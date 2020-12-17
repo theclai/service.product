@@ -1,0 +1,3 @@
+[submodule "service.proto"]
+	path = service.proto
+	url = https://faisalrahman2020@bitbucket.org/tapptribe/service.proto.git
