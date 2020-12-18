@@ -1,1 +1,1 @@
-CREATE DATABASE serviceJavaDb
+CREATE DATABASE service_product;

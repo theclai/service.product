@@ -1,4 +1,4 @@
-package service.catalogue;
+package service.product;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -7,15 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import org.flywaydb.core.Flyway;
 
-public class CatalogueServiceServer {
+public class ProductServiceServer {
 
-    private static final Logger logger = LoggerFactory.getLogger(CatalogueServiceServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceServer.class);
     private int port;
     private Server server;
 
-    public CatalogueServiceServer(int port) {
+    public ProductServiceServer(int port) {
 
         this.port = port;
 
@@ -24,7 +23,7 @@ public class CatalogueServiceServer {
                 .build();
     }
 
-    public CatalogueServiceServer(ServerBuilder<?> serverBuilder, int port) {
+    public ProductServiceServer(ServerBuilder<?> serverBuilder, int port) {
 
         this.port = port;
     }
@@ -41,7 +40,7 @@ public class CatalogueServiceServer {
                 logger.info("*** shutting down gRPC server since JVM is shutting down");
                 try {
                     logger.debug("Server stop");
-                    service.catalogue.CatalogueServiceServer.this.stop();
+                    ProductServiceServer.this.stop();
                 } catch (InterruptedException e) {
                     logger.error(e.getMessage());
                 }
@@ -72,12 +71,12 @@ public class CatalogueServiceServer {
      * Main launches the server from the command line.
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        logger.info("Log from {}", CatalogueServiceServer.class.getSimpleName());
+        logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
         System.out.println("Read Specific Environment Variable");
 
         int port = Integer.parseInt(System.getenv("HTTP_PORT"));
 
-        final CatalogueServiceServer server = new CatalogueServiceServer(port);
+        final ProductServiceServer server = new ProductServiceServer(port);
         server.start();
         server.blockUntilShutdown();
     }

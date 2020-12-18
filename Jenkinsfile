@@ -4,7 +4,7 @@ pipeline {
     agent any
     environment {
         ECR_URL = '778179562648.dkr.ecr.eu-west-1.amazonaws.com'
-        CONTAINER_IMAGE = 'service.catalogue'
+        CONTAINER_IMAGE = 'service.product'
     }
     stages {
         stage('Build') {
