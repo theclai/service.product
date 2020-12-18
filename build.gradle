@@ -82,28 +82,28 @@ sourceSets {
 startScripts.enabled = false
 jib.to.image = 'image-built-with-jib'
 
-task CatalogueServiceServer(type: CreateStartScripts) {
-    mainClassName = 'service.catalogue.CatalogueServiceServer'
-    applicationName = 'catalogue-service-server'
+task ProductServiceServer(type: CreateStartScripts) {
+    mainClassName = 'service.product.ProductServiceServer'
+    applicationName = 'product-service-server'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
-task CatalogueServiceClient(type: CreateStartScripts) {
-    mainClassName = 'service.catalogue.CatalogueServiceClient'
-    applicationName = 'catalogue-service-client'
+task ProductServiceClient(type: CreateStartScripts) {
+    mainClassName = 'service.product.ProductServiceClient'
+    applicationName = 'product-service-client'
     outputDir = new File(project.buildDir, 'tmp')
     classpath = startScripts.classpath
 }
 
 applicationDistribution.into('bin') {
 
-    from(CatalogueServiceServer)
-    from(CatalogueServiceClient)
+    from(ProductServiceServer)
+    from(ProductServiceClient)
 
     fileMode = 0755
 }
 
 jib {
-    container.mainClass = "service.catalogue.CatalogueServiceServer"
+    container.mainClass = "service.product.ProductServiceServer"
 }

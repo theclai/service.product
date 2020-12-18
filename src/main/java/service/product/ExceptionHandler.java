@@ -2,7 +2,7 @@
  * Tapp
  * Copyright (c) 20042020 All Rights Reserved.
  */
-package service.catalogue;
+package service.product;
 
 import io.grpc.*;
 
