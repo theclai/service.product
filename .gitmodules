@@ -1,0 +1,3 @@
+[submodule "service.proto"]
+	path = service.proto
+	url = git@bitbucket.org:tapptribe/service.proto.git
