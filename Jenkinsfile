@@ -36,7 +36,13 @@ pipeline {
                         DURATION=30
                         timeout $DURATION docker run --rm \
                             -e HTTP_PORT=8080 \
-                            ${CONTAINER_IMAGE}:check 
+                            -e DATABASE_HOST=localhost \
+                            -e DATABASE_NAME=service_product \
+                            -e DATABASE_PORT=5432 \
+                            -e DATABASE_USERNAME=postgres \
+                            -e DATABASE_PASSWORD=tapp \
+                            -e DATABASE_TYPE=postgresql \
+                            ${CONTAINER_IMAGE}:check
                         code=$?
                         set -e
                         [ $code -eq 124 ] && exit 0 || exit 1
