@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import org.flywaydb.core.Flyway;
 
 public class ProductServiceServer {
 
@@ -19,6 +20,7 @@ public class ProductServiceServer {
         this.port = port;
 
         server = ServerBuilder.forPort(this.port)
+                .addService(new AlbServiceImpl())
                 .intercept(new ExceptionHandler())
                 .build();
     }
@@ -26,6 +28,7 @@ public class ProductServiceServer {
     public ProductServiceServer(ServerBuilder<?> serverBuilder, int port) {
 
         this.port = port;
+        this.server = serverBuilder.addService(new AlbServiceImpl()).build();
     }
 
     public void start() throws IOException, InterruptedException {
@@ -75,9 +78,71 @@ public class ProductServiceServer {
         System.out.println("Read Specific Environment Variable");
 
         int port = Integer.parseInt(System.getenv("HTTP_PORT"));
+        String flywayTask = System.getenv("FLYWAY_TASK");
+        DatabaseParams databaseParams = new DatabaseParams();
+        databaseParams.setDatabaseHost(System.getenv("DATABASE_HOST"));
+        databaseParams.setDatabasePort(Integer.parseInt(System.getenv("DATABASE_PORT")));
+        databaseParams.setDatabaseName(System.getenv("DATABASE_NAME"));
+        databaseParams.setDatabaseType(System.getenv("DATABASE_TYPE"));
+        databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
+        databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
 
         final ProductServiceServer server = new ProductServiceServer(port);
+
+        if (flywayTask != null && flywayTask.length() > 0 ) {
+
+            runMigration(System.getenv("FLYWAY_TASK"), databaseParams);
+            server.start();
+            server.blockUntilShutdown();
+            return;
+        }
+
         server.start();
         server.blockUntilShutdown();
+    }
+
+    private static void runMigration(String flywayTask, DatabaseParams databaseParams) {
+
+        if(flywayTask != ""){
+
+            String operation = flywayTask.toLowerCase();
+
+            try{
+
+                Flyway flyway = Flyway.configure().dataSource(
+                        databaseParams.getDatabaseHost(),
+                        databaseParams.getDatabaseUsername(),
+                        databaseParams.getDatabasePassword()).load();
+
+                switch (operation) {
+                    case "baseline":
+                        //flyway baseline
+                        flyway.baseline();
+                        break;
+                    case "clean":
+                        //flyway clean
+                        flyway.clean();
+                        break;
+                    case "info":
+                        //flyway info
+                        flyway.info();
+                        break;
+                    case "migrate":
+                        //flyway migrate
+                        flyway.migrate();
+                        break;
+                    case "repair":
+                        //flyway repair
+                        flyway.repair();
+                        break;
+                    case "validate":
+                        //flyway validate
+                        flyway.validate();
+                        break;
+                }
+            }catch (Exception e){
+                logger.error(e.getMessage());
+            }
+        }
     }
 }
