@@ -82,7 +82,7 @@ public class ProductServiceServer {
         if (System.getenv("HTTP_PORT") != null && System.getenv("HTTP_PORT").length() > 0) {
             port = Integer.parseInt(System.getenv("HTTP_PORT"));
         }
-        
+
         String flywayTask = System.getenv("FLYWAY_TASK");
         DatabaseParams databaseParams = new DatabaseParams();
         databaseParams.setDatabaseHost(System.getenv("DATABASE_HOST"));
@@ -94,8 +94,8 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if (args[1] != null) {
-
+        if (args.length > 0) {
+            
             runMigration(args[1].toLowerCase(), databaseParams);
             return;
         } else if (flywayTask != null && flywayTask.length() > 0) {
