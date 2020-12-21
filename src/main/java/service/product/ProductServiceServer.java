@@ -77,7 +77,12 @@ public class ProductServiceServer {
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
         System.out.println("Read Specific Environment Variable");
 
-        int port = Integer.parseInt(System.getenv("HTTP_PORT"));
+        int port = 8080;
+
+        if(System.getenv("HTTP_PORT") != null && System.getenv("HTTP_PORT").length() > 0){
+            port = Integer.parseInt(System.getenv("HTTP_PORT"));
+        }
+        
         String flywayTask = System.getenv("FLYWAY_TASK");
         DatabaseParams databaseParams = new DatabaseParams();
         databaseParams.setDatabaseHost(System.getenv("DATABASE_HOST"));
