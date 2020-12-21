@@ -25,7 +25,7 @@ public class DatabaseParams {
         this.databaseHost = databaseHost;
     }
 
-    public int getDatabasePortPort() {
+    public int getDatabasePort() {
         return databasePort;
     }
 

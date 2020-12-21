@@ -2,12 +2,16 @@ package service.product;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.flywaydb.core.api.configuration.ClassicConfiguration;
+import org.flywaydb.core.api.configuration.Configuration;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.flywaydb.core.Flyway;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class ProductServiceServer {
 
@@ -118,10 +122,23 @@ public class ProductServiceServer {
 
             try{
 
-                Flyway flyway = Flyway.configure().dataSource(
-                        databaseParams.getDatabaseHost(),
-                        databaseParams.getDatabaseUsername(),
-                        databaseParams.getDatabasePassword()).load();
+                HikariDataSource dataSource = new HikariDataSource();
+                dataSource.setUsername(databaseParams.getDatabaseUsername());
+                dataSource.setPassword(databaseParams.getDatabasePassword());
+                dataSource.setDriverClassName(org.postgresql.Driver.class.getName());
+                dataSource.setJdbcUrl("jdbc:postgresql://" + databaseParams.getDatabaseHost() + ":"
+                        + databaseParams.getDatabasePort() + "/" + databaseParams.getDatabaseName());
+
+                FluentConfiguration fluentConfiguration = Flyway.configure();
+                fluentConfiguration.dataSource(dataSource);
+                fluentConfiguration.baselineOnMigrate(true);
+
+                Flyway flyway = new Flyway(fluentConfiguration);
+
+
+//                Flyway flyway = new Flyway();
+//                flyway.setDataSource(databaseParams.getDatabaseHost(),databaseParams.getDatabaseUsername(),databaseParams.getDatabasePassword());
+//                flyway.setLocations("filesystem:src/main/resources/db/migration");
 
                 switch (operation) {
                     case "baseline":
