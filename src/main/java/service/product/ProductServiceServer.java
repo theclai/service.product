@@ -132,13 +132,7 @@ public class ProductServiceServer {
                 FluentConfiguration fluentConfiguration = Flyway.configure();
                 fluentConfiguration.dataSource(dataSource);
                 fluentConfiguration.baselineOnMigrate(true);
-
                 Flyway flyway = new Flyway(fluentConfiguration);
-
-
-//                Flyway flyway = new Flyway();
-//                flyway.setDataSource(databaseParams.getDatabaseHost(),databaseParams.getDatabaseUsername(),databaseParams.getDatabasePassword());
-//                flyway.setLocations("filesystem:src/main/resources/db/migration");
 
                 switch (operation) {
                     case "baseline":
