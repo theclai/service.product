@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=tapp
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./resources/db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -74,10 +74,12 @@ public class ProductServiceServer {
      * Main launches the server from the command line.
      */
     public static void main(String[] args) throws IOException, InterruptedException {
+
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
         System.out.println("Read Specific Environment Variable");
 
         int port = Integer.parseInt(System.getenv("HTTP_PORT"));
+
         String flywayTask = System.getenv("FLYWAY_TASK");
         DatabaseParams databaseParams = new DatabaseParams();
         databaseParams.setDatabaseHost(System.getenv("DATABASE_HOST"));
@@ -89,7 +91,11 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if (flywayTask != null && flywayTask.length() > 0 ) {
+        if(args[1] != null) {
+
+            runMigration(args[1].toLowerCase(), databaseParams);
+            return;
+        } else if (flywayTask != null && flywayTask.length() > 0 ) {
 
             runMigration(System.getenv("FLYWAY_TASK"), databaseParams);
             server.start();
@@ -118,26 +124,32 @@ public class ProductServiceServer {
                     case "baseline":
                         //flyway baseline
                         flyway.baseline();
+                        logger.info("flyway baseline");
                         break;
                     case "clean":
                         //flyway clean
                         flyway.clean();
+                        logger.info("flyway clean");
                         break;
                     case "info":
                         //flyway info
                         flyway.info();
+                        logger.info("flyway info");
                         break;
                     case "migrate":
                         //flyway migrate
                         flyway.migrate();
+                        logger.info("flyway migrate");
                         break;
                     case "repair":
                         //flyway repair
                         flyway.repair();
+                        logger.info("flyway repair");
                         break;
                     case "validate":
                         //flyway validate
                         flyway.validate();
+                        logger.info("flyway validate");
                         break;
                 }
             }catch (Exception e){
