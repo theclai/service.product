@@ -75,11 +75,14 @@ public class ProductServiceServer {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
 
+        int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
         System.out.println("Read Specific Environment Variable");
 
-        int port = Integer.parseInt(System.getenv("HTTP_PORT"));
-
+        if (System.getenv("HTTP_PORT") != null && System.getenv("HTTP_PORT").length() > 0) {
+            port = Integer.parseInt(System.getenv("HTTP_PORT"));
+        }
+        
         String flywayTask = System.getenv("FLYWAY_TASK");
         DatabaseParams databaseParams = new DatabaseParams();
         databaseParams.setDatabaseHost(System.getenv("DATABASE_HOST"));
@@ -91,11 +94,11 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if(args[1] != null) {
+        if (args[1] != null) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
             return;
-        } else if (flywayTask != null && flywayTask.length() > 0 ) {
+        } else if (flywayTask != null && flywayTask.length() > 0) {
 
             runMigration(System.getenv("FLYWAY_TASK"), databaseParams);
             server.start();
