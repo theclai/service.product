@@ -133,7 +133,8 @@ public class ProductServiceServer {
                 fluentConfiguration.dataSource(dataSource);
                 fluentConfiguration.baselineOnMigrate(true);
                 Flyway flyway = new Flyway(fluentConfiguration);
-
+                System.out.println("Running database migrations ...");
+                
                 switch (operation) {
                     case "baseline":
                         //flyway baseline
