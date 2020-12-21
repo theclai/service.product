@@ -95,7 +95,7 @@ public class ProductServiceServer {
         final ProductServiceServer server = new ProductServiceServer(port);
 
         if (args.length > 0) {
-            
+
             runMigration(args[1].toLowerCase(), databaseParams);
             return;
         } else if (flywayTask != null && flywayTask.length() > 0) {
