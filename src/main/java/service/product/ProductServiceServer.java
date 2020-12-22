@@ -110,8 +110,6 @@ public class ProductServiceServer {
             server.start();
             server.blockUntilShutdown();
             return;
-        }else {
-            System.exit(0);
         }
 
         server.start();
