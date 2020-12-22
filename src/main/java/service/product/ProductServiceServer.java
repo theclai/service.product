@@ -121,55 +121,50 @@ public class ProductServiceServer {
 
             String operation = flywayTask.toLowerCase();
 
-            try{
+            PGSimpleDataSource dataSource = new PGSimpleDataSource();
+            dataSource.setDatabaseName(databaseParams.getDatabaseName());
+            dataSource.setPortNumber(databaseParams.getDatabasePort());
+            dataSource.setUser(databaseParams.getDatabaseUsername());
+            dataSource.setPassword(databaseParams.getDatabasePassword());
+            dataSource.setDatabaseName(databaseParams.getDatabaseName());
+            dataSource.setApplicationName("flyway migration");
 
-                PGSimpleDataSource dataSource = new PGSimpleDataSource();
-                dataSource.setDatabaseName(databaseParams.getDatabaseName());
-                dataSource.setPortNumber(databaseParams.getDatabasePort());
-                dataSource.setUser(databaseParams.getDatabaseUsername());
-                dataSource.setPassword(databaseParams.getDatabasePassword());
-                dataSource.setDatabaseName(databaseParams.getDatabaseName());
-                dataSource.setApplicationName("flyway migration");
+            FluentConfiguration fluentConfiguration = Flyway.configure();
+            fluentConfiguration.dataSource(dataSource);
+            Flyway flyway = new Flyway(fluentConfiguration);
+            System.out.println("Running database migrations ...");
 
-                FluentConfiguration fluentConfiguration = Flyway.configure();
-                fluentConfiguration.dataSource(dataSource);
-                Flyway flyway = new Flyway(fluentConfiguration);
-                System.out.println("Running database migrations ...");
-
-                switch (operation) {
-                    case "baseline":
-                        //flyway baseline
-                        flyway.baseline();
-                        logger.info("flyway baseline");
-                        break;
-                    case "clean":
-                        //flyway clean
-                        flyway.clean();
-                        logger.info("flyway clean");
-                        break;
-                    case "info":
-                        //flyway info
-                        flyway.info();
-                        logger.info("flyway info");
-                        break;
-                    case "migrate":
-                        //flyway migrate
-                        flyway.migrate();
-                        logger.info("flyway migrate");
-                        break;
-                    case "repair":
-                        //flyway repair
-                        flyway.repair();
-                        logger.info("flyway repair");
-                        break;
-                    case "validate":
-                        //flyway validate
-                        flyway.validate();
-                        logger.info("flyway validate");
-                        break;
-                }
-            }catch (Exception e){
-                logger.error(e.getMessage());
+            switch (operation) {
+                case "baseline":
+                    //flyway baseline
+                    flyway.baseline();
+                    logger.info("flyway baseline");
+                    break;
+                case "clean":
+                    //flyway clean
+                    flyway.clean();
+                    logger.info("flyway clean");
+                    break;
+                case "info":
+                    //flyway info
+                    flyway.info();
+                    logger.info("flyway info");
+                    break;
+                case "migrate":
+                    //flyway migrate
+                    flyway.migrate();
+                    logger.info("flyway migrate");
+                    break;
+                case "repair":
+                    //flyway repair
+                    flyway.repair();
+                    logger.info("flyway repair");
+                    break;
+                case "validate":
+                    //flyway validate
+                    flyway.validate();
+                    logger.info("flyway validate");
+                    break;
             }
         }
     }
