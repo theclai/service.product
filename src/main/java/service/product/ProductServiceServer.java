@@ -99,7 +99,7 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if (args.length > 0 && args[0].equals("flyway")) {
+        if (args.length > 0 && args[0].equalsIgnoreCase("flyway")) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
             System.exit(0);
