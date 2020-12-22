@@ -12,7 +12,7 @@ plugins {
     // Generate IntelliJ IDEA's .idea & .iml project files
     id 'idea'
     id 'com.google.cloud.tools.jib' version '2.6.0'
-    id "org.flywaydb.flyway" version "7.3.1"
+    id "org.flywaydb.flyway" version "7.3.2"
 }
 
 mainClassName = 'service.product.ProductServiceServer'
@@ -35,7 +35,7 @@ targetCompatibility = 1.8
 def grpcVersion = '1.33.1' // CURRENT_GRPC_VERSION
 def protobufVersion = '3.12.0'
 def protocVersion = protobufVersion
-def flywayVersion = '7.3.1'
+def flywayVersion = '7.3.2'
 
 dependencies {
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
@@ -54,6 +54,7 @@ dependencies {
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile "org.slf4j:slf4j-simple:1.7.9"
     compile "org.flywaydb:flyway-core:${flywayVersion}"
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
 }
 
 protobuf {
