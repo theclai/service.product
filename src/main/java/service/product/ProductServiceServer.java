@@ -102,6 +102,7 @@ public class ProductServiceServer {
         if (args.length > 0 && args[0].equals("flyway")) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
+            System.exit(0);
             return;
         } else if (flywayTask != null && flywayTask.length() > 0) {
 
