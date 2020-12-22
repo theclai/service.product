@@ -78,7 +78,7 @@ public class ProductServiceServer {
     /**
      * Main launches the server from the command line.
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
@@ -99,7 +99,7 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if (args.length > 0) {
+        if (args.length > 0 && args[0].equals("flyway")) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
             return;
@@ -109,13 +109,15 @@ public class ProductServiceServer {
             server.start();
             server.blockUntilShutdown();
             return;
+        }else {
+            System.exit(0);
         }
 
         server.start();
         server.blockUntilShutdown();
     }
 
-    private static void runMigration(String flywayTask, DatabaseParams databaseParams) {
+    private static void runMigration(String flywayTask, DatabaseParams databaseParams) throws Exception {
 
         if(flywayTask != ""){
 
@@ -166,6 +168,8 @@ public class ProductServiceServer {
                     flyway.validate();
                     logger.info("flyway validate");
                     break;
+                default:
+                    throw new Exception("Unsupported Flyway task: " + operation);
             }
         }
     }
