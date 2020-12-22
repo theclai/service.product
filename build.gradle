@@ -68,8 +68,16 @@ protobuf {
 }
 
 flyway {
-    url = 'jdbc:h2:file:./target/foobar'
-    user = 'sa'
+    if(project.hasProperty('env') == false) {ext.env = 'dev'}
+    apply from: "env/${env}.gradle"
+    driver = "org.postgresql.Driver"
+    url = flyway.url
+    schemas = flyway.schemas
+    user = flyway.user
+    password = flyway.password
+    sqlMigrationSeparator = "_"
+    locations = flyway.locations
+    placeholders = ["dir" : "${project.projectDir}".toString()]
 }
 
 // Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
