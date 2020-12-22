@@ -129,6 +129,7 @@ public class ProductServiceServer {
                 dataSource.setUser(databaseParams.getDatabaseUsername());
                 dataSource.setPassword(databaseParams.getDatabasePassword());
                 dataSource.setDatabaseName(databaseParams.getDatabaseName());
+                dataSource.setServerName(databaseParams.getDatabaseHost());
                 dataSource.setApplicationName("flyway migration");
 
                 FluentConfiguration fluentConfiguration = Flyway.configure();
