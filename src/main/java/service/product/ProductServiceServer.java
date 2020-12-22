@@ -5,13 +5,14 @@ import io.grpc.ServerBuilder;
 import org.flywaydb.core.api.configuration.ClassicConfiguration;
 import org.flywaydb.core.api.configuration.Configuration;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
+import org.postgresql.ds.PGSimpleDataSource;
+import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.flywaydb.core.Flyway;
-import com.zaxxer.hikari.HikariDataSource;
 
 public class ProductServiceServer {
 
@@ -122,12 +123,13 @@ public class ProductServiceServer {
 
             try{
 
-                HikariDataSource dataSource = new HikariDataSource();
-                dataSource.setUsername(databaseParams.getDatabaseUsername());
+                PGSimpleDataSource dataSource = new PGSimpleDataSource();
+                dataSource.setDatabaseName(databaseParams.getDatabaseName());
+                dataSource.setPortNumber(databaseParams.getDatabasePort());
+                dataSource.setUser(databaseParams.getDatabaseUsername());
                 dataSource.setPassword(databaseParams.getDatabasePassword());
-                dataSource.setDriverClassName(org.postgresql.Driver.class.getName());
-                dataSource.setJdbcUrl("jdbc:postgresql://" + databaseParams.getDatabaseHost() + ":"
-                        + databaseParams.getDatabasePort() + "/" + databaseParams.getDatabaseName());
+                dataSource.setDatabaseName(databaseParams.getDatabaseName());
+                dataSource.setApplicationName("flyway migration");
 
                 FluentConfiguration fluentConfiguration = Flyway.configure();
                 fluentConfiguration.dataSource(dataSource);
