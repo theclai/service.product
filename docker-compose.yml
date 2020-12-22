@@ -8,7 +8,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./resources/db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/resources/db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   database-data: # named volumes can be managed easier using docker-compose
