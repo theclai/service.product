@@ -26,6 +26,7 @@ public class ProductServiceServer {
 
         server = ServerBuilder.forPort(this.port)
                 .addService(new AlbServiceImpl())
+                .addService(new ProductServiceImpl())
                 .intercept(new ExceptionHandler())
                 .build();
     }
@@ -33,7 +34,10 @@ public class ProductServiceServer {
     public ProductServiceServer(ServerBuilder<?> serverBuilder, int port) {
 
         this.port = port;
-        this.server = serverBuilder.addService(new AlbServiceImpl()).build();
+        this.server = serverBuilder
+                .addService(new AlbServiceImpl())
+                .addService(new ProductServiceImpl())
+                .build();
     }
 
     public void start() throws IOException, InterruptedException {
