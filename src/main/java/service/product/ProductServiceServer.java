@@ -99,6 +99,11 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
+        if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
+            System.out.println("Wrong migration command");
+            System.exit(0);
+        }
+
         if (args.length > 0 && args[0].equalsIgnoreCase("flyway")) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
