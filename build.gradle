@@ -15,6 +15,8 @@ plugins {
     id "org.flywaydb.flyway" version "7.3.2"
 }
 
+mainClassName = 'service.product.ProductServiceServer'
+
 repositories {
     maven { // The google mirror is less flaky than mavenCentral()
         url "https://maven-central.storage-download.googleapis.com/maven2/" }
@@ -66,8 +68,16 @@ protobuf {
 }
 
 flyway {
-    url = 'jdbc:h2:file:./target/foobar'
-    user = 'sa'
+    if(project.hasProperty('env') == false) {ext.env = 'dev'}
+    apply from: "env/${env}.gradle"
+    driver = "org.postgresql.Driver"
+    url = flyway.url
+    schemas = flyway.schemas
+    user = flyway.user
+    password = flyway.password
+    sqlMigrationSeparator = "_"
+    locations = flyway.locations
+    placeholders = ["dir" : "${project.projectDir}".toString()]
 }
 
 // Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.

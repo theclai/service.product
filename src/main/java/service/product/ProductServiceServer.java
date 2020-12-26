@@ -82,7 +82,7 @@ public class ProductServiceServer {
     /**
      * Main launches the server from the command line.
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
@@ -103,9 +103,15 @@ public class ProductServiceServer {
 
         final ProductServiceServer server = new ProductServiceServer(port);
 
-        if (args.length > 0) {
+        if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
+            System.out.println("Wrong migration command");
+            System.exit(0);
+        }
+
+        if (args.length > 0 && args[0].equalsIgnoreCase("flyway")) {
 
             runMigration(args[1].toLowerCase(), databaseParams);
+            System.exit(0);
             return;
         } else if (flywayTask != null && flywayTask.length() > 0) {
 
@@ -119,62 +125,59 @@ public class ProductServiceServer {
         server.blockUntilShutdown();
     }
 
-    private static void runMigration(String flywayTask, DatabaseParams databaseParams) {
+    private static void runMigration(String flywayTask, DatabaseParams databaseParams) throws Exception {
 
         if(flywayTask != ""){
 
             String operation = flywayTask.toLowerCase();
 
-            try{
+            PGSimpleDataSource dataSource = new PGSimpleDataSource();
+            dataSource.setDatabaseName(databaseParams.getDatabaseName());
+            dataSource.setPortNumber(databaseParams.getDatabasePort());
+            dataSource.setUser(databaseParams.getDatabaseUsername());
+            dataSource.setPassword(databaseParams.getDatabasePassword());
+            dataSource.setDatabaseName(databaseParams.getDatabaseName());
+            dataSource.setServerName(databaseParams.getDatabaseHost());
+            dataSource.setApplicationName("flyway migration");
 
-                PGSimpleDataSource dataSource = new PGSimpleDataSource();
-                dataSource.setDatabaseName(databaseParams.getDatabaseName());
-                dataSource.setPortNumber(databaseParams.getDatabasePort());
-                dataSource.setUser(databaseParams.getDatabaseUsername());
-                dataSource.setPassword(databaseParams.getDatabasePassword());
-                dataSource.setDatabaseName(databaseParams.getDatabaseName());
-                dataSource.setServerName(databaseParams.getDatabaseHost());
-                dataSource.setApplicationName("flyway migration");
+            FluentConfiguration fluentConfiguration = Flyway.configure();
+            fluentConfiguration.dataSource(dataSource);
+            Flyway flyway = new Flyway(fluentConfiguration);
+            System.out.println("Running database migrations ...");
 
-                FluentConfiguration fluentConfiguration = Flyway.configure();
-                fluentConfiguration.dataSource(dataSource);
-                Flyway flyway = new Flyway(fluentConfiguration);
-                System.out.println("Running database migrations ...");
-
-                switch (operation) {
-                    case "baseline":
-                        //flyway baseline
-                        flyway.baseline();
-                        logger.info("flyway baseline");
-                        break;
-                    case "clean":
-                        //flyway clean
-                        flyway.clean();
-                        logger.info("flyway clean");
-                        break;
-                    case "info":
-                        //flyway info
-                        flyway.info();
-                        logger.info("flyway info");
-                        break;
-                    case "migrate":
-                        //flyway migrate
-                        flyway.migrate();
-                        logger.info("flyway migrate");
-                        break;
-                    case "repair":
-                        //flyway repair
-                        flyway.repair();
-                        logger.info("flyway repair");
-                        break;
-                    case "validate":
-                        //flyway validate
-                        flyway.validate();
-                        logger.info("flyway validate");
-                        break;
-                }
-            }catch (Exception e){
-                logger.error(e.getMessage());
+            switch (operation) {
+                case "baseline":
+                    //flyway baseline
+                    flyway.baseline();
+                    logger.info("flyway baseline");
+                    break;
+                case "clean":
+                    //flyway clean
+                    flyway.clean();
+                    logger.info("flyway clean");
+                    break;
+                case "info":
+                    //flyway info
+                    flyway.info();
+                    logger.info("flyway info");
+                    break;
+                case "migrate":
+                    //flyway migrate
+                    flyway.migrate();
+                    logger.info("flyway migrate");
+                    break;
+                case "repair":
+                    //flyway repair
+                    flyway.repair();
+                    logger.info("flyway repair");
+                    break;
+                case "validate":
+                    //flyway validate
+                    flyway.validate();
+                    logger.info("flyway validate");
+                    break;
+                default:
+                    throw new Exception("Unsupported Flyway task: " + operation);
             }
         }
     }
