@@ -307,6 +307,10 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         List<Product> productList = new ArrayList<>();
         productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+        productList.add(product4);
+        productList.add(product5);
 
         Products products = Products.newBuilder().build();
 
