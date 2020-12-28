@@ -58,4 +58,24 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         responseObserver.onNext(products);
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void getProductVariant(ID request, StreamObserver<ProductVariant> responseObserver) {
+
+        logger.debug("getProductVariant");
+
+        ProductVariant productVariant = ProductVariant.newBuilder().build();
+        responseObserver.onNext(productVariant);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void listProductVariants(ListProductVariantsRequest request, StreamObserver<ProductVariants> responseObserver) {
+
+        logger.debug("listProductVariants");
+
+        ProductVariants productVariants = ProductVariants.newBuilder().build();
+        responseObserver.onNext(productVariants);
+        responseObserver.onCompleted();
+    }
 }
