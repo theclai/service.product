@@ -376,7 +376,8 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setTransactionTime(transactionTime)
                 .setCreatedTime(transactionTime)
                 .setValidTime(validTime)
-                .setTitle("")
+                .setTitle("Fitness bracelet")
+                .setSubtitle("")
                 .setDescription("Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock, calendar, stopwatch. Language:English, German, Spanish, Italian, French, Portuguese (Brazil), Russian, Indonesian, Czech, Arabic, Thai, Dutch, Polish, Turkish, Persian, Hebrew,Malaysian, Vietnamese, Greek language.")
                 .setImages(0, "")
                 .setForm(ProductVariant.Form.PHYSICAL)
@@ -385,7 +386,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setQuantity(10)
                 .putAllProperties(properties)
                 .build();
-        
+
         responseObserver.onNext(productVariant);
         responseObserver.onCompleted();
     }
@@ -395,7 +396,373 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         logger.debug("listProductVariants");
 
-        ProductVariants productVariants = ProductVariants.newBuilder().build();
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
+        } catch (ParseException e) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription(e.getMessage())
+                    .asRuntimeException());
+        }
+        Instant time = date.toInstant();
+
+        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                .setNanos(time.getNano()).build();
+
+        Date dateValid = null;
+        try {
+            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
+        } catch (ParseException e) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription(e.getMessage())
+                    .asRuntimeException());
+        }
+        Instant instantValid = dateValid.toInstant();
+
+        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                .setNanos(instantValid.getNano()).build();
+
+        Map<String, String> properties1 = new HashMap<>();
+        properties1.put("Operating System", "Android Wear");
+        properties1.put("Compatible Operating System", "Android, iOS - Apple");
+        properties1.put("Model","Smart Bracelet");
+        properties1.put("Band Material","Silicone");
+        properties1.put("Series","C55");
+        properties1.put("Features","Blood Pressure Monitor, Bluetooth Enabled, Waterproof");
+        properties1.put("Case Material","Aluminium, Ceramic, Metal");
+        properties1.put("Item type","smart watch");
+        properties1.put("Screen size",".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen");
+        properties1.put("CPU chip","MTK2502");
+        properties1.put("RAM/ROM","34M/128M");
+        properties1.put("Phone version require","Android 5.0 and above ,IOS 9.0 and above");
+        properties1.put("Waterproof","IP67");
+        properties1.put("Packing list","1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual");
+
+        ProductVariant productVariant1 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Fitness bracelet")
+                .setSubtitle("")
+                .setDescription("Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock, calendar, stopwatch. Language:English, German, Spanish, Italian, French, Portuguese (Brazil), Russian, Indonesian, Czech, Arabic, Thai, Dutch, Polish, Turkish, Persian, Hebrew,Malaysian, Vietnamese, Greek language.")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("fitness-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
+                .setQuantity(10)
+                .putAllProperties(properties1)
+                .build();
+
+        Map<String, String> properties2 = new HashMap<>();
+        properties2.put("Type", "Type-C /Micro USB");
+        properties2.put("Cable Length", "1m");
+        properties2.put("Items Included","Charging & Data Sync Cable, Charging Cable, Data Sync Cable");
+        properties2.put("Brand","Unbranded");
+        properties2.put("Features","USB-C");
+        properties2.put("MPN","Does Not Apply");
+
+        ProductVariant productVariant2 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/df659673-dc85-49bc-8af6-f7497275a064")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("USB Type-C Cable")
+                .setSubtitle("")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("usb-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(24500).build())
+                .setQuantity(10)
+                .putAllProperties(properties2)
+                .build();
+
+        Map<String, String> properties3 = new HashMap<>();
+        properties3.put("Fit Design", "In-Ear Only");
+        properties3.put("Wireless Technology", "Bluetooth");
+        properties3.put("Compatible Brand","Android");
+        properties3.put("Connectivity","3.5mm Jack, Lightning");
+        properties3.put("Earpiece Design","Earbud (In Ear) Type: Headset");
+        properties3.put("Connector(s)","3.5mm Jack/Lightning Features: Built-in Microphone, Call functions, Playback Controls, Volume Control");
+        properties3.put("Earpiece","Double Color: White");
+        properties3.put("Brand","Unbranded");
+        properties3.put("MPN","Does Not Apply");
+
+        ProductVariant productVariant3 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/ProductVariant/e55305f0-5722-4634-b48f-a8ced6d17b4e")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Headset with box")
+                .setSubtitle("")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("headset-box-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
+                .setQuantity(10)
+                .putAllProperties(properties3)
+                .build();
+
+        Map<String, String> properties4 = new HashMap<>();
+        properties4.put("Earphone style", "wired earphone");
+        properties4.put("Plug diameter", "3.5MM/ Lightning");
+        properties4.put("State of the fast connection","to peel");
+        properties4.put("Quick connection","you device is connect");
+        properties4.put("Prompt disconnect","you device is disconnect");
+        properties4.put("Button function","Button function");
+        properties4.put("Style","in ear");
+
+        ProductVariant productVariant4 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/ProductVariant/e55305f0-5722-4634-b48f-a8ced6d17b4e")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Headset (Blue)")
+                .setSubtitle("")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("headset-blue-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
+                .setQuantity(4)
+                .putAllProperties(properties4)
+                .build();
+
+        Map<String, String> properties5 = new HashMap<>();
+        properties5.put("Earphone style", "wired earphone");
+        properties5.put("Plug diameter", "3.5MM/ Lightning");
+        properties5.put("State of the fast connection","to peel");
+        properties5.put("Quick connection","you device is connect");
+        properties5.put("Prompt disconnect","you device is disconnect");
+        properties5.put("Button function","Microphone with microphone");
+        properties5.put("Style","in ear");
+
+        Map<String, String> options5 = new HashMap<>();
+        options5.put("white","white");
+
+        ProductVariant productVariant5 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Headset (White)")
+                .setSubtitle("")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("headset-white-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(22000).build())
+                .setQuantity(47)
+                .putAllProperties(properties5)
+                .putAllOptions(options5)
+                .build();
+
+        Map<String, String> properties6 = new HashMap<>();
+        properties6.put("Earphone style", "wired earphone");
+        properties6.put("Plug diameter", "3.5MM/ Lightning");
+        properties6.put("State of the fast connection","to peel");
+        properties6.put("Quick connection","you device is connect");
+        properties6.put("Prompt disconnect","you device is disconnect");
+        properties6.put("Button function","Microphone with microphone");
+        properties6.put("Style","in ear");
+
+        Map<String, String> options6 = new HashMap<>();
+        options6.put("red","red");
+
+        ProductVariant productVariant6 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Headset (Red)")
+                .setSubtitle("")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("headset-red-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
+                .setQuantity(47)
+                .putAllProperties(properties6)
+                .putAllOptions(options6)
+                .build();
+
+        Map<String, String> properties7 = new HashMap<>();
+        properties7.put("Material", "Plastic +TPU");
+        properties7.put("Product name", "Phone Socket");
+        properties7.put("Function","Stick on the phone");
+        properties7.put("Weight","10g");
+        properties7.put("Compatible Brand","All phones");
+
+        Map<String, String> options7 = new HashMap<>();
+        options7.put("black","black");
+
+        ProductVariant productVariant7 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Phone stent (Black)")
+                .setSubtitle("Pop socket / Phone stent")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("phone-stent-black-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
+                .setQuantity(43)
+                .putAllProperties(properties7)
+                .putAllOptions(options7)
+                .build();
+
+        Map<String, String> properties8 = new HashMap<>();
+        properties8.put("Material", "Plastic +TPU");
+        properties8.put("Product name", "Phone Socket");
+        properties8.put("Function","Stick on the phone");
+        properties8.put("Weight","10g");
+        properties8.put("Compatible Brand","All phones");
+
+        Map<String, String> options8 = new HashMap<>();
+        options8.put("pink","pink");
+
+        ProductVariant productVariant8 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Phone stent (Pink)")
+                .setSubtitle("Pop socket / Phone stent")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("phone-ping-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
+                .setQuantity(20)
+                .putAllProperties(properties8)
+                .putAllOptions(options8)
+                .build();
+
+        Map<String, String> properties9 = new HashMap<>();
+        properties9.put("Material", "Plastic +TPU");
+        properties9.put("Product name", "Phone Socket");
+        properties9.put("Function","Stick on the phone");
+        properties9.put("Weight","10g");
+        properties9.put("Compatible Brand","All phones");
+
+        Map<String, String> options9 = new HashMap<>();
+        options9.put("white","white");
+
+        ProductVariant productVariant9 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Phone stent (White)")
+                .setSubtitle("Pop socket / Phone stent")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("phone-stent-white-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
+                .setQuantity(20)
+                .putAllProperties(properties9)
+                .putAllOptions(options9)
+                .build();
+
+        Map<String, String> properties10 = new HashMap<>();
+        properties10.put("Material", "Plastic +TPU");
+        properties10.put("Product name", "Phone Socket");
+        properties10.put("Function","Stick on the phone");
+        properties10.put("Weight","10g");
+        properties10.put("Compatible Brand","All phones");
+
+        Map<String, String> options10 = new HashMap<>();
+        options10.put("blue","blue");
+
+        ProductVariant productVariant10 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Phone stent (Blue)")
+                .setSubtitle("Pop socket / Phone stent")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("phone-stent-blue-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
+                .setQuantity(20)
+                .putAllProperties(properties10)
+                .putAllOptions(options10)
+                .build();
+
+        Map<String, String> properties11 = new HashMap<>();
+        properties11.put("Material", "Plastic +TPU");
+        properties11.put("Product name", "Phone Socket");
+        properties11.put("Function","Stick on the phone");
+        properties11.put("Weight","10g");
+        properties11.put("Compatible Brand","All phones");
+
+        Map<String, String> options11 = new HashMap<>();
+        options11.put("cartoon","cartoon");
+
+        ProductVariant productVariant11 = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("Phone stent (cartoon)")
+                .setSubtitle("Pop socket / Phone stent")
+                .setDescription("")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("phone-stent-cartoon-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
+                .setQuantity(20)
+                .putAllProperties(properties11)
+                .putAllOptions(options11)
+                .build();
+
+        List<ProductVariant> productVariantList = new ArrayList<>();
+        productVariantList.add(productVariant1);
+        productVariantList.add(productVariant2);
+        productVariantList.add(productVariant3);
+        productVariantList.add(productVariant4);
+        productVariantList.add(productVariant5);
+        productVariantList.add(productVariant6);
+        productVariantList.add(productVariant7);
+        productVariantList.add(productVariant8);
+        productVariantList.add(productVariant9);
+        productVariantList.add(productVariant10);
+        productVariantList.add(productVariant11);
+
+        ProductVariants productVariants = ProductVariants
+                .newBuilder()
+                .addAllNodes(productVariantList)
+                .build();
+
         responseObserver.onNext(productVariants);
         responseObserver.onCompleted();
     }
