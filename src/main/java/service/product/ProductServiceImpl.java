@@ -312,7 +312,10 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         productList.add(product4);
         productList.add(product5);
 
-        Products products = Products.newBuilder().build();
+        Products products = Products
+                .newBuilder()
+                .addAllNodes(productList)
+                .build();
 
         responseObserver.onNext(products);
         responseObserver.onCompleted();
