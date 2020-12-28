@@ -7,6 +7,7 @@ package service.product;
 import AWS.ALBGrpc;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
+import com.google.type.Money;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
@@ -307,8 +308,15 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         List<Product> productList = new ArrayList<>();
         productList.add(product1);
+        productList.add(product2);
+        productList.add(product3);
+        productList.add(product4);
+        productList.add(product5);
 
-        Products products = Products.newBuilder().build();
+        Products products = Products
+                .newBuilder()
+                .addAllNodes(productList)
+                .build();
 
         responseObserver.onNext(products);
         responseObserver.onCompleted();
@@ -319,7 +327,65 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         logger.debug("getProductVariant");
 
-        ProductVariant productVariant = ProductVariant.newBuilder().build();
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
+        } catch (ParseException e) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription(e.getMessage())
+                    .asRuntimeException());
+        }
+        Instant time = date.toInstant();
+
+        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                .setNanos(time.getNano()).build();
+
+        Date dateValid = null;
+        try {
+            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
+        } catch (ParseException e) {
+            responseObserver.onError(Status.INVALID_ARGUMENT
+                    .withDescription(e.getMessage())
+                    .asRuntimeException());
+        }
+        Instant instantValid = dateValid.toInstant();
+
+        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                .setNanos(instantValid.getNano()).build();
+
+        Map<String, String> properties = new HashMap<>();
+        properties.put("Operating System", "Android Wear");
+        properties.put("Compatible Operating System", "Android, iOS - Apple");
+        properties.put("Model","Smart Bracelet");
+        properties.put("Band Material","Silicone");
+        properties.put("Series","C55");
+        properties.put("Features","Blood Pressure Monitor, Bluetooth Enabled, Waterproof");
+        properties.put("Case Material","Aluminium, Ceramic, Metal");
+        properties.put("Item type","smart watch");
+        properties.put("Screen size",".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen");
+        properties.put("CPU chip","MTK2502");
+        properties.put("RAM/ROM","34M/128M");
+        properties.put("Phone version require","Android 5.0 and above ,IOS 9.0 and above");
+        properties.put("Waterproof","IP67");
+        properties.put("Packing list","1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual");
+
+        ProductVariant productVariant = ProductVariant
+                .newBuilder()
+                .setProduct("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
+                .setId("//product.tapp/ProductVariant/")
+                .setTransactionTime(transactionTime)
+                .setCreatedTime(transactionTime)
+                .setValidTime(validTime)
+                .setTitle("")
+                .setDescription("Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock, calendar, stopwatch. Language:English, German, Spanish, Italian, French, Portuguese (Brazil), Russian, Indonesian, Czech, Arabic, Thai, Dutch, Polish, Turkish, Persian, Hebrew,Malaysian, Vietnamese, Greek language.")
+                .setImages(0, "")
+                .setForm(ProductVariant.Form.PHYSICAL)
+                .setSku("fitness-1")
+                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
+                .setQuantity(10)
+                .putAllProperties(properties)
+                .build();
+        
         responseObserver.onNext(productVariant);
         responseObserver.onCompleted();
     }
