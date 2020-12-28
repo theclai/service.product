@@ -16,9 +16,7 @@ import tapp.product.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author faisalrahman
@@ -268,6 +266,13 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
+
+        Map<String,String> colors4 = new HashMap<>();
+        colors4.put("blue","blue");
+        colors4.put("white","white");
+        colors4.put("red","red");
+
+        ProductVariant productVariant4 = ProductVariant.newBuilder().putAllOptions(colors4).build();
         Product product4 = Product
                 .newBuilder()
                 .setId("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
@@ -275,9 +280,19 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(56)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
+                .setDefaultVariant(productVariant4)
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
+
+        Map<String,String> colors5 = new HashMap<>();
+        colors4.put("black","black");
+        colors4.put("pink","pink");
+        colors4.put("white","white");
+        colors4.put("red","red");
+        colors4.put("blue","blue");
+        colors4.put("cartoon","cartoon");
+
+        ProductVariant productVariant5 = ProductVariant.newBuilder().putAllOptions(colors5).build();
 
         Product product5 = Product
                 .newBuilder()
@@ -286,7 +301,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(143)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
+                .setDefaultVariant(productVariant5)
                 .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
                 .build();
 
