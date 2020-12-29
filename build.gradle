@@ -75,7 +75,6 @@ flyway {
     schemas = flyway.schemas
     user = flyway.user
     password = flyway.password
-    sqlMigrationSeparator = "_"
     locations = flyway.locations
     placeholders = ["dir" : "${project.projectDir}".toString()]
 }
