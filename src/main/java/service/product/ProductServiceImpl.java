@@ -384,7 +384,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("fitness-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties)
                 .build();
 
         responseObserver.onNext(productVariant);
@@ -453,7 +452,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("fitness-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties1)
                 .build();
 
         Map<String, String> properties2 = new HashMap<>();
@@ -479,7 +477,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("usb-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(24500).build())
                 .setQuantity(10)
-                .putAllProperties(properties2)
                 .build();
 
         Map<String, String> properties3 = new HashMap<>();
@@ -508,7 +505,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-box-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties3)
                 .build();
 
         Map<String, String> properties4 = new HashMap<>();
@@ -535,7 +531,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-blue-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
                 .setQuantity(4)
-                .putAllProperties(properties4)
                 .build();
 
         Map<String, String> properties5 = new HashMap<>();
@@ -565,7 +560,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-white-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(22000).build())
                 .setQuantity(47)
-                .putAllProperties(properties5)
                 .putAllOptions(options5)
                 .build();
 
@@ -596,7 +590,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-red-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
                 .setQuantity(47)
-                .putAllProperties(properties6)
                 .putAllOptions(options6)
                 .build();
 
@@ -625,7 +618,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-black-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(43)
-                .putAllProperties(properties7)
                 .putAllOptions(options7)
                 .build();
 
@@ -654,7 +646,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-ping-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties8)
                 .putAllOptions(options8)
                 .build();
 
@@ -683,7 +674,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-white-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties9)
                 .putAllOptions(options9)
                 .build();
 
@@ -712,7 +702,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-blue-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties10)
                 .putAllOptions(options10)
                 .build();
 
@@ -741,7 +730,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-cartoon-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties11)
                 .putAllOptions(options11)
                 .build();
 
