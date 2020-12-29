@@ -16,25 +16,25 @@ pipeline {
                 sh './gradlew installDist'
             }
         }
-
         stage('Unit & Integration Tests') {
-            steps {
-                script {
-                    try {
-                        sh 'docker-compose up -d'
-                        sh './gradlew flywayMigrate -Penv=dev'
-                        sh './gradlew clean test --no-daemon' //run a gradle task
-                    } finally {
-                        junit '**/build/test-results/test/*.xml' //make the junit test results available in any case (success & failure)
-                    }
-                }
-            }
-            post {
-                  always {
-                      sh 'docker-compose down'
+                  steps {
+                      script {
+                          try {
+                              sh 'docker-compose up -d'
+                              sleep time: 1000, unit: 'MILLISECONDS'
+                              sh './gradlew flywayMigrate -Penv=dev'
+                              sh './gradlew clean test --no-daemon' //run a gradle task
+                          } finally {
+                              junit '**/build/test-results/test/*.xml' //make the junit test results available in any case (success & failure)
+                          }
+                      }
                   }
-            }
-        }
+                  post {
+                        always {
+                            sh 'docker-compose down'
+                        }
+                  }
+              }
         stage('Sanity Check') {
             steps {
                 sh '''
