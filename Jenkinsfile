@@ -4,7 +4,7 @@ pipeline {
     agent any
     environment {
         ECR_URL = '778179562648.dkr.ecr.eu-west-1.amazonaws.com'
-        CONTAINER_IMAGE = 'service.product'
+        CONTAINER_IMAGE = 'service.java'
     }
     stages {
         stage('Build') {
@@ -16,30 +16,25 @@ pipeline {
                 sh './gradlew installDist'
             }
         }
-
         stage('Unit & Integration Tests') {
-            steps{
-                script {
-                    sh 'docker-compose up -d'
-                }
-                sleep time: 1000, unit: 'MILLISECONDS'
-             }
-            steps {
-                script {
-                    try {
-                        sh './gradlew flywayMigrate -Penv=dev'
-                        sh './gradlew clean test --no-daemon' //run a gradle task
-                    } finally {
-                        junit '**/build/test-results/test/*.xml' //make the junit test results available in any case (success & failure)
-                    }
-                }
-            }
-            post {
-                  always {
-                      sh 'docker-compose down'
+                  steps {
+                      script {
+                          try {
+                              sh 'docker-compose up -d'
+                              sleep time: 1000, unit: 'MILLISECONDS'
+                              sh './gradlew flywayMigrate -Penv=dev'
+                              sh './gradlew clean test --no-daemon' //run a gradle task
+                          } finally {
+                              junit '**/build/test-results/test/*.xml' //make the junit test results available in any case (success & failure)
+                          }
+                      }
                   }
-            }
-        }
+                  post {
+                        always {
+                            sh 'docker-compose down'
+                        }
+                  }
+              }
         stage('Sanity Check') {
             steps {
                 sh '''
@@ -50,7 +45,7 @@ pipeline {
                         timeout $DURATION docker run --rm \
                             -e HTTP_PORT=8080 \
                             -e DATABASE_HOST=localhost \
-                            -e DATABASE_NAME=service_product \
+                            -e DATABASE_NAME=service_java \
                             -e DATABASE_PORT=5432 \
                             -e DATABASE_USERNAME=postgres \
                             -e DATABASE_PASSWORD=tapp \
