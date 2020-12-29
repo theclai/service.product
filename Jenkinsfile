@@ -4,7 +4,7 @@ pipeline {
     agent any
     environment {
         ECR_URL = '778179562648.dkr.ecr.eu-west-1.amazonaws.com'
-        CONTAINER_IMAGE = 'service.java'
+        CONTAINER_IMAGE = 'service.product'
     }
     stages {
         stage('Build') {
@@ -45,7 +45,7 @@ pipeline {
                         timeout $DURATION docker run --rm \
                             -e HTTP_PORT=8080 \
                             -e DATABASE_HOST=localhost \
-                            -e DATABASE_NAME=service_java \
+                            -e DATABASE_NAME=service_product \
                             -e DATABASE_PORT=5432 \
                             -e DATABASE_USERNAME=postgres \
                             -e DATABASE_PASSWORD=tapp \
