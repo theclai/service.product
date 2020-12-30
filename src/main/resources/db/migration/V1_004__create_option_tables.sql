@@ -1,20 +1,22 @@
 create table variant_option_tx (
-    id uuid primary key,
+    variant uuid references product_variant_tx(id),
+    id varchar(1024),
     tx bigserial references log(tx),
-    created_time timestamp with time zone not null default (current_timestamp)
+    created_time timestamp with time zone not null default(current_timestamp),
+    primary key(variant, id)
 );
 
-create index variant_option_tx_created_time_idx on variant_option_tx(created_time, id);
+create index variant_option_tx_created_time_idx on variant_option_tx(created_time, variant, id);
 
 create table variant_option (
-    id int,
+    variant uuid,
+    id varchar(1024),
     tx bigserial references log(tx),
-    variant uuid references product_variant_tx(id),
-    primary key(variant, id, tx),
-    valid_time timestamp with time zone not null default (current_timestamp),
+    valid_time timestamp with time zone not null default(current_timestamp),
     deleted boolean default (false),
-    key text not null,
-    value text not null
+    value text not null,
+    foreign key(variant, id) references variant_option_tx(variant, id),
+    primary key(variant, id, tx)
 );
 
 create index variant_option_variant_id_valid_time_tx_idx on variant_option(variant, id, valid_time, tx);
