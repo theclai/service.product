@@ -18,6 +18,7 @@ create table category (
     tx bigserial references log(tx),
     primary key(id, tx),
     valid_time timestamp with time zone not null default(current_timestamp),
+    deleted boolean default(false),
     title text not null,
     subtitle text,
     description text,
