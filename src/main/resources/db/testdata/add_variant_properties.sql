@@ -180,86 +180,88 @@ insert into variant_property(variant, id, tx, valid_time, key, value)
 values('d8f20c40-889c-4170-8f7a-3d19739e26ef', 8, '0', current_timestamp, 'MPN', 'Does Not Apply');
 
 ----Headset (Blue)
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Earphone style', 'wired earphone','0');
---
---insert into variant_property_tx(id, tx, created_time)
---values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Plug diameter', '3.5MM/ Lightning','1');
---
---insert into variant_property_tx(id, tx, created_time)
---values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('74014bba-d6bb-422c-8438-282aae7e51be', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'State of the fast connection', 'to peel','2');
---
---insert into variant_property_tx(id, tx, created_time)
---values('74014bba-d6bb-422c-8438-282aae7e51be', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('018ac5a6-424e-4acb-871b-caa80fea2921', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Quick connection', 'you device is connect','4');
---
---insert into variant_property_tx(id, tx, created_time)
---values('018ac5a6-424e-4acb-871b-caa80fea2921', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('4fa09e07-14a8-49ab-93f0-28c76b44332d', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Prompt disconnect', 'you device is connect','5');
---
---insert into variant_property_tx(id, tx, created_time)
---values('4fa09e07-14a8-49ab-93f0-28c76b44332d', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('da09b717-5170-41dc-9069-fe7a4e02aa9f', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Button function', 'Microphone with microphone','6');
---
---insert into variant_property_tx(id, tx, created_time)
---values('da09b717-5170-41dc-9069-fe7a4e02aa9f', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('91059f42-293d-4956-8c5d-87fd95374437', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Style', 'in ear','7');
---
---insert into variant_property_tx(id, tx, created_time)
---values('91059f42-293d-4956-8c5d-87fd95374437', '0', current_timestamp);
---
+
+insert into variant_property_tx(id, tx, created_time)
+values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Earphone style', 'wired earphone','0');
+
+insert into variant_property_tx(id, tx, created_time)
+values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('c54a982d-559b-49b8-bbc4-6d67a0737636', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Plug diameter', '3.5MM/ Lightning','1');
+
+insert into variant_property_tx(id, tx, created_time)
+values('74014bba-d6bb-422c-8438-282aae7e51be', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('74014bba-d6bb-422c-8438-282aae7e51be', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'State of the fast connection', 'to peel','2');
+
+insert into variant_property_tx(id, tx, created_time)
+values('018ac5a6-424e-4acb-871b-caa80fea2921', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('018ac5a6-424e-4acb-871b-caa80fea2921', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Quick connection', 'you device is connect','4');
+
+insert into variant_property_tx(id, tx, created_time)
+values('4fa09e07-14a8-49ab-93f0-28c76b44332d', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('4fa09e07-14a8-49ab-93f0-28c76b44332d', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Prompt disconnect', 'you device is connect','5');
+
+insert into variant_property_tx(id, tx, created_time)
+values('da09b717-5170-41dc-9069-fe7a4e02aa9f', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('da09b717-5170-41dc-9069-fe7a4e02aa9f', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Button function', 'Microphone with microphone','6');
+
+insert into variant_property_tx(id, tx, created_time)
+values('91059f42-293d-4956-8c5d-87fd95374437', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('91059f42-293d-4956-8c5d-87fd95374437', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Style', 'in ear','7');
+
 ----Headset (White)
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('c54a982d-559b-49b8-bbc4-6d67a0737637', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Earphone style', 'wired earphone','0');
---
---insert into variant_property_tx(id, tx, created_time)
---values('c54a982d-559b-49b8-bbc4-6d67a0737637', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('c54a982d-559b-49b8-bbc4-6d67a0737638', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Plug diameter', '3.5MM/ Lightning','1');
---
---insert into variant_property_tx(id, tx, created_time)
---values('c54a982d-559b-49b8-bbc4-6d67a0737638', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('74014bba-d6bb-422c-8438-282aae7e51bf', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'State of the fast connection', 'to peel','2');
---
---insert into variant_property_tx(id, tx, created_time)
---values('74014bba-d6bb-422c-8438-282aae7e51bf', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('018ac5a6-424e-4acb-871b-caa80fea2922', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Quick connection', 'you device is connect','4');
---
---insert into variant_property_tx(id, tx, created_time)
---values('018ac5a6-424e-4acb-871b-caa80fea2922', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('4fa09e07-14a8-49ab-93f0-28c76b44332e', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Prompt disconnect', 'you device is connect','5');
---
---insert into variant_property_tx(id, tx, created_time)
---values('4fa09e07-14a8-49ab-93f0-28c76b44332e', '0', current_timestamp);
---
---insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
---values('5d0a6c3e-b8f3-4b84-b542-89d234cafb12', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Button function', 'Microphone with microphone','6');
---
---insert into variant_property_tx(id, tx, created_time)
---values('5d0a6c3e-b8f3-4b84-b542-89d234cafb12', '0', current_timestamp);
+
+insert into variant_property_tx(id, tx, created_time)
+values('c54a982d-559b-49b8-bbc4-6d67a0737637', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('c54a982d-559b-49b8-bbc4-6d67a0737637', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Earphone style', 'wired earphone','0');
+
+insert into variant_property_tx(id, tx, created_time)
+values('c54a982d-559b-49b8-bbc4-6d67a0737638', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('c54a982d-559b-49b8-bbc4-6d67a0737638', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Plug diameter', '3.5MM/ Lightning','1');
+
+insert into variant_property_tx(id, tx, created_time)
+values('74014bba-d6bb-422c-8438-282aae7e51bf', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('74014bba-d6bb-422c-8438-282aae7e51bf', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'State of the fast connection', 'to peel','2');
+
+insert into variant_property_tx(id, tx, created_time)
+values('018ac5a6-424e-4acb-871b-caa80fea2922', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('018ac5a6-424e-4acb-871b-caa80fea2922', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Quick connection', 'you device is connect','4');
+
+insert into variant_property_tx(id, tx, created_time)
+values('4fa09e07-14a8-49ab-93f0-28c76b44332e', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('4fa09e07-14a8-49ab-93f0-28c76b44332e', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Prompt disconnect', 'you device is connect','5');
+
+insert into variant_property_tx(id, tx, created_time)
+values('5d0a6c3e-b8f3-4b84-b542-89d234cafb12', '0', current_timestamp);
+
+insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
+values('5d0a6c3e-b8f3-4b84-b542-89d234cafb12', '0', current_timestamp, '6aa5b22d-caa4-434c-a844-507d248d2a96', 'Button function', 'Microphone with microphone','6');
+
+
 --
 --insert into variant_property(id, tx, valid_time, variant, key, value, order_nr)
 --values('91059f42-293d-4956-8c5d-87fd95374438', '0', current_timestamp, '41f29159-5634-4e23-a600-59af937ee61f', 'Style', 'in ear','7');
