@@ -55,6 +55,8 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.7.9"
     compile "org.flywaydb:flyway-core:${flywayVersion}"
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
+    compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+    compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '3.0.0'
 }
 
 protobuf {
