@@ -353,21 +353,21 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                 .setNanos(instantValid.getNano()).build();
 
-        Map<String, String> properties = new HashMap<>();
-        properties.put("Operating System", "Android Wear");
-        properties.put("Compatible Operating System", "Android, iOS - Apple");
-        properties.put("Model","Smart Bracelet");
-        properties.put("Band Material","Silicone");
-        properties.put("Series","C55");
-        properties.put("Features","Blood Pressure Monitor, Bluetooth Enabled, Waterproof");
-        properties.put("Case Material","Aluminium, Ceramic, Metal");
-        properties.put("Item type","smart watch");
-        properties.put("Screen size",".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen");
-        properties.put("CPU chip","MTK2502");
-        properties.put("RAM/ROM","34M/128M");
-        properties.put("Phone version require","Android 5.0 and above ,IOS 9.0 and above");
-        properties.put("Waterproof","IP67");
-        properties.put("Packing list","1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual");
+        List<ProductVariant.Property> mapList = new ArrayList<>();
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Operating System").setValue("Android Wear").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Compatible Operating System").setValue("Android, iOS - Apple").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Model").setValue("Smart Bracelet").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Band Material").setValue("Silicone").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Series").setValue("C55").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("Blood Pressure Monitor, Bluetooth Enabled, Waterproof").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Case Material").setValue("Aluminium, Ceramic, Metal").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Item type").setValue("smart watch").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Screen size").setValue(".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("CPU chip").setValue("MTK2502").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("RAM/ROM").setValue("34M/128M").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Operating SystemPhone version require").setValue("Android 5.0 and above ,IOS 9.0 and above").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Waterproof").setValue("IP67").build());
+        mapList.add(ProductVariant.Property.newBuilder().setKey("Packing list").setValue("1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual").build());
 
         ProductVariant productVariant = ProductVariant
                 .newBuilder()
@@ -384,7 +384,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("fitness-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties)
+                .addAllProperties(mapList)
                 .build();
 
         responseObserver.onNext(productVariant);
@@ -422,21 +422,21 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                 .setNanos(instantValid.getNano()).build();
 
-        Map<String, String> properties1 = new HashMap<>();
-        properties1.put("Operating System", "Android Wear");
-        properties1.put("Compatible Operating System", "Android, iOS - Apple");
-        properties1.put("Model","Smart Bracelet");
-        properties1.put("Band Material","Silicone");
-        properties1.put("Series","C55");
-        properties1.put("Features","Blood Pressure Monitor, Bluetooth Enabled, Waterproof");
-        properties1.put("Case Material","Aluminium, Ceramic, Metal");
-        properties1.put("Item type","smart watch");
-        properties1.put("Screen size",".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen");
-        properties1.put("CPU chip","MTK2502");
-        properties1.put("RAM/ROM","34M/128M");
-        properties1.put("Phone version require","Android 5.0 and above ,IOS 9.0 and above");
-        properties1.put("Waterproof","IP67");
-        properties1.put("Packing list","1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual");
+        List<ProductVariant.Property> mapList1 = new ArrayList<>();
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Operating System").setValue("Android Wear").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Compatible Operating System").setValue("Android, iOS - Apple").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Model").setValue("Smart Bracelet").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Band Material").setValue("Silicone").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Series").setValue("C55").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("Blood Pressure Monitor, Bluetooth Enabled, Waterproof").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Case Material").setValue("Aluminium, Ceramic, Metal").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Item type").setValue("smart watch").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Screen size").setValue(".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("CPU chip").setValue("MTK2502").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("RAM/ROM").setValue("34M/128M").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Operating SystemPhone version require").setValue("Android 5.0 and above ,IOS 9.0 and above").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Waterproof").setValue("IP67").build());
+        mapList1.add(ProductVariant.Property.newBuilder().setKey("Packing list").setValue("1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual").build());
 
         ProductVariant productVariant1 = ProductVariant
                 .newBuilder()
@@ -453,16 +453,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("fitness-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties1)
+                .addAllProperties(mapList1)
                 .build();
 
-        Map<String, String> properties2 = new HashMap<>();
-        properties2.put("Type", "Type-C /Micro USB");
-        properties2.put("Cable Length", "1m");
-        properties2.put("Items Included","Charging & Data Sync Cable, Charging Cable, Data Sync Cable");
-        properties2.put("Brand","Unbranded");
-        properties2.put("Features","USB-C");
-        properties2.put("MPN","Does Not Apply");
+        List<ProductVariant.Property> mapList2 = new ArrayList<>();
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("Type").setValue("Type-C /Micro USB").build());
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("Cable Length").setValue("1m").build());
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("Items Included").setValue("Charging & Data Sync Cable, Charging Cable, Data Sync Cable").build());
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("Brand").setValue("Unbranded").build());
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("USB-C").build());
+        mapList2.add(ProductVariant.Property.newBuilder().setKey("MPN").setValue("Does Not Apply").build());
 
         ProductVariant productVariant2 = ProductVariant
                 .newBuilder()
@@ -479,19 +479,19 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("usb-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(24500).build())
                 .setQuantity(10)
-                .putAllProperties(properties2)
+                .addAllProperties(mapList2)
                 .build();
 
-        Map<String, String> properties3 = new HashMap<>();
-        properties3.put("Fit Design", "In-Ear Only");
-        properties3.put("Wireless Technology", "Bluetooth");
-        properties3.put("Compatible Brand","Android");
-        properties3.put("Connectivity","3.5mm Jack, Lightning");
-        properties3.put("Earpiece Design","Earbud (In Ear) Type: Headset");
-        properties3.put("Connector(s)","3.5mm Jack/Lightning Features: Built-in Microphone, Call functions, Playback Controls, Volume Control");
-        properties3.put("Earpiece","Double Color: White");
-        properties3.put("Brand","Unbranded");
-        properties3.put("MPN","Does Not Apply");
+        List<ProductVariant.Property> mapList3 = new ArrayList<>();
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Fit Design").setValue("In-Ear Only").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Wireless Technology").setValue("Bluetooth").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("Android").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Connectivity").setValue("3.5mm Jack, Lightning").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Earpiece Design").setValue("Earbud (In Ear) Type: Headset").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Connector(s)").setValue("3.5mm Jack/Lightning Features: Built-in Microphone, Call functions, Playback Controls, Volume Control").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Earpiece").setValue("Double Color: White").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("Brand").setValue("Unbranded").build());
+        mapList3.add(ProductVariant.Property.newBuilder().setKey("MPN").setValue("Does Not Apply").build());
 
         ProductVariant productVariant3 = ProductVariant
                 .newBuilder()
@@ -508,17 +508,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-box-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
                 .setQuantity(10)
-                .putAllProperties(properties3)
+                .addAllProperties(mapList3)
                 .build();
 
-        Map<String, String> properties4 = new HashMap<>();
-        properties4.put("Earphone style", "wired earphone");
-        properties4.put("Plug diameter", "3.5MM/ Lightning");
-        properties4.put("State of the fast connection","to peel");
-        properties4.put("Quick connection","you device is connect");
-        properties4.put("Prompt disconnect","you device is disconnect");
-        properties4.put("Button function","Button function");
-        properties4.put("Style","in ear");
+        List<ProductVariant.Property> mapList4 = new ArrayList<>();
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
+        mapList4.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
 
         ProductVariant productVariant4 = ProductVariant
                 .newBuilder()
@@ -535,17 +535,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-blue-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
                 .setQuantity(4)
-                .putAllProperties(properties4)
+                .addAllProperties(mapList4)
                 .build();
 
-        Map<String, String> properties5 = new HashMap<>();
-        properties5.put("Earphone style", "wired earphone");
-        properties5.put("Plug diameter", "3.5MM/ Lightning");
-        properties5.put("State of the fast connection","to peel");
-        properties5.put("Quick connection","you device is connect");
-        properties5.put("Prompt disconnect","you device is disconnect");
-        properties5.put("Button function","Microphone with microphone");
-        properties5.put("Style","in ear");
+        List<ProductVariant.Property> mapList5 = new ArrayList<>();
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
+        mapList5.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
 
         Map<String, String> options5 = new HashMap<>();
         options5.put("white","white");
@@ -565,18 +565,18 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-white-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(22000).build())
                 .setQuantity(47)
-                .putAllProperties(properties5)
+                .addAllProperties(mapList5)
                 .putAllOptions(options5)
                 .build();
 
-        Map<String, String> properties6 = new HashMap<>();
-        properties6.put("Earphone style", "wired earphone");
-        properties6.put("Plug diameter", "3.5MM/ Lightning");
-        properties6.put("State of the fast connection","to peel");
-        properties6.put("Quick connection","you device is connect");
-        properties6.put("Prompt disconnect","you device is disconnect");
-        properties6.put("Button function","Microphone with microphone");
-        properties6.put("Style","in ear");
+        List<ProductVariant.Property> mapList6 = new ArrayList<>();
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
+        mapList6.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
 
         Map<String, String> options6 = new HashMap<>();
         options6.put("red","red");
@@ -596,16 +596,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("headset-red-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
                 .setQuantity(47)
-                .putAllProperties(properties6)
+                .addAllProperties(mapList6)
                 .putAllOptions(options6)
                 .build();
 
-        Map<String, String> properties7 = new HashMap<>();
-        properties7.put("Material", "Plastic +TPU");
-        properties7.put("Product name", "Phone Socket");
-        properties7.put("Function","Stick on the phone");
-        properties7.put("Weight","10g");
-        properties7.put("Compatible Brand","All phones");
+        List<ProductVariant.Property> mapList7 = new ArrayList<>();
+        mapList7.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
+        mapList7.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
+        mapList7.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
+        mapList7.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
+        mapList7.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
 
         Map<String, String> options7 = new HashMap<>();
         options7.put("black","black");
@@ -625,16 +625,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-black-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(43)
-                .putAllProperties(properties7)
+                .addAllProperties(mapList7)
                 .putAllOptions(options7)
                 .build();
 
-        Map<String, String> properties8 = new HashMap<>();
-        properties8.put("Material", "Plastic +TPU");
-        properties8.put("Product name", "Phone Socket");
-        properties8.put("Function","Stick on the phone");
-        properties8.put("Weight","10g");
-        properties8.put("Compatible Brand","All phones");
+        List<ProductVariant.Property> mapList8 = new ArrayList<>();
+        mapList8.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
+        mapList8.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
+        mapList8.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
+        mapList8.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
+        mapList8.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
 
         Map<String, String> options8 = new HashMap<>();
         options8.put("pink","pink");
@@ -654,16 +654,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-ping-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties8)
+                .addAllProperties(mapList8)
                 .putAllOptions(options8)
                 .build();
 
-        Map<String, String> properties9 = new HashMap<>();
-        properties9.put("Material", "Plastic +TPU");
-        properties9.put("Product name", "Phone Socket");
-        properties9.put("Function","Stick on the phone");
-        properties9.put("Weight","10g");
-        properties9.put("Compatible Brand","All phones");
+        List<ProductVariant.Property> mapList9 = new ArrayList<>();
+        mapList9.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
+        mapList9.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
+        mapList9.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
+        mapList9.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
+        mapList9.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
 
         Map<String, String> options9 = new HashMap<>();
         options9.put("white","white");
@@ -683,16 +683,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-white-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties9)
+                .addAllProperties(mapList9)
                 .putAllOptions(options9)
                 .build();
 
-        Map<String, String> properties10 = new HashMap<>();
-        properties10.put("Material", "Plastic +TPU");
-        properties10.put("Product name", "Phone Socket");
-        properties10.put("Function","Stick on the phone");
-        properties10.put("Weight","10g");
-        properties10.put("Compatible Brand","All phones");
+        List<ProductVariant.Property> mapList10 = new ArrayList<>();
+        mapList10.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
+        mapList10.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
+        mapList10.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
+        mapList10.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
+        mapList10.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
 
         Map<String, String> options10 = new HashMap<>();
         options10.put("blue","blue");
@@ -712,16 +712,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-blue-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties10)
+                .addAllProperties(mapList10)
                 .putAllOptions(options10)
                 .build();
 
-        Map<String, String> properties11 = new HashMap<>();
-        properties11.put("Material", "Plastic +TPU");
-        properties11.put("Product name", "Phone Socket");
-        properties11.put("Function","Stick on the phone");
-        properties11.put("Weight","10g");
-        properties11.put("Compatible Brand","All phones");
+        List<ProductVariant.Property> mapList11 = new ArrayList<>();
+        mapList11.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
+        mapList11.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
+        mapList11.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
+        mapList11.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
+        mapList11.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
 
         Map<String, String> options11 = new HashMap<>();
         options11.put("cartoon","cartoon");
@@ -741,7 +741,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setSku("phone-stent-cartoon-1")
                 .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
                 .setQuantity(20)
-                .putAllProperties(properties11)
+                .addAllProperties(mapList11)
                 .putAllOptions(options11)
                 .build();
 
