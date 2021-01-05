@@ -2,13 +2,15 @@
  * Tapp
  * Copyright (c) 20042021 All Rights Reserved.
  */
-package service.model;
+package service.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 import org.eclipse.persistence.annotations.Converter;
+import org.eclipse.persistence.annotations.Convert;
 import service.util.UUIDConverter;
 
 /**
@@ -23,9 +25,19 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String Category_find_by_id = "Category.findById";
+
+    public static final String Category_find_by_id_query =
+            "select * from category_tx \n" +
+            "join log using(tx)\n" +
+            "join category using(id, tx)\n" +
+            "where node_tx.id = 'MY_CATEGORY_UUID'\n" +
+            "and deleted = false";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
+    @Convert("uuidConverter")
     private UUID id;
 
     @Column(name="tx")
@@ -47,7 +59,24 @@ public class Category implements Serializable {
     private String description;
 
     @Column(name="parent")
+    @Convert("uuidConverter")
     private UUID parent;
+
+    public Category(){
+
+    }
+
+    public Category(UUID id, int tx, Date validTime, boolean deleted, String title, String subtitle, String description, UUID parent){
+
+        this.id = id;
+        this.tx = tx;
+        this.validTime = validTime;
+        this.deleted = deleted;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.description = description;
+        this.parent = parent;
+    }
 
     public UUID getId() {
         return id;
@@ -111,5 +140,23 @@ public class Category implements Serializable {
 
     public void setParent(UUID parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return Objects.equals(id, category.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Category{id=%d}", id);
     }
 }

@@ -1,0 +1,76 @@
+/**
+ * Tapp
+ * Copyright (c) 20042021 All Rights Reserved.
+ */
+package service.entities;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
+
+/**
+ * @author faisalrahman
+ * @version $Id: Log.java, v 0.1 20210105 09.37 faisalrahman Exp $$
+ */
+
+@Entity
+@Table(name = "log")
+public class Log implements Serializable {
+
+    @Id
+    @Column(name="tx")
+    private int tx;
+
+    @Column(name="transaction_time")
+    private Date transactionTime;
+
+    public Log(){
+
+    }
+
+    public Log(int tx, Date transactionTime){
+
+        this.tx = tx;
+        this.transactionTime = transactionTime;
+    }
+
+    public int getTx() {
+        return tx;
+    }
+
+    public void setTx(int tx) {
+        this.tx = tx;
+    }
+
+    public Date getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(Date transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Log log = (Log) o;
+        return Objects.equals(tx, log.tx);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tx);
+    }
+
+    @Override
+    public String toString() {
+
+        return "";
+        //return String.format("Log{tx=%d}", tx);
+    }
+}
