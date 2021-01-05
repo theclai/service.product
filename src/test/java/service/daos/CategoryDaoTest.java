@@ -4,10 +4,7 @@
  */
 package service.daos;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import service.entities.Category;
@@ -35,6 +32,7 @@ import static org.junit.Assert.assertFalse;
 public class CategoryDaoTest {
 
     private static final String PERSISTENCE_UNIT_NAME = "service_product";
+
     private EntityManager entityManager;
 
     @Rule
@@ -48,28 +46,38 @@ public class CategoryDaoTest {
 
     @After
     public void tearDown() throws Exception {
+
+        entityManager.getTransaction().begin();
+        entityManager.createNativeQuery("truncate table log").executeUpdate();
+        entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
+        entityManager.createNativeQuery("truncate table category").executeUpdate();
+        entityManager.getTransaction().commit();
+        entityManager.clear();
         entityManager.close();
     }
 
     @Test
     public void getCategory_withUUId_returnCategory() {
 
-        UUID fakeId =  UUID.randomUUID();
-
+        UUID fakeId =  UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
         provider.begin();
         provider.em().persist(new Log(0, new Date()));
+        provider.commit();
+
+        provider.begin();
         provider.em().persist(new CategoryTx(fakeId, 0, new Date()));
+        provider.commit();
+
+        provider.begin();
         provider.em().persist(new Category(fakeId, 0, new Date(),  false, "Physical Goods", null, null, null));
+        provider.commit();
 
         CategoryDao categoryDao = new CategoryDao(entityManager);
         UUID id = fakeId;
+        Optional<Category> categoryValue = categoryDao.get(id);
+        String actualValue = categoryValue.get().getTitle();
+        String expectedValue = "Physical Goods";
 
-        try {
-            Optional<Category> actualValue = categoryDao.get(id);
-        }catch (Exception e){
-            String t = e.getMessage();
-        }
-
-        //assertEquals(actualValue.get().getId(), id);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }

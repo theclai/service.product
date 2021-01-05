@@ -25,7 +25,6 @@ import java.util.UUID;
 public class CategoryTx implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     @Convert("uuidConverter")
     private UUID id;

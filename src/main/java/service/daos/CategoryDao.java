@@ -29,9 +29,7 @@ public class CategoryDao implements Dao<Category> {
 
         Query query = entityManager.createNativeQuery("SELECT * FROM category_tx cx JOIN log l using(tx) JOIN category c using(id, tx) WHERE cx.id = ? AND c.deleted = 'f'", Category.class);
         query.setParameter(1, id);
-
-        List<Category> categoryList = query.getResultList();
-        Category category = (Category) query.getSingleResult();
+        Category category = (Category) query.getResultList().stream().findFirst().orElse(null);
 
         return Optional.ofNullable(category);
     }

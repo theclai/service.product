@@ -35,7 +35,6 @@ public class Category implements Serializable {
             "and deleted = false";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     @Convert("uuidConverter")
     private UUID id;
@@ -58,7 +57,7 @@ public class Category implements Serializable {
     @Column(name="description")
     private String description;
 
-    @Column(name="parent")
+    @Column(name="parent", nullable = true)
     @Convert("uuidConverter")
     private UUID parent;
 
@@ -157,6 +156,6 @@ public class Category implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Category{id=%d}", id);
+        return String.format("Category{id=%s}", id.toString());
     }
 }
