@@ -58,6 +58,7 @@ dependencies {
     compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.7.3'
     compile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.jpa', version: '3.0.0'
+    testCompile "org.testcontainers:postgresql:1.10.6"
 }
 
 protobuf {

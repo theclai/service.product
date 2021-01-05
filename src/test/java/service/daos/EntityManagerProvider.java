@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.Map;
 
 /**
  * @author faisalrahman
@@ -28,8 +29,18 @@ public class EntityManagerProvider implements TestRule {
         this.tx = em.getTransaction();
     }
 
+    public EntityManagerProvider(String unitName, Map properties) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(unitName, properties);
+        this.em = emf.createEntityManager();
+        this.tx = em.getTransaction();
+    }
+
     public static EntityManagerProvider withUnit(String unitName) {
         return new EntityManagerProvider(unitName);
+    }
+
+    public static EntityManagerProvider withUnit(String unitName, Map properties) {
+        return new EntityManagerProvider(unitName, properties);
     }
 
     public void begin() {

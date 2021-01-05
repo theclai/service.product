@@ -14,11 +14,12 @@ import service.entities.Log;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.testcontainers.containers.PostgreSQLContainer;
+import static org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import static java.lang.String.format;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -31,17 +32,45 @@ import static org.junit.Assert.assertFalse;
 @RunWith(JUnit4.class)
 public class CategoryDaoTest {
 
+    private static final String USER = "test";
+    private static final String PASSWORD = "test";
+    private static final String DATABASE = "service_product_db";
     private static final String PERSISTENCE_UNIT_NAME = "service_product";
+    private static final int POSTGRESQL_PORT = 5433;
 
     private EntityManager entityManager;
-
-    @Rule
-    public EntityManagerProvider provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
+    private EntityManagerProvider provider;
+    private PostgreSQLContainer postgreSQLContainer;
 
     @Before
     public void Setup() {
 
+        postgreSQLContainer = new PostgreSQLContainer("postgres:11.1")
+                .withDatabaseName(DATABASE)
+                .withUsername(USER)
+                .withPassword(PASSWORD);
+
+        postgreSQLContainer.start();
+
+        Map properties = new HashMap<>();
+        properties.put("eclipselink.ddl-generation", "create-tables");
+        properties.put("javax.persistence.jdbc.url", getJdbcUrl());
+        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
+        properties.put("javax.persistence.jdbc.user", USER);
+        properties.put("javax.persistence.jdbc.password", PASSWORD);
+        properties.put("eclipselink.allow-zero-id", "true");
+
+        //entityManager = provider.em();
+        provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME, properties);
         entityManager = provider.em();
+    }
+
+    public String getJdbcUrl() {
+
+        return format("jdbc:postgresql://%s:%s/%s?user=%s&password=%s",
+                postgreSQLContainer.getContainerIpAddress(),
+                postgreSQLContainer.getMappedPort(POSTGRESQL_PORT),
+                DATABASE, USER, PASSWORD);
     }
 
     @After
@@ -52,6 +81,8 @@ public class CategoryDaoTest {
         entityManager.createNativeQuery("truncate table category").executeUpdate();
         entityManager.createNativeQuery("truncate table log").executeUpdate();
         entityManager.getTransaction().commit();
+
+        postgreSQLContainer.close();
     }
 
     @Test
