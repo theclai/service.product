@@ -36,7 +36,6 @@ public class CategoryDaoTest {
     private static final String PASSWORD = "test";
     private static final String DATABASE = "service_product_db";
     private static final String PERSISTENCE_UNIT_NAME = "service_product";
-    private static final int POSTGRESQL_PORT = 5433;
 
     private EntityManager entityManager;
     private EntityManagerProvider provider;
@@ -45,7 +44,7 @@ public class CategoryDaoTest {
     @Before
     public void Setup() {
 
-        postgreSQLContainer = new PostgreSQLContainer("postgres:11.1")
+        postgreSQLContainer = new PostgreSQLContainer("postgres:13.1")
                 .withDatabaseName(DATABASE)
                 .withUsername(USER)
                 .withPassword(PASSWORD);
@@ -54,33 +53,18 @@ public class CategoryDaoTest {
 
         Map properties = new HashMap<>();
         properties.put("eclipselink.ddl-generation", "create-tables");
-        properties.put("javax.persistence.jdbc.url", getJdbcUrl());
+        properties.put("javax.persistence.jdbc.url", postgreSQLContainer.getJdbcUrl());
         properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
         properties.put("javax.persistence.jdbc.user", USER);
         properties.put("javax.persistence.jdbc.password", PASSWORD);
         properties.put("eclipselink.allow-zero-id", "true");
 
-        //entityManager = provider.em();
         provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME, properties);
         entityManager = provider.em();
     }
 
-    public String getJdbcUrl() {
-
-        return format("jdbc:postgresql://%s:%s/%s?user=%s&password=%s",
-                postgreSQLContainer.getContainerIpAddress(),
-                postgreSQLContainer.getMappedPort(POSTGRESQL_PORT),
-                DATABASE, USER, PASSWORD);
-    }
-
     @After
     public void tearDown() throws Exception {
-
-        entityManager.getTransaction().begin();
-        entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
-        entityManager.createNativeQuery("truncate table category").executeUpdate();
-        entityManager.createNativeQuery("truncate table log").executeUpdate();
-        entityManager.getTransaction().commit();
 
         postgreSQLContainer.close();
     }
