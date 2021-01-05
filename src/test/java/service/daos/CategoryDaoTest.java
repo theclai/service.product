@@ -48,12 +48,10 @@ public class CategoryDaoTest {
     public void tearDown() throws Exception {
 
         entityManager.getTransaction().begin();
-        entityManager.createNativeQuery("truncate table log").executeUpdate();
         entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
         entityManager.createNativeQuery("truncate table category").executeUpdate();
+        entityManager.createNativeQuery("truncate table log").executeUpdate();
         entityManager.getTransaction().commit();
-        entityManager.clear();
-        entityManager.close();
     }
 
     @Test

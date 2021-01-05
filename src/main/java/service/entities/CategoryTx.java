@@ -85,6 +85,6 @@ public class CategoryTx implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("CategoryTx{id=%d}", id);
+        return String.format("CategoryTx{id=%s}", id.toString());
     }
 }

@@ -70,7 +70,6 @@ public class Log implements Serializable {
     @Override
     public String toString() {
 
-        return "";
-        //return String.format("Log{tx=%d}", tx);
+        return String.format("Log{tx=%d}", tx);
     }
 }
