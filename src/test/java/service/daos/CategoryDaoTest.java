@@ -66,7 +66,15 @@ public class CategoryDaoTest {
     @After
     public void tearDown() throws Exception {
 
-        postgreSQLContainer.close();
+//        entityManager.getTransaction().begin();
+//        entityManager.createNativeQuery("truncate table log").executeUpdate();
+//        entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
+//        entityManager.createNativeQuery("truncate table category").executeUpdate();
+//        entityManager.getTransaction().commit();
+//        entityManager.clear();
+        entityManager.close();
+
+        //postgreSQLContainer.close();
     }
 
     @Test
