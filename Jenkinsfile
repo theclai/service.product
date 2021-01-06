@@ -12,7 +12,7 @@ pipeline {
                 echo 'Building..'
                 sh 'git submodule update --init'
                 sh './gradlew clean'
-                sh './gradlew build'
+                sh './gradlew build -x test'
                 sh './gradlew installDist'
             }
         }
