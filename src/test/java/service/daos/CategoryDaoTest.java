@@ -44,22 +44,22 @@ public class CategoryDaoTest {
     @Before
     public void Setup() {
 
-        postgreSQLContainer = new PostgreSQLContainer("postgres:13.1")
-                .withDatabaseName(DATABASE)
-                .withUsername(USER)
-                .withPassword(PASSWORD);
+//        postgreSQLContainer = new PostgreSQLContainer("postgres:13.1")
+//                .withDatabaseName(DATABASE)
+//                .withUsername(USER)
+//                .withPassword(PASSWORD);
+//
+//        postgreSQLContainer.start();
 
-        postgreSQLContainer.start();
+//        Map properties = new HashMap<>();
+//        properties.put("eclipselink.ddl-generation", "create-tables");
+//        properties.put("javax.persistence.jdbc.url", postgreSQLContainer.getJdbcUrl());
+//        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
+//        properties.put("javax.persistence.jdbc.user", USER);
+//        properties.put("javax.persistence.jdbc.password", PASSWORD);
+//        properties.put("eclipselink.allow-zero-id", "true");
 
-        Map properties = new HashMap<>();
-        properties.put("eclipselink.ddl-generation", "create-tables");
-        properties.put("javax.persistence.jdbc.url", postgreSQLContainer.getJdbcUrl());
-        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
-        properties.put("javax.persistence.jdbc.user", USER);
-        properties.put("javax.persistence.jdbc.password", PASSWORD);
-        properties.put("eclipselink.allow-zero-id", "true");
-
-        provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME, properties);
+        provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
         entityManager = provider.em();
     }
 
