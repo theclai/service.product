@@ -37,6 +37,10 @@ public class ProductTx implements Serializable {
     @Column(name = "created_time")
     private Date createdTime;
 
+    public ProductTx(){
+
+    }
+
     public ProductTx(UUID id, int tx, Date createdTime){
 
         this.id = id;

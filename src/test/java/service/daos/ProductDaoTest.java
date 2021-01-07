@@ -54,9 +54,9 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void getProduct_withUUId_returnProduct(){
+    public void getProduct_withUUId_returnProduct() {
 
-        UUID fakeProductId =  UUID.fromString("a6ec855f-2329-44fd-a68b-e21e1398fe13");
+        UUID fakeProductId =  UUID.fromString("59e1ae6c-45a2-41b6-a2f2-fce36b541b05");
         UUID fakeIdCategory =  UUID.fromString("feb246cb-cf3f-40f2-b3a0-6e84ce27396d");
 
         provider.begin();
@@ -72,7 +72,7 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Log(1, new Date()));
+        provider.em().persist(new Log(2, new Date()));
         provider.commit();
 
         provider.begin();
