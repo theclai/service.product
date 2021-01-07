@@ -68,6 +68,35 @@ public class ProductVariant implements Serializable {
 
     }
 
+    public ProductVariant(
+            UUID id,
+            int tx,
+            Date validTime,
+            boolean deleted,
+            String title,
+            String subtitle,
+            String sku,
+            String description,
+            UUID product,
+            int quantity,
+            double price,
+            Form form) {
+
+        this.id = id;
+        this.tx = tx;
+        this.validTime = validTime;
+        this.deleted = deleted;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.sku = sku;
+        this.description = description;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.form = form;
+
+    }
+
     public enum Form {
         digital, physical, billing, lending;
     }
