@@ -6,6 +6,8 @@
         <class>service.entities.Category</class>
         <class>service.entities.CategoryTx</class>
         <class>service.entities.Log</class>
+        <class>service.entities.Product</class>
+        <class>service.entities.ProductTx</class>
         <properties>
             <property name="eclipselink.ddl-generation" value="create-tables" />
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/service_product"/>

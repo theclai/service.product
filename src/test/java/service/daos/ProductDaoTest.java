@@ -64,11 +64,11 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory, 0, new Date()));
+        provider.em().persist(new CategoryTx(fakeIdCategory, 1, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 0, new Date(),  false, "Physical Goods", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null));
         provider.commit();
 
         provider.begin();
@@ -76,11 +76,11 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId, 0, new Date()));
+        provider.em().persist(new ProductTx(fakeProductId, 2, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Product(fakeProductId, 0, new Date(),  false, fakeIdCategory, 20));
+        provider.em().persist(new Product(fakeProductId, 2, new Date(),  false, fakeIdCategory, 20));
         provider.commit();
 
         ProductDao productDao = new ProductDao(entityManager);

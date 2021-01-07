@@ -43,7 +43,8 @@ public class Product implements Serializable {
     @Column(name="deleted")
     private boolean deleted;
 
-    @Column(name="category")
+    @Column(name="category", nullable = true)
+    @Convert("uuidConverter")
     private UUID category;
 
     @Column(name="quantity")

@@ -27,7 +27,7 @@ public class ProductDao implements Dao<Product>{
     @Override
     public Optional<Product> get(UUID id) {
 
-        Query query = entityManager.createNativeQuery("SELECT * FROM product_tx px JOIN log l using(tx) JOIN product p using(id, tx) WHERE px.id = ? AND c.deleted = 'f'", Product.class);
+        Query query = entityManager.createNativeQuery("SELECT * FROM product_tx px JOIN log l using(tx) JOIN product p using(id, tx) WHERE px.id = ? AND p.deleted = 'f'", Product.class);
         query.setParameter(1, id);
         Product product = (Product) query.getResultList().stream().findFirst().orElse(null);
 
