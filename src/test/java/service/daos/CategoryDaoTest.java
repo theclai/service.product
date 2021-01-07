@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.testcontainers.containers.PostgreSQLContainer;
-import static org.testcontainers.containers.PostgreSQLContainer.POSTGRESQL_PORT;
 
 import java.time.LocalDateTime;
 import java.util.*;
