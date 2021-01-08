@@ -5,13 +5,15 @@
 package service.daos;
 
 import service.entities.Product;
-import tapp.product.ProductVariant;
+import service.entities.ProductVariant;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import service.entities.ProductVariant;
 
 /**
  * @author faisalrahman

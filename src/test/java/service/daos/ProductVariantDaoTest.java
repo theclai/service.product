@@ -5,6 +5,7 @@
 package service.daos;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import service.entities.*;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -69,12 +71,34 @@ public class ProductVariantDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductId, 3, new Date()));
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId, 3, new Date()));
         provider.commit();
 
-//        provider.begin();
-//        provider.em().persist(new ProductVariant(fakeProductVariantId, 3, new Date(),  false,));
-//        provider.commit();
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId,
+                3,
+                new Date(),
+                false,
+                "Fitness bracelet",
+                null,
+                "fitness-1",
+                null,
+                fakeProductId,
+                10,
+                new ProductMoney("IDR",1068051),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
+        UUID id = fakeProductVariantId;
+
+        Optional<ProductVariant> productVariantValue = productVariantDao.get(id);
+        String actualValue = productVariantValue.get().getTitle();
+        String expectedValue = "Fitness bracelet";
+
+        Assert.assertEquals(actualValue, expectedValue);
 
     }
 }
