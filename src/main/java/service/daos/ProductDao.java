@@ -5,9 +5,11 @@
 package service.daos;
 
 import service.entities.Product;
+import service.entities.Category;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,5 +54,23 @@ public class ProductDao implements Dao<Product>{
     @Override
     public void delete(Product product) {
 
+    }
+
+    public List<Product> getProductList(List<UUID> categoryList) {
+
+        Query query;
+        List<Product> productList = new ArrayList<>();
+
+        if (categoryList == null || categoryList.isEmpty()) {
+            query = entityManager.createNativeQuery("SELECT * FROM product_tx px JOIN log l using(tx) JOIN product p using(id, tx) WHERE p.deleted = 'f'", Product.class);
+        }else {
+            query = entityManager.createNativeQuery("SELECT * FROM product_tx px JOIN log l using(tx) JOIN product p using(id, tx) WHERE p.deleted = 'f' AND p.category IN ?", Product.class);
+            
+            query.setParameter(1, categoryList);
+        }
+
+        productList = query.getResultList();
+
+        return productList;
     }
 }
