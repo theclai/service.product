@@ -81,7 +81,7 @@ public class ProductDao implements Dao<Product> {
                 sb.append(")");
             }
 
-            query = entityManager.createNativeQuery(sb.toString());
+            query = entityManager.createNativeQuery(sb.toString(), Product.class);
 
             for (int i = 0; i < categoryList.size(); i++) {
                 query.setParameter(i + 1, categoryList.get(i));
