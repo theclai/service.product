@@ -4,13 +4,11 @@
  */
 package service.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.eclipse.persistence.jpa.config.Cascade;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author faisalrahman
