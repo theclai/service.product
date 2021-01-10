@@ -25,15 +25,6 @@ public class Category implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String Category_find_by_id = "Category.findById";
-
-    public static final String Category_find_by_id_query =
-            "select * from category_tx \n" +
-            "join log using(tx)\n" +
-            "join category using(id, tx)\n" +
-            "where node_tx.id = 'MY_CATEGORY_UUID'\n" +
-            "and deleted = false";
-
     @Id
     @Column(name="id")
     @Convert("uuidConverter")

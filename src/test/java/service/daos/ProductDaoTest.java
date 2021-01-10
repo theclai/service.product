@@ -92,7 +92,85 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void getListOfProduct_categoryList_isNull(){
+    public void getListOfProduct_categoryList_isNull_returnAllProduct(){
+
+        UUID fakeProductId1 =  UUID.fromString("0450df08-2245-41e8-8345-3918fd5db926");
+        UUID fakeProductId2 =  UUID.fromString("04365df2-07eb-4c55-b756-db989d9b99ec");
+        UUID fakeProductId3 =  UUID.fromString("cfa30360-6c13-4bbf-bbfe-3de5499cc383");
+        UUID fakeProductId4 =  UUID.fromString("ca4caf23-e8e1-46bd-bd10-e16e3c7d8b18");
+        UUID fakeIdCategory1 =  UUID.fromString("90296533-1d43-47ce-920a-6cb119dde1bd");
+        UUID fakeIdCategory2 =  UUID.fromString("13924fb7-6591-436a-afba-6b67593c5d7c");
+
+        provider.begin();
+        provider.em().persist(new Log(4, new Date()));
+        provider.commit();
+
+        //category1
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeIdCategory1, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeIdCategory1, 4, new Date(),  false, "Phone Accessories", null, null, null));
+        provider.commit();
+
+        //category2
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeIdCategory2, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeIdCategory2, 4, new Date(),  false, "Yachts", null, null, null));
+        provider.commit();
+
+        //product1
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId1, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId1, 4, new Date(),  false, fakeIdCategory1, 20));
+        provider.commit();
+
+        //product2
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId2, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId2, 4, new Date(),  false, fakeIdCategory1, 30));
+        provider.commit();
+
+        //product3
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId3, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId3, 4, new Date(),  false, fakeIdCategory2, 40));
+        provider.commit();
+
+        //product4
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId4, 4, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId4, 4, new Date(),  false, fakeIdCategory2, 50));
+        provider.commit();
+
+        ProductDao productDao = new ProductDao(entityManager);
+        List<UUID> categoryIdList = new ArrayList<>();
+
+        List<Product> productList = productDao.getProductList(categoryIdList);
+
+        long actualValue = productList.stream().count();
+        
+        Assert.assertNotEquals(actualValue, 0);
+    }
+
+    @Test
+    public void getListOfProduct_categoryList_isNot_Null_returnProductByCategory(){
 
         UUID fakeProductId1 =  UUID.fromString("8dbfcaa0-6eec-46e2-b883-941ff858c7cd");
         UUID fakeProductId2 =  UUID.fromString("be90abfc-4319-4008-bd9c-94e8f5696d02");
@@ -101,75 +179,73 @@ public class ProductDaoTest {
         UUID fakeIdCategory1 =  UUID.fromString("65247ab7-1423-402e-b624-04ee89cfc313");
         UUID fakeIdCategory2 =  UUID.fromString("9408699c-49c9-4857-8519-3cec6907407c");
 
+        provider.begin();
+        provider.em().persist(new Log(5, new Date()));
+        provider.commit();
+
         //category1
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory1, 2, new Date()));
+        provider.em().persist(new CategoryTx(fakeIdCategory1, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory1, 2, new Date(),  false, "Phone Accessories", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory1, 5, new Date(),  false, "Phone Accessories", null, null, null));
         provider.commit();
 
         //category2
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory2, 2, new Date()));
+        provider.em().persist(new CategoryTx(fakeIdCategory2, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory2, 2, new Date(),  false, "Yachts", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory2, 5, new Date(),  false, "Yachts", null, null, null));
         provider.commit();
 
         //product1
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId1, 2, new Date()));
+        provider.em().persist(new ProductTx(fakeProductId1, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Product(fakeProductId1, 2, new Date(),  false, fakeIdCategory1, 20));
+        provider.em().persist(new Product(fakeProductId1, 5, new Date(),  false, fakeIdCategory1, 20));
         provider.commit();
 
         //product2
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId2, 2, new Date()));
+        provider.em().persist(new ProductTx(fakeProductId2, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Product(fakeProductId2, 2, new Date(),  false, fakeIdCategory1, 30));
+        provider.em().persist(new Product(fakeProductId2, 5, new Date(),  false, fakeIdCategory1, 30));
         provider.commit();
 
         //product3
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId3, 2, new Date()));
+        provider.em().persist(new ProductTx(fakeProductId3, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Product(fakeProductId3, 2, new Date(),  false, fakeIdCategory2, 40));
+        provider.em().persist(new Product(fakeProductId3, 5, new Date(),  false, fakeIdCategory2, 40));
         provider.commit();
 
         //product4
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId4, 2, new Date()));
+        provider.em().persist(new ProductTx(fakeProductId4, 5, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Product(fakeProductId4, 2, new Date(),  false, fakeIdCategory2, 50));
+        provider.em().persist(new Product(fakeProductId4, 5, new Date(),  false, fakeIdCategory2, 50));
         provider.commit();
 
         ProductDao productDao = new ProductDao(entityManager);
         List<UUID> categoryIdList = new ArrayList<>();
         categoryIdList.add(fakeIdCategory1);
-        categoryIdList.add(fakeIdCategory2);
 
         List<Product> productList = productDao.getProductList(categoryIdList);
 
         long actualValue = productList.stream().count();
-        long expectedValue = 3;
+        long expectedValue = 4;
 
-        Assert.assertEquals(actualValue, expectedValue);
-    }
-
-    @Test
-    public void getListOfProduct_categoryList_isNot_Null(){
-
+        Assert.assertNotEquals(actualValue, expectedValue);
     }
 }
