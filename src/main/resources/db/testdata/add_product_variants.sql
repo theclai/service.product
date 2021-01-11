@@ -17,7 +17,7 @@ insert into product_variant(id,tx,deleted,product, title,subtitle,sku,descriptio
     ('088ee4d7-e526-4626-bd78-6cebf0194e4a',0,false,'9a0e4932-44be-11eb-b378-0242ac130002','Fitness bracelet',null,'fitness-1',null,'10','("IDR",1068051,)','physical'),
     ('088ee4d7-e526-4626-bd78-6cebf0194e4a',1,false,'9a0e4932-44be-11eb-b378-0242ac130002','Fitness bracelet',null,'fitness-1','Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock,calendar,stopwatch. Language:English,German,Spanish,Italian,French,Portuguese (Brazil),Russian,Indonesian,Czech,Arabic,Thai,Dutch,Polish,Turkish,Persian,Hebrew,Malaysian,Vietnamese,Greek language.','10','("IDR",1068051,)','physical'),
     ('951d0352-0e1b-43a7-b874-d4c950d5b457',0,false,'df659673-dc85-49bc-8af6-f7497275a064','USB Type-C Cable',null,'usb-1',null,10,'("IDR",24500,)','physical'),
-    ('d8f20c40-889c-4170-8f7a-3d19739e26ef',0,false,'19ef2f61-7ceb-4a69-a423-cdd513688e94','Headset with box',null,'Headset with box',null,10,'("IDR",1068051,)','physical'),
+    ('d8f20c40-889c-4170-8f7a-3d19739e26ef',0,false,'19ef2f61-7ceb-4a69-a423-cdd513688e94','Headset with box',null,'headset-box-1',null,10,'("IDR",1068051,)','physical'),
     ('41f29159-5634-4e23-a600-59af937ee61f',0,false,'ec0cb10f-f275-4861-9d04-cde3c4f5b868','Headset (Blue)',null,'headset-blue-1',null,4,'("IDR",26000,)','physical'),
     ('6aa5b22d-caa4-434c-a844-507d248d2a96',0,false,'ec0cb10f-f275-4861-9d04-cde3c4f5b868','Headset (White)',null, 'headset-white-1',null,47,'("IDR",22000,)','physical'),
     ('023bf7d0-315b-4f4e-b202-0faf9b0bda2f',0,false,'ec0cb10f-f275-4861-9d04-cde3c4f5b868','Headset (Red)',null,'headset-red-1',null,5,'("IDR",26000,)','physical'),
