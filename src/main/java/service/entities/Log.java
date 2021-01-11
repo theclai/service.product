@@ -19,6 +19,8 @@ import java.util.*;
 @Table(name = "log")
 public class Log implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name="tx")
     private int tx;
