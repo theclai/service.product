@@ -9,6 +9,7 @@ import service.entities.ProductVariant;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,5 +57,45 @@ public class ProductVariantDao implements Dao<ProductVariant> {
     @Override
     public void delete(ProductVariant productVariant) {
 
+    }
+
+    public List<ProductVariant> getProductVariant(List<UUID> productIdList) {
+
+        List<ProductVariant> productVariantList = new ArrayList<>();
+        Query query;
+
+        if (productIdList == null || productIdList.isEmpty()) {
+
+            query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN  product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f'", ProductVariant.class);
+
+        } else {
+
+            StringBuilder sb = new StringBuilder("SELECT * FROM product_variant pv LEFT JOIN  product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f' AND pv.product IN ");
+            sb.append("(");
+
+            if (productIdList.size() > 0) {
+
+                for (int i = 0; i < productIdList.size(); i++) {
+                    sb.append("?");
+                    sb.append(",");
+                }
+
+                if (sb.length() > 0) {
+                    sb.setLength(sb.length() - 1);
+                }
+
+                sb.append(")");
+            }
+
+            query = entityManager.createNativeQuery(sb.toString(), ProductVariant.class);
+
+            for (int i = 0; i < productIdList.size(); i++) {
+                query.setParameter(i + 1, productIdList.get(i));
+            }
+        }
+
+        productVariantList = query.getResultList();
+
+        return productVariantList;
     }
 }
