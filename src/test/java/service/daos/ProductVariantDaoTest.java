@@ -13,9 +13,7 @@ import org.junit.runners.JUnit4;
 import service.entities.*;
 
 import javax.persistence.EntityManager;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author faisalrahman
@@ -99,6 +97,212 @@ public class ProductVariantDaoTest {
         String expectedValue = "Fitness bracelet";
 
         Assert.assertEquals(actualValue, expectedValue);
+    }
 
+    @Test
+    public void getCategoryList_withEmptyProductIdList_returnAllProductVariantList(){
+
+        UUID fakeProductVariantId1 =  UUID.fromString("8fd5371f-55ea-49e6-bb5d-69745a0e464b");
+        UUID fakeProductVariantId2 =  UUID.fromString("1c93a06e-dd43-4278-9cd4-f941593624ad");
+        UUID fakeProductVariantId3 =  UUID.fromString("574064b6-ec66-432c-91d7-479dc8b1506b");
+        UUID fakeProductId =  UUID.fromString("059c653c-bf8f-45ab-84f2-149688aff2f2");
+        UUID fakeIdCategory =  UUID.fromString("0602eb59-43ec-4616-a25f-dc910e04b363");
+
+        provider.begin();
+        provider.em().persist(new Log(8, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeIdCategory, 8, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeIdCategory, 8, new Date(),  false, "Electronics", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId, 8, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId, 8, new Date(),  false, fakeIdCategory, 30));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 8, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId1,
+                8,
+                new Date(),
+                false,
+                "Fitness bracelet",
+                null,
+                "fitness-1",
+                null,
+                fakeProductId,
+                10,
+                new ProductMoney("IDR",1068051),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 8, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId2,
+                8,
+                new Date(),
+                false,
+                "Headset with box",
+                null,
+                "Headset with box",
+                null,
+                fakeProductId,
+                20,
+                new ProductMoney("IDR",24500),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId3,
+                8,
+                new Date(),
+                false,
+                "USB Type-C Cable",
+                null,
+                "usb-1",
+                null,
+                fakeProductId,
+                30,
+                new ProductMoney("IDR",26000),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        List<UUID> productIdList = new ArrayList<>();
+
+        ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
+        List<ProductVariant> productVariantList = productVariantDao.getProductVariant(productIdList);
+
+        long expectedValue = 4;
+        long actualValue = productVariantList.stream().count();
+
+        Assert.assertEquals(actualValue, expectedValue);
+    }
+
+    @Test
+    public void getCategoryList_withProductIdList_returnProductVariantListByProductId(){
+
+        UUID fakeProductVariantId1 =  UUID.fromString("a5e64526-7363-45bc-9ece-29d0f72a00e3");
+        UUID fakeProductVariantId2 =  UUID.fromString("c747c907-0058-4769-8377-d2aae4ad178c");
+        UUID fakeProductVariantId3 =  UUID.fromString("b23cb307-2a92-45a1-95a7-3293e6371073");
+        UUID fakeProductId =  UUID.fromString("dc50f255-39c8-4e7f-9044-1030068a50d6");
+        UUID fakeIdCategory =  UUID.fromString("fca8f771-c2b9-4371-ac9b-f258016cd21a");
+
+        provider.begin();
+        provider.em().persist(new Log(9, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeIdCategory, 9, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeIdCategory, 9, new Date(),  false, "Electronics", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductTx(fakeProductId, 9, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Product(fakeProductId, 9, new Date(),  false, fakeIdCategory, 30));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 9, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId1,
+                9,
+                new Date(),
+                false,
+                "Fitness bracelet",
+                null,
+                "fitness-1",
+                null,
+                fakeProductId,
+                10,
+                new ProductMoney("IDR",1068051),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId2,
+                9,
+                new Date(),
+                false,
+                "Headset with box",
+                null,
+                "Headset with box",
+                null,
+                fakeProductId,
+                20,
+                new ProductMoney("IDR",24500),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId3,
+                9,
+                new Date(),
+                false,
+                "USB Type-C Cable",
+                null,
+                "usb-1",
+                null,
+                null,
+                30,
+                new ProductMoney("IDR",26000),
+                ProductVariant.Form.physical));
+
+        provider.commit();
+
+        List<UUID> productIdList = new ArrayList<>();
+        productIdList.add(fakeProductId);
+
+        ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
+        List<ProductVariant> productVariantList = productVariantDao.getProductVariant(productIdList);
+
+        long expectedValue = 2;
+        long actualValue = productVariantList.stream().count();
+
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }
