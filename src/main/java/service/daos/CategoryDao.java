@@ -8,6 +8,7 @@ import service.entities.Category;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,5 +53,45 @@ public class CategoryDao implements Dao<Category> {
     @Override
     public void delete(Category category) {
 
+    }
+
+    public List<Category> getCategoryList(List<UUID> categoryParentList) {
+
+        List<Category> categoryList = new ArrayList<>();
+        Query query;
+
+        if (categoryParentList == null || categoryParentList.isEmpty()) {
+
+            query = entityManager.createNativeQuery("SELECT * FROM category_tx JOIN log l using(tx) JOIN category c using(id, tx) WHERE c.deleted = 'f'", Category.class);
+
+        } else {
+
+            StringBuilder sb = new StringBuilder("SELECT * FROM category_tx JOIN log l using(tx) JOIN category c using(id, tx) WHERE c.deleted = 'f' AND c.parent IN ");
+            sb.append("(");
+
+            if (categoryParentList.size() > 0) {
+
+                for (int i = 0; i < categoryParentList.size(); i++) {
+                    sb.append("?");
+                    sb.append(",");
+                }
+
+                if (sb.length() > 0) {
+                    sb.setLength(sb.length() - 1);
+                }
+
+                sb.append(")");
+            }
+
+            query = entityManager.createNativeQuery(sb.toString(), Category.class);
+
+            for (int i = 0; i < categoryParentList.size(); i++) {
+                query.setParameter(i + 1, categoryParentList.get(i));
+            }
+        }
+
+        categoryList = query.getResultList();
+
+        return categoryList;
     }
 }

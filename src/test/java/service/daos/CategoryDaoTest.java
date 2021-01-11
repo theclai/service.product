@@ -79,7 +79,7 @@ public class CategoryDaoTest {
     @Test
     public void getCategory_withUUId_returnCategory() {
 
-        UUID fakeId =  UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
+        UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
         provider.begin();
         provider.em().persist(new Log(0, new Date()));
         provider.commit();
@@ -89,7 +89,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeId, 0, new Date(),  false, "Physical Goods", null, null, null));
+        provider.em().persist(new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null));
         provider.commit();
 
         CategoryDao categoryDao = new CategoryDao(entityManager);
@@ -97,6 +97,135 @@ public class CategoryDaoTest {
         Optional<Category> categoryValue = categoryDao.get(id);
         String actualValue = categoryValue.get().getTitle();
         String expectedValue = "Physical Goods";
+
+        Assert.assertEquals(actualValue, expectedValue);
+    }
+
+    @Test
+    public void getCategoryList_withListOfParentUUID_returnCategory() {
+
+        UUID fakeCategoryId1 = UUID.fromString("d7b137f3-9d81-4d41-9169-7040d0adf0bb");
+        UUID fakeCategoryId2 = UUID.fromString("ff46a914-c61b-4e2e-aecb-3d4f1889774f");
+        UUID fakeCategoryId3 = UUID.fromString("265132e6-2b63-4034-9c80-569f5c7d327b");
+        UUID fakeCategoryId4 = UUID.fromString("68ec07e3-1052-4781-9916-ae649bae120d");
+        UUID fakeCategoryId5 = UUID.fromString("2b8f70c4-99ea-45c0-b6dd-398e937ad8d6");
+
+        provider.begin();
+        provider.em().persist(new Log(6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId1, 6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId1, 6, new Date(), false, "Physical Goods", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId2, 6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId2, 6, new Date(), false, "Electronics", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId3, 6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId3, 6, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId4, 6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId4, 6, new Date(), false, "Yachts", null, null, fakeCategoryId1));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId5, 6, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId5, 6, new Date(), false, "Physical Goods", null, null, fakeCategoryId1));
+        provider.commit();
+
+        List<UUID> categoryParentList = new ArrayList<>();
+        categoryParentList.add(fakeCategoryId1);
+
+        CategoryDao categoryDao = new CategoryDao(entityManager);
+        List<Category> categoryList = categoryDao.getCategoryList(categoryParentList);
+
+        long expectedValue = 3;
+        long actualValue = categoryList.stream().count();
+
+        Assert.assertEquals(actualValue, expectedValue);
+    }
+
+    @Test
+    public void getCategoryList_withEmptyParentIds_returnAllCategory() {
+
+        UUID fakeCategoryId1 = UUID.fromString("7867408e-185a-45a9-9882-9fa5b6f87d24");
+        UUID fakeCategoryId2 = UUID.fromString("19a6c5b8-5d30-4719-8531-4e5faf1027a8");
+        UUID fakeCategoryId3 = UUID.fromString("943a558b-2fb4-490a-afdc-79ffff28a523");
+        UUID fakeCategoryId4 = UUID.fromString("1bc6476e-de89-474f-bdd1-9c6b0bf6812c");
+        UUID fakeCategoryId5 = UUID.fromString("737d4454-504e-4454-93d5-554bdc4c1da8");
+
+        provider.begin();
+        provider.em().persist(new Log(7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId1, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId1, 7, new Date(), false, "Physical Goods", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId2, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId2, 7, new Date(), false, "Electronics", null, null, null));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId3, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId3, 7, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId4, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId4, 7, new Date(), false, "Yachts", null, null, fakeCategoryId1));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new CategoryTx(fakeCategoryId5, 7, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new Category(fakeCategoryId5, 7, new Date(), false, "Physical Goods", null, null, fakeCategoryId1));
+        provider.commit();
+
+        List<UUID> categoryParentList = new ArrayList<>();
+
+        CategoryDao categoryDao = new CategoryDao(entityManager);
+        List<Category> categoryList = categoryDao.getCategoryList(categoryParentList);
+
+        long expectedValue = 5;
+        long actualValue = categoryList.stream().count();
 
         Assert.assertEquals(actualValue, expectedValue);
     }
