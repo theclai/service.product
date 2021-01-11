@@ -85,7 +85,8 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 10,
                 new ProductMoney("IDR",1068051),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical,
+                10,10,20,20));
 
         provider.commit();
 

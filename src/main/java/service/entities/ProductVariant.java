@@ -69,6 +69,18 @@ public class ProductVariant implements Serializable {
     @Column(name="form")
     private Form productVariantForm;
 
+    @Column(name = "width")
+    private int width;
+
+    @Column(name = "length")
+    private int length;
+
+    @Column(name = "height")
+    private int height;
+
+    @Column(name = "weight")
+    private int weight;
+
     public ProductVariant(){
 
     }
@@ -85,7 +97,11 @@ public class ProductVariant implements Serializable {
             UUID product,
             int quantity,
             ProductMoney price,
-            Form productVariantForm) {
+            Form productVariantForm,
+            int width,
+            int length,
+            int height,
+            int weight) {
 
         this.id = id;
         this.tx = tx;
@@ -99,6 +115,10 @@ public class ProductVariant implements Serializable {
         this.quantity = quantity;
         this.price = price;
         this.productVariantForm = productVariantForm;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+        this.weight = weight;
     }
 
     public UUID getId() {
@@ -197,6 +217,37 @@ public class ProductVariant implements Serializable {
         this.productVariantForm = productVariantForm;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
 
     public enum Form {
         digital, physical, billing, lending;
