@@ -25,7 +25,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "variant_option")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class ProductVariantOption implements Serializable {
+public class VariantOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,19 +43,23 @@ public class ProductVariantOption implements Serializable {
     @Column(name = "valid_time")
     private Date validTime;
 
+    @Column(name = "deleted")
+    private boolean deleted;
+
     @Column(name = "value")
     private String value;
 
-    public ProductVariantOption(){
+    public VariantOption(){
 
     }
 
-    public ProductVariantOption(UUID variant, String id, int tx, Date validTime, String value){
+    public VariantOption(UUID variant, String id, int tx, Date validTime, boolean deleted, String value){
 
         this.variant = variant;
         this.id = id;
         this.tx = tx;
         this.validTime = validTime;
+        this.deleted = deleted;
         this.value =value;
     }
 
@@ -91,6 +95,14 @@ public class ProductVariantOption implements Serializable {
         this.validTime = validTime;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     public String getValue() {
         return value;
     }
@@ -103,17 +115,17 @@ public class ProductVariantOption implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductVariantOption productVariantOption = (ProductVariantOption) o;
-        return Objects.equals(id, productVariantOption.id);
+        VariantOption variantOption = (VariantOption) o;
+        return Objects.equals(variant, variantOption.variant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(variant);
     }
 
     @Override
     public String toString() {
-        return String.format("ProductVariantOption{id=%s}", id.toString());
+        return String.format("VariantOption{id=%s}", variant.toString());
     }
 }

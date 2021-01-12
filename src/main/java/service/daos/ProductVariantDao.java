@@ -59,14 +59,14 @@ public class ProductVariantDao implements Dao<ProductVariant> {
 
     }
 
-    public List<ProductVariant> getProductVariant(List<UUID> productIdList) {
+    public List<ProductVariant> getProductVariants(List<UUID> productIdList) {
 
         List<ProductVariant> productVariantList = new ArrayList<>();
         Query query;
 
         if (productIdList == null || productIdList.isEmpty()) {
 
-            query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN  product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f'", ProductVariant.class);
+            query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f'", ProductVariant.class);
 
         } else {
 

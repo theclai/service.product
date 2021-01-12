@@ -25,7 +25,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "variant_option_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class ProductVariantOptionTx implements Serializable {
+public class VariantOptionTx implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,11 +43,11 @@ public class ProductVariantOptionTx implements Serializable {
     @Column(name = "created_time")
     private Date createdTime;
 
-    public ProductVariantOptionTx(){
+    public VariantOptionTx(){
 
     }
 
-    public ProductVariantOptionTx(UUID variant, String id, int tx, Date createdTime){
+    public VariantOptionTx(UUID variant, String id, int tx, Date createdTime){
 
         this.variant = variant;
         this.id = id;
@@ -91,17 +91,17 @@ public class ProductVariantOptionTx implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductVariantOptionTx productVariantOptionTx = (ProductVariantOptionTx) o;
-        return Objects.equals(id, productVariantOptionTx.id);
+        VariantOptionTx variantOptionTx = (VariantOptionTx) o;
+        return Objects.equals(variant, variantOptionTx.variant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(variant);
     }
 
     @Override
     public String toString() {
-        return String.format("ProductVariantOptionTx{id=%s}", id.toString());
+        return String.format("VariantOptionTx{id=%s}", variant.toString());
     }
 }
