@@ -146,7 +146,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 10,
                 new ProductMoney("IDR",1068051),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
 
@@ -167,7 +167,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 20,
                 new ProductMoney("IDR",24500),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 20, 20, 15, 15));
 
         provider.commit();
 
@@ -188,7 +188,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 30,
                 new ProductMoney("IDR",26000),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 5, 5, 10, 10));
 
         provider.commit();
 
@@ -249,7 +249,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 10,
                 new ProductMoney("IDR",1068051),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
 
@@ -270,7 +270,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 20,
                 new ProductMoney("IDR",24500),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 2, 2, 5, 5));
 
         provider.commit();
 
@@ -291,7 +291,7 @@ public class ProductVariantDaoTest {
                 null,
                 30,
                 new ProductMoney("IDR",26000),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 15, 15, 20, 20));
 
         provider.commit();
 
