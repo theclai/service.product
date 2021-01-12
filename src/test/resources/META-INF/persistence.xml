@@ -12,6 +12,8 @@
         <class>service.entities.ProductVariantTx</class>
         <class>service.entities.VariantOption</class>
         <class>service.entities.VariantOptionTx</class>
+        <class>service.entities.VariantProperty</class>
+        <class>service.entities.VariantPropertyTx</class>
         <properties>
             <property name="eclipselink.ddl-generation" value="create-tables" />
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/service_product"/>

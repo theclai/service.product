@@ -30,6 +30,7 @@ public class Category implements Serializable {
     @Convert("uuidConverter")
     private UUID id;
 
+    @Id
     @Column(name="tx")
     private int tx;
 
