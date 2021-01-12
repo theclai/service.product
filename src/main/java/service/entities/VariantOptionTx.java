@@ -34,6 +34,7 @@ public class VariantOptionTx implements Serializable {
     @Convert("uuidConverter")
     private UUID variant;
 
+    @Id
     @Column(name = "id")
     private String id;
 

@@ -51,9 +51,9 @@ public class VariantPropertyDao implements Dao<VariantProperty> {
 
     public List<VariantProperty> getVariantProperties(UUID productVariantId){
 
-        List<VariantProperty> variantPropertyList = new ArrayList<>();
-        Query query = entityManager.createNativeQuery("SELECT * FROM variant_property vp LEFT OUTER JOIN variant_property_tx vpt ON (vo.variant = vot.variant) LEFT OUTER JOIN log l ON (vp.tx = l.tx) WHERE vp.deleted = 'f' and vp.variant = ?", VariantProperty.class);
+        Query query = entityManager.createNativeQuery("SELECT * FROM variant_property vp LEFT OUTER JOIN variant_property_tx vpt ON (vp.variant = vpt.variant and vp.id = vpt.id) LEFT OUTER JOIN log l ON (vp.tx = l.tx) WHERE vp.deleted = 'f' and vp.variant = ?", VariantProperty.class);
         query.setParameter(1, productVariantId);
+        List<VariantProperty> variantPropertyList = query.getResultList();
 
         return variantPropertyList;
     }

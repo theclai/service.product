@@ -8,10 +8,7 @@ import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import service.util.UUIDConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -34,6 +31,7 @@ public class VariantPropertyTx implements Serializable {
     @Convert("uuidConverter")
     private UUID variant;
 
+    @Id
     @Column(name = "id")
     private String id;
 

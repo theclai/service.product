@@ -8,10 +8,8 @@ import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import service.util.UUIDConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,7 +22,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "variant_property")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class VariantProperty {
+public class VariantProperty implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,9 +31,11 @@ public class VariantProperty {
     @Convert("uuidConverter")
     private UUID variant;
 
+    @Id
     @Column(name = "id")
     private String id;
 
+    @Id
     @Column(name = "tx")
     private int tx;
 

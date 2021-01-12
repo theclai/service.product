@@ -58,11 +58,11 @@ public class VariantPropertyDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantProperty(fakeProductVariantId1, "1", 11,  new Date(), false, "Operating System", "Android Wear"));
+        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, "2", 11,  new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, "2", 11,  new Date()));
+        provider.em().persist(new VariantProperty(fakeProductVariantId1, "1", 11,  new Date(), false, "Operating System", "Android Wear"));
         provider.commit();
 
         provider.begin();
