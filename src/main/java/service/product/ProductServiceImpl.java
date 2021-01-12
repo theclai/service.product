@@ -75,7 +75,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     }
 
     @Override
-    public synchronized void listCategories(ListCategoriesRequest request, StreamObserver<Categories> responseObserver)  {
+    public void listCategories(CategoriesList request, StreamObserver<Categories> responseObserver) {
 
         logger.debug("listCategories");
         Date date = null;
@@ -203,8 +203,10 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         responseObserver.onCompleted();
     }
 
+
+
     @Override
-    public synchronized void listProducts(ListProductsRequest request, StreamObserver<Products> responseObserver) {
+    public void listProducts(ProductsList request, StreamObserver<Products> responseObserver) {
 
         logger.debug("listProducts");
 
@@ -392,7 +394,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     }
 
     @Override
-    public void listProductVariants(ListProductVariantsRequest request, StreamObserver<ProductVariants> responseObserver) {
+    public void listProductVariants(ProductVariantsList request, StreamObserver<ProductVariants> responseObserver) {
 
         logger.debug("listProductVariants");
 
