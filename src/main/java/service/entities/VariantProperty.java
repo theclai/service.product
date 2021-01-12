@@ -12,20 +12,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * @author faisalrahman
- * @version $Id: ProductOption.java, v 0.1 20210111 15.09 faisalrahman Exp $$
+ * @version $Id: VariantProperty.java, v 0.1 20210112 11.34 faisalrahman Exp $$
  */
 
 @Entity
-@Table(name = "variant_option")
+@Table(name = "variant_property")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class VariantOption implements Serializable {
+public class VariantProperty {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,20 +45,24 @@ public class VariantOption implements Serializable {
     @Column(name = "deleted")
     private boolean deleted;
 
+    @Column(name = "key")
+    private String key;
+
     @Column(name = "value")
     private String value;
 
-    public VariantOption() {
+    public VariantProperty() {
 
     }
 
-    public VariantOption(UUID variant, String id, int tx, Date validTime, boolean deleted, String value) {
+    public VariantProperty(UUID variant, String id, int tx, Date validTime, boolean deleted, String key, String value) {
 
         this.variant = variant;
         this.id = id;
         this.tx = tx;
         this.validTime = validTime;
         this.deleted = deleted;
+        this.key = key;
         this.value = value;
     }
 
@@ -103,6 +106,14 @@ public class VariantOption implements Serializable {
         this.deleted = deleted;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getValue() {
         return value;
     }
@@ -115,8 +126,8 @@ public class VariantOption implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VariantOption variantOption = (VariantOption) o;
-        return Objects.equals(variant, variantOption.variant);
+        VariantProperty variantProperty = (VariantProperty) o;
+        return Objects.equals(variant, variantProperty.variant);
     }
 
     @Override
@@ -126,6 +137,6 @@ public class VariantOption implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("VariantOption{id=%s}", variant.toString());
+        return String.format("VariantProperty{id=%s}", variant.toString());
     }
 }

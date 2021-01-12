@@ -19,18 +19,18 @@ import java.util.UUID;
 
 /**
  * @author faisalrahman
- * @version $Id: ProductOption.java, v 0.1 20210111 15.09 faisalrahman Exp $$
+ * @version $Id: VariantPropertyTx.java, v 0.1 20210112 11.34 faisalrahman Exp $$
  */
 
 @Entity
-@Table(name = "variant_option")
+@Table(name = "variant_property_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class VariantOption implements Serializable {
+public class VariantPropertyTx implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "variant")
+    @Column(name="variant")
     @Convert("uuidConverter")
     private UUID variant;
 
@@ -40,27 +40,19 @@ public class VariantOption implements Serializable {
     @Column(name = "tx")
     private int tx;
 
-    @Column(name = "valid_time")
-    private Date validTime;
+    @Column(name = "created_time")
+    private Date createdTime;
 
-    @Column(name = "deleted")
-    private boolean deleted;
-
-    @Column(name = "value")
-    private String value;
-
-    public VariantOption() {
+    public VariantPropertyTx(){
 
     }
 
-    public VariantOption(UUID variant, String id, int tx, Date validTime, boolean deleted, String value) {
+    public VariantPropertyTx(UUID variant, String id, int tx, Date createdTime){
 
         this.variant = variant;
         this.id = id;
-        this.tx = tx;
-        this.validTime = validTime;
-        this.deleted = deleted;
-        this.value = value;
+        this.tx= tx;
+        this.createdTime = createdTime;
     }
 
     public UUID getVariant() {
@@ -87,36 +79,20 @@ public class VariantOption implements Serializable {
         this.tx = tx;
     }
 
-    public Date getValidTime() {
-        return validTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setValidTime(Date validTime) {
-        this.validTime = validTime;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VariantOption variantOption = (VariantOption) o;
-        return Objects.equals(variant, variantOption.variant);
+        VariantPropertyTx variantPropertyTx = (VariantPropertyTx) o;
+        return Objects.equals(variant, variantPropertyTx.variant);
     }
 
     @Override
@@ -126,6 +102,6 @@ public class VariantOption implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("VariantOption{id=%s}", variant.toString());
+        return String.format("VariantPropertyTx{id=%s}", variant.toString());
     }
 }
