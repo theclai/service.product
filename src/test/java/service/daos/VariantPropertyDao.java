@@ -8,6 +8,8 @@ import service.entities.VariantOption;
 import service.entities.VariantProperty;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,5 +47,14 @@ public class VariantPropertyDao implements Dao<VariantProperty> {
     @Override
     public void delete(VariantProperty variantProperty) {
 
+    }
+
+    public List<VariantProperty> getVariantProperties(UUID productVariantId){
+
+        List<VariantProperty> variantPropertyList = new ArrayList<>();
+        Query query = entityManager.createNativeQuery("SELECT * FROM variant_property vp LEFT OUTER JOIN variant_property_tx vpt ON (vo.variant = vot.variant) LEFT OUTER JOIN log l ON (vp.tx = l.tx) WHERE vp.deleted = 'f' and vp.variant = ?", VariantProperty.class);
+        query.setParameter(1, productVariantId);
+
+        return variantPropertyList;
     }
 }
