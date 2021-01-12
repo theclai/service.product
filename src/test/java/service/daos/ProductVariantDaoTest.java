@@ -101,7 +101,7 @@ public class ProductVariantDaoTest {
     }
 
     @Test
-    public void getCategoryList_withEmptyProductIdList_returnAllProductVariantList(){
+    public void getProductVariants_withEmptyProductIdList_returnAllProductVariantList(){
 
         UUID fakeProductVariantId1 =  UUID.fromString("8fd5371f-55ea-49e6-bb5d-69745a0e464b");
         UUID fakeProductVariantId2 =  UUID.fromString("1c93a06e-dd43-4278-9cd4-f941593624ad");
@@ -146,7 +146,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 10,
                 new ProductMoney("IDR",1068051),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
 
@@ -167,7 +167,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 20,
                 new ProductMoney("IDR",24500),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 20, 20, 15, 15));
 
         provider.commit();
 
@@ -188,23 +188,23 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 30,
                 new ProductMoney("IDR",26000),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 5, 5, 10, 10));
 
         provider.commit();
 
         List<UUID> productIdList = new ArrayList<>();
 
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
-        List<ProductVariant> productVariantList = productVariantDao.getProductVariant(productIdList);
+        List<ProductVariant> productVariantList = productVariantDao.getProductVariants(productIdList);
 
-        long expectedValue = 4;
+        long expectedValue = 3;
         long actualValue = productVariantList.stream().count();
 
         Assert.assertEquals(actualValue, expectedValue);
     }
 
     @Test
-    public void getCategoryList_withProductIdList_returnProductVariantListByProductId(){
+    public void getProductVariants_withProductIdList_returnProductVariantListByProductId(){
 
         UUID fakeProductVariantId1 =  UUID.fromString("a5e64526-7363-45bc-9ece-29d0f72a00e3");
         UUID fakeProductVariantId2 =  UUID.fromString("c747c907-0058-4769-8377-d2aae4ad178c");
@@ -249,7 +249,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 10,
                 new ProductMoney("IDR",1068051),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
 
@@ -270,7 +270,7 @@ public class ProductVariantDaoTest {
                 fakeProductId,
                 20,
                 new ProductMoney("IDR",24500),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 2, 2, 5, 5));
 
         provider.commit();
 
@@ -291,7 +291,7 @@ public class ProductVariantDaoTest {
                 null,
                 30,
                 new ProductMoney("IDR",26000),
-                ProductVariant.Form.physical));
+                ProductVariant.Form.physical, 15, 15, 20, 20));
 
         provider.commit();
 
@@ -299,7 +299,7 @@ public class ProductVariantDaoTest {
         productIdList.add(fakeProductId);
 
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
-        List<ProductVariant> productVariantList = productVariantDao.getProductVariant(productIdList);
+        List<ProductVariant> productVariantList = productVariantDao.getProductVariants(productIdList);
 
         long expectedValue = 2;
         long actualValue = productVariantList.stream().count();

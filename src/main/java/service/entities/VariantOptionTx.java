@@ -8,7 +8,10 @@ import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import service.util.UUIDConverter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -16,43 +19,55 @@ import java.util.UUID;
 
 /**
  * @author faisalrahman
- * @version $Id: ProductVariantTx.java, v 0.1 20210106 18.20 faisalrahman Exp $$
+ * @version $Id: ProductOptionTx.java, v 0.1 20210111 15.09 faisalrahman Exp $$
  */
 
 @Entity
-@Table(name = "product_variant_tx")
+@Table(name = "variant_option_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class ProductVariantTx implements Serializable {
+public class VariantOptionTx implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name="id")
+    @Column(name="variant")
     @Convert("uuidConverter")
-    private UUID id;
+    private UUID variant;
 
-    @Column(name="tx")
+    @Column(name = "id")
+    private String id;
+
+    @Column(name = "tx")
     private int tx;
 
     @Column(name = "created_time")
     private Date createdTime;
 
-    public ProductVariantTx(){
+    public VariantOptionTx(){
 
     }
 
-    public ProductVariantTx(UUID id, int tx, Date createdTime){
+    public VariantOptionTx(UUID variant, String id, int tx, Date createdTime){
 
+        this.variant = variant;
         this.id = id;
-        this.tx = tx;
+        this.tx= tx;
         this.createdTime = createdTime;
     }
 
-    public UUID getId() {
+    public UUID getVariant() {
+        return variant;
+    }
+
+    public void setVariant(UUID variant) {
+        this.variant = variant;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,17 +91,17 @@ public class ProductVariantTx implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductVariantTx productVariantTx = (ProductVariantTx) o;
-        return Objects.equals(id, productVariantTx.id);
+        VariantOptionTx variantOptionTx = (VariantOptionTx) o;
+        return Objects.equals(variant, variantOptionTx.variant);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(variant);
     }
 
     @Override
     public String toString() {
-        return String.format("ProductVariantTx{id=%s}", id.toString());
+        return String.format("VariantOptionTx{id=%s}", variant.toString());
     }
 }

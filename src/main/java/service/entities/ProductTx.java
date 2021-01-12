@@ -26,6 +26,8 @@ import java.util.UUID;
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
 public class ProductTx implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name="id")
     @Convert("uuidConverter")
