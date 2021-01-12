@@ -14,13 +14,27 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.flywaydb.core.Flyway;
 
+import javax.persistence.EntityManager;
+
 public class ProductServiceServer {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceServer.class);
     private int port;
     private Server server;
+    private EntityManager entityManager;
 
     public ProductServiceServer(int port) {
+
+        this.port = port;
+
+        server = ServerBuilder.forPort(this.port)
+                .addService(new AlbServiceImpl())
+                .addService(new ProductServiceImpl())
+                .intercept(new ExceptionHandler())
+                .build();
+    }
+
+    public ProductServiceServer(int port, EntityManager entityManager) {
 
         this.port = port;
 
@@ -101,6 +115,8 @@ public class ProductServiceServer {
         databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
         databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
 
+        //EntityManager entityManager = EntityManagerConfigurator.init(PERSISTENCE_UNIT_NAME, EntityManagerPropertiesFactory.init(databaseParams).properties).entityManager;
+        //final ProductServiceServer server = new ProductServiceServer(port, entityManager);
         final ProductServiceServer server = new ProductServiceServer(port);
 
         if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
