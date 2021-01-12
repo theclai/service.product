@@ -27,7 +27,11 @@ create table product_variant (
     product uuid references product_tx(id),
     quantity int not null,
     price product_money,
-    form product_variant_form
+    form product_variant_form,
+    width int not null,
+    length int not null,
+    height int not null,
+    weight int not null
 );
 
 create index product_variant_valid_time_id_tx_idx on product_variant(valid_time, id, tx);
