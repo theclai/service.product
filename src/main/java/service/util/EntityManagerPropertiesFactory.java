@@ -23,7 +23,6 @@ public final class EntityManagerPropertiesFactory {
 
         this.databaseParams = databaseParams;
         properties = new HashMap<>();
-        properties.put("eclipselink.ddl-generation", "create-tables");
         properties.put("javax.persistence.jdbc.url", databaseParams.getDatabaseHost());
         properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
         properties.put("javax.persistence.jdbc.user", databaseParams.getDatabaseUsername());
