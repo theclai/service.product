@@ -17,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.xml.crypto.Data;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -40,8 +42,10 @@ public class AlbServiceServerTest {
 
         // Generate a unique in-process server name.
         String serverName = InProcessServerBuilder.generateName();
+        DatabaseParams databaseParams = new DatabaseParams();
+
         productServiceServer = new ProductServiceServer(
-                InProcessServerBuilder.forName(serverName).directExecutor(), 50052);
+                InProcessServerBuilder.forName(serverName).directExecutor(), 50052, databaseParams);
 
         productServiceServer.start();
         inProcessChannel = grpcCleanup.register(

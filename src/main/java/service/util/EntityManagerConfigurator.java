@@ -9,6 +9,7 @@ import service.product.DatabaseParams;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,9 +21,16 @@ public class EntityManagerConfigurator {
     private static EntityManagerConfigurator entityManagerConfigurator = null;
     public EntityManager entityManager;
 
-    private EntityManagerConfigurator(String unitName, Map properties) {
+    private EntityManagerConfigurator(DatabaseParams databaseParams) {
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory(unitName, properties);
+        Map properties = new HashMap();
+        properties.put("javax.persistence.jdbc.url", databaseParams.getDatabaseHost());
+        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
+        properties.put("javax.persistence.jdbc.user", databaseParams.getDatabaseUsername());
+        properties.put("javax.persistence.jdbc.password", databaseParams.getDatabasePassword());
+        properties.put("eclipselink.allow-zero-id", "true");
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory(databaseParams.getDatabaseName(), properties);
         entityManager = emf.createEntityManager();
     }
 
@@ -35,13 +43,13 @@ public class EntityManagerConfigurator {
         return entityManagerConfigurator;
     }
 
-    public synchronized static EntityManagerConfigurator init(String unitName, Map properties) {
+    public synchronized static EntityManagerConfigurator init(DatabaseParams databaseParams) {
 
         if (entityManagerConfigurator != null) {
             throw new AssertionError("You already initialized");
         }
 
-        entityManagerConfigurator = new EntityManagerConfigurator(unitName, properties);
+        entityManagerConfigurator = new EntityManagerConfigurator(databaseParams);
 
         return entityManagerConfigurator;
     }

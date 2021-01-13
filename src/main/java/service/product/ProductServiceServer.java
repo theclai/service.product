@@ -2,17 +2,15 @@ package service.product;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import org.flywaydb.core.api.configuration.ClassicConfiguration;
-import org.flywaydb.core.api.configuration.Configuration;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.postgresql.ds.PGSimpleDataSource;
-import org.postgresql.jdbc3.Jdbc3PoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.flywaydb.core.Flyway;
+import service.util.EntityManagerConfigurator;
 
 import javax.persistence.EntityManager;
 
@@ -21,22 +19,11 @@ public class ProductServiceServer {
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceServer.class);
     private int port;
     private Server server;
-    private EntityManager entityManager;
 
-    public ProductServiceServer(int port) {
-
-        this.port = port;
-
-        server = ServerBuilder.forPort(this.port)
-                .addService(new AlbServiceImpl())
-                .addService(new ProductServiceImpl())
-                .intercept(new ExceptionHandler())
-                .build();
-    }
-
-    public ProductServiceServer(int port, EntityManager entityManager) {
+    public ProductServiceServer(int port, DatabaseParams databaseParams) {
 
         this.port = port;
+        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).entityManager;
 
         server = ServerBuilder.forPort(this.port)
                 .addService(new AlbServiceImpl())
@@ -45,8 +32,9 @@ public class ProductServiceServer {
                 .build();
     }
 
-    public ProductServiceServer(ServerBuilder<?> serverBuilder, int port, EntityManager entityManager) {
+    public ProductServiceServer(ServerBuilder<?> serverBuilder, int port, DatabaseParams databaseParams) {
 
+        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).entityManager;
         this.port = port;
         this.server = serverBuilder
                 .addService(new AlbServiceImpl())
@@ -115,9 +103,7 @@ public class ProductServiceServer {
         databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
         databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
 
-        //EntityManager entityManager = EntityManagerConfigurator.init(PERSISTENCE_UNIT_NAME, EntityManagerPropertiesFactory.init(databaseParams).properties).entityManager;
-        //final ProductServiceServer server = new ProductServiceServer(port, entityManager);
-        final ProductServiceServer server = new ProductServiceServer(port);
+        final ProductServiceServer server = new ProductServiceServer(port, databaseParams);
 
         if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
             System.out.println("Wrong migration command");
