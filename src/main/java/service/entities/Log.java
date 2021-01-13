@@ -4,8 +4,6 @@
  */
 package service.entities;
 
-import org.eclipse.persistence.jpa.config.Cascade;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;

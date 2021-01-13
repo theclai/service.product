@@ -21,6 +21,18 @@ public class ProductServiceServer {
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceServer.class);
     private int port;
     private Server server;
+    private EntityManager entityManager;
+
+    public ProductServiceServer(int port) {
+
+        this.port = port;
+
+        server = ServerBuilder.forPort(this.port)
+                .addService(new AlbServiceImpl())
+                .addService(new ProductServiceImpl())
+                .intercept(new ExceptionHandler())
+                .build();
+    }
 
     public ProductServiceServer(int port, EntityManager entityManager) {
 
@@ -102,8 +114,10 @@ public class ProductServiceServer {
         databaseParams.setDatabaseType(System.getenv("DATABASE_TYPE"));
         databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
         databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
-        
-        final ProductServiceServer server = new ProductServiceServer(port, null);
+
+        //EntityManager entityManager = EntityManagerConfigurator.init(PERSISTENCE_UNIT_NAME, EntityManagerPropertiesFactory.init(databaseParams).properties).entityManager;
+        //final ProductServiceServer server = new ProductServiceServer(port, entityManager);
+        final ProductServiceServer server = new ProductServiceServer(port);
 
         if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
             System.out.println("Wrong migration command");

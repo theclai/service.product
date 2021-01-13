@@ -31,32 +31,13 @@ import static org.junit.Assert.assertFalse;
 @RunWith(JUnit4.class)
 public class CategoryDaoTest {
 
-    private static final String USER = "test";
-    private static final String PASSWORD = "test";
-    private static final String DATABASE = "service_product_db";
     private static final String PERSISTENCE_UNIT_NAME = "service_product";
 
     private EntityManager entityManager;
     private EntityManagerProvider provider;
-    private PostgreSQLContainer postgreSQLContainer;
 
     @Before
     public void Setup() {
-
-//        postgreSQLContainer = new PostgreSQLContainer("postgres:13.1")
-//                .withDatabaseName(DATABASE)
-//                .withUsername(USER)
-//                .withPassword(PASSWORD);
-//
-//        postgreSQLContainer.start();
-
-//        Map properties = new HashMap<>();
-//        properties.put("eclipselink.ddl-generation", "create-tables");
-//        properties.put("javax.persistence.jdbc.url", postgreSQLContainer.getJdbcUrl());
-//        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
-//        properties.put("javax.persistence.jdbc.user", USER);
-//        properties.put("javax.persistence.jdbc.password", PASSWORD);
-//        properties.put("eclipselink.allow-zero-id", "true");
 
         provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
         entityManager = provider.em();
@@ -65,15 +46,7 @@ public class CategoryDaoTest {
     @After
     public void tearDown() throws Exception {
 
-//        entityManager.getTransaction().begin();
-//        entityManager.createNativeQuery("truncate table log").executeUpdate();
-//        entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
-//        entityManager.createNativeQuery("truncate table category").executeUpdate();
-//        entityManager.getTransaction().commit();
-//        entityManager.clear();
         entityManager.close();
-
-        //postgreSQLContainer.close();
     }
 
     @Test
