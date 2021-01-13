@@ -14,29 +14,31 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.flywaydb.core.Flyway;
 
+import javax.persistence.EntityManager;
+
 public class ProductServiceServer {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceServer.class);
     private int port;
     private Server server;
 
-    public ProductServiceServer(int port) {
+    public ProductServiceServer(int port, EntityManager entityManager) {
 
         this.port = port;
 
         server = ServerBuilder.forPort(this.port)
                 .addService(new AlbServiceImpl())
-                .addService(new ProductServiceImpl())
+                .addService(new ProductServiceImpl(entityManager))
                 .intercept(new ExceptionHandler())
                 .build();
     }
 
-    public ProductServiceServer(ServerBuilder<?> serverBuilder, int port) {
+    public ProductServiceServer(ServerBuilder<?> serverBuilder, int port, EntityManager entityManager) {
 
         this.port = port;
         this.server = serverBuilder
                 .addService(new AlbServiceImpl())
-                .addService(new ProductServiceImpl())
+                .addService(new ProductServiceImpl(entityManager))
                 .build();
     }
 
@@ -100,8 +102,8 @@ public class ProductServiceServer {
         databaseParams.setDatabaseType(System.getenv("DATABASE_TYPE"));
         databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
         databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
-
-        final ProductServiceServer server = new ProductServiceServer(port);
+        
+        final ProductServiceServer server = new ProductServiceServer(port, null);
 
         if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
             System.out.println("Wrong migration command");

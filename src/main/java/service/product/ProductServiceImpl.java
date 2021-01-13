@@ -12,8 +12,10 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.daos.CategoryDao;
 import tapp.product.*;
 
+import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -26,6 +28,12 @@ import java.util.*;
 public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBase {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+    private CategoryDao categoryDao;
+
+    public ProductServiceImpl(EntityManager entityManager){
+
+        categoryDao = new CategoryDao(entityManager);
+    }
 
     @Override
     public synchronized void getCategory(ID request, StreamObserver<Category> responseObserver) {
