@@ -62,9 +62,14 @@ public class ProductVariant implements Serializable {
     @Column(name="quantity")
     private int quantity;
 
-    @Column(name="price")
-    @Embedded
-    private ProductMoney price;
+    @Column(name="price_currency_code")
+    private String priceCurrencyCode;
+
+    @Column(name="price_units")
+    private long priceUnits;
+
+    @Column(name="price_nanos")
+    private int priceNanos;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name="form")
@@ -97,7 +102,9 @@ public class ProductVariant implements Serializable {
             String description,
             UUID product,
             int quantity,
-            ProductMoney price,
+            String priceCurrencyCode,
+            long priceUnits,
+            int priceNanos,
             Form productVariantForm,
             int width,
             int length,
@@ -114,7 +121,9 @@ public class ProductVariant implements Serializable {
         this.description = description;
         this.product = product;
         this.quantity = quantity;
-        this.price = price;
+        this.priceCurrencyCode = priceCurrencyCode;
+        this.priceUnits = priceUnits;
+        this.priceNanos = priceNanos;
         this.productVariantForm = productVariantForm;
         this.width = width;
         this.length = length;
@@ -202,12 +211,28 @@ public class ProductVariant implements Serializable {
         this.quantity = quantity;
     }
 
-    public ProductMoney getPrice() {
-        return price;
+    public String getPriceCurrencyCode() {
+        return priceCurrencyCode;
     }
 
-    public void setPrice(ProductMoney price) {
-        this.price = price;
+    public void setPriceCurrencyCode(String priceCurrencyCode) {
+        this.priceCurrencyCode = priceCurrencyCode;
+    }
+
+    public long getPriceUnits() {
+        return priceUnits;
+    }
+
+    public void setPriceUnits(long priceUnits) {
+        this.priceUnits = priceUnits;
+    }
+
+    public int getPriceNanos() {
+        return priceNanos;
+    }
+
+    public void setPriceNanos(int priceNanos) {
+        this.priceNanos = priceNanos;
     }
 
     public Form getProductVariantForm() {
