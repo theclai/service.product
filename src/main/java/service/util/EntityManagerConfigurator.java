@@ -23,8 +23,16 @@ public class EntityManagerConfigurator {
 
     private EntityManagerConfigurator(DatabaseParams databaseParams) {
 
+        StringBuilder url = new StringBuilder();
+        url.append("jdbc:postgresql://");
+        url.append(databaseParams.getDatabaseHost());
+        url.append(":");
+        url.append(databaseParams.getDatabasePort());
+        url.append("/");
+        url.append(databaseParams.getDatabaseName());
+
         Map properties = new HashMap();
-        properties.put("javax.persistence.jdbc.url", databaseParams.getDatabaseHost());
+        properties.put("javax.persistence.jdbc.url", url.toString());
         properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
         properties.put("javax.persistence.jdbc.user", databaseParams.getDatabaseUsername());
         properties.put("javax.persistence.jdbc.password", databaseParams.getDatabasePassword());

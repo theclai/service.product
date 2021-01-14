@@ -6,6 +6,7 @@ package service.product;
 
 import AWS.ALBGrpc;
 import com.google.protobuf.Empty;
+import com.google.protobuf.NullValue;
 import com.google.protobuf.Timestamp;
 import com.google.type.Money;
 import io.grpc.Status;
@@ -53,28 +54,30 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         try {
             Optional<service.entities.Category> categoryValue = categoryDao.get(UUID.fromString(request.getId()));
 
-            Instant time = Instant.now();
-            Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                    .setNanos(time.getNano()).build();
+            if(categoryValue.isPresent()) {
 
-            Instant instantValid = categoryValue.get().getValidTime().toInstant();
-            Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                    .setNanos(instantValid.getNano()).build();
+                Instant time = Instant.now();
+                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                        .setNanos(time.getNano()).build();
 
-            category = Category
-                    .newBuilder()
-                    .setId(categoryValue.get().getId().toString())
-                    .setTransactionTime(transactionTime)
-                    .setValidTime(validTime)
-                    .setCreatedTime(transactionTime)
-                    .setTitle(categoryValue.get().getTitle())
-                    .setSubtitle(categoryValue.get().getSubtitle())
-                    .setDescription(categoryValue.get().getDescription())
-                    .setParent(categoryValue.get().getParent().toString())
-                    //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
-                    .build();
+                Instant instantValid = categoryValue.get().getValidTime().toInstant();
+                Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                        .setNanos(instantValid.getNano()).build();
 
-        } catch (CustomException e) {
+                category = Category
+                        .newBuilder()
+                        .setId(categoryValue.get().getId().toString())
+                        .setTransactionTime(transactionTime)
+                        .setValidTime(validTime)
+                        .setCreatedTime(transactionTime)
+                        .setTitle(categoryValue.get().getTitle() != null ? categoryValue.get().getTitle() : "")
+                        .setSubtitle(categoryValue.get().getSubtitle() != null ? categoryValue.get().getSubtitle() : "")
+                        .setDescription(categoryValue.get().getDescription() != null ? categoryValue.get().getDescription() : "")
+                        .setParent(categoryValue.get().getParent() != null ? categoryValue.get().getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
+                        //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
+                        .build();
+            }
+        } catch (CustomException | ServiceException e) {
             logger.error("id {} error message: {}", request.getId(), e.getMessage());
             responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
