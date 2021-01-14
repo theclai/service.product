@@ -23,7 +23,7 @@ public class ProductServiceServer {
     public ProductServiceServer(int port, DatabaseParams databaseParams) {
 
         this.port = port;
-        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).entityManager;
+        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).getEntityManager();
 
         server = ServerBuilder.forPort(this.port)
                 .addService(new AlbServiceImpl())
@@ -34,7 +34,7 @@ public class ProductServiceServer {
 
     public ProductServiceServer(ServerBuilder<?> serverBuilder, int port, DatabaseParams databaseParams) {
 
-        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).entityManager;
+        EntityManager entityManager = EntityManagerConfigurator.init(databaseParams).getEntityManager();
         this.port = port;
         this.server = serverBuilder
                 .addService(new AlbServiceImpl())

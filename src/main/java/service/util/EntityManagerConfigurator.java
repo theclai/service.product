@@ -19,7 +19,7 @@ import java.util.Map;
 public class EntityManagerConfigurator {
 
     private static EntityManagerConfigurator entityManagerConfigurator = null;
-    public EntityManager entityManager;
+    private EntityManager entityManager;
 
     private EntityManagerConfigurator(DatabaseParams databaseParams) {
 
@@ -52,5 +52,9 @@ public class EntityManagerConfigurator {
         entityManagerConfigurator = new EntityManagerConfigurator(databaseParams);
 
         return entityManagerConfigurator;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 }
