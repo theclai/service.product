@@ -13,6 +13,8 @@ import org.junit.runners.JUnit4;
 import service.entities.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import java.util.*;
 
 /**
@@ -72,8 +74,7 @@ public class ProductVariantDaoTest {
         provider.em().persist(new ProductVariantTx(fakeProductVariantId, 3, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId,
                 3,
                 new Date(),
@@ -89,8 +90,6 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical,
                 10,10,20,20));
-
-        provider.commit();
 
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
         UUID id = fakeProductVariantId;
@@ -135,8 +134,7 @@ public class ProductVariantDaoTest {
         provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 8, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId1,
                 8,
                 new Date(),
@@ -152,14 +150,11 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 10, 10, 20, 20));
 
-        provider.commit();
-
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 8, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId2,
                 8,
                 new Date(),
@@ -175,14 +170,11 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 20, 20, 15, 15));
 
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 8, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 7, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId3,
                 8,
                 new Date(),
@@ -198,10 +190,7 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 5, 5, 10, 10));
 
-        provider.commit();
-
         List<UUID> productIdList = new ArrayList<>();
-
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
         List<ProductVariant> productVariantList = productVariantDao.getProductVariants(productIdList);
 
@@ -244,8 +233,7 @@ public class ProductVariantDaoTest {
         provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 9, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId1,
                 9,
                 new Date(),
@@ -261,14 +249,11 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 10, 10, 20, 20));
 
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 9, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 7, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId2,
                 9,
                 new Date(),
@@ -284,14 +269,11 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 2, 2, 5, 5));
 
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 9, new Date()));
         provider.commit();
 
-        provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 7, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductVariant(
+        saveToProductVariant(new ProductVariant(
                 fakeProductVariantId3,
                 9,
                 new Date(),
@@ -307,8 +289,6 @@ public class ProductVariantDaoTest {
                 0,
                 ProductVariant.Form.physical, 15, 15, 20, 20));
 
-        provider.commit();
-
         List<UUID> productIdList = new ArrayList<>();
         productIdList.add(fakeProductId);
 
@@ -319,5 +299,33 @@ public class ProductVariantDaoTest {
         long actualValue = productVariantList.stream().count();
 
         Assert.assertEquals(actualValue, expectedValue);
+    }
+
+    private void saveToProductVariant(ProductVariant productVariant) {
+
+        EntityManager em = provider.em();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
+        query.setParameter(1, productVariant.getId());
+        query.setParameter(2, productVariant.getTx());
+        query.setParameter(3, productVariant.getValidTime());
+        query.setParameter(4, productVariant.isDeleted());
+        query.setParameter(5, productVariant.getProduct());
+        query.setParameter(6, productVariant.getTitle());
+        query.setParameter(7, productVariant.getSubtitle());
+        query.setParameter(8, productVariant.getSku());
+        query.setParameter(9, productVariant.getDescription());
+        query.setParameter(10, productVariant.getQuantity());
+        query.setParameter(11, productVariant.getPriceCurrencyCode());
+        query.setParameter(12, productVariant.getPriceUnits());
+        query.setParameter(13, productVariant.getPriceNanos());
+        query.setParameter(14, productVariant.getProductVariantForm().toString());
+        query.setParameter(15, productVariant.getWidth());
+        query.setParameter(16, productVariant.getLength());
+        query.setParameter(17, productVariant.getHeight());
+        query.setParameter(18, productVariant.getWeight());
+        query.executeUpdate();
+        et.commit();
     }
 }
