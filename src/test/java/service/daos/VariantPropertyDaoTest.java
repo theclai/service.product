@@ -90,7 +90,7 @@ public class VariantPropertyDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical.toString(), 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
 

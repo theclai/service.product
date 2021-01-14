@@ -33,7 +33,7 @@ public class VariantPropertyTx implements Serializable {
 
     @Id
     @Column(name = "id")
-    private String id;
+    private int id;
 
     @Column(name = "tx")
     private int tx;
@@ -45,7 +45,7 @@ public class VariantPropertyTx implements Serializable {
 
     }
 
-    public VariantPropertyTx(UUID variant, String id, int tx, Date createdTime){
+    public VariantPropertyTx(UUID variant, int id, int tx, Date createdTime){
 
         this.variant = variant;
         this.id = id;
@@ -61,11 +61,11 @@ public class VariantPropertyTx implements Serializable {
         this.variant = variant;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

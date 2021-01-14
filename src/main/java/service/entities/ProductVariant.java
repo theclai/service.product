@@ -71,8 +71,8 @@ public class ProductVariant implements Serializable {
     @Column(name="price_nanos")
     private int priceNanos;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name="form")
+    @Enumerated(EnumType.STRING)
+    @Column(name =  "form")
     private Form productVariantForm;
 
     @Column(name = "width")
@@ -273,6 +273,24 @@ public class ProductVariant implements Serializable {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductVariant productVariant = (ProductVariant) o;
+        return Objects.equals(id, productVariant.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("ProductVariant{id=%s}", id.toString());
     }
 
     public enum Form {
