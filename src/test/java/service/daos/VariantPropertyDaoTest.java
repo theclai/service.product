@@ -46,6 +46,8 @@ public class VariantPropertyDaoTest {
     @Test
     public void getVariantProperties_WithProductVariantId_ReturnListVariantProperty(){
 
+        UUID fakeProductId =  UUID.fromString("b09713e5-72a3-4e58-9227-b36b0b847e48");
+        UUID fakeIdCategory =  UUID.fromString("a7e2b9eb-c48a-4fc3-9dec-c6b73d390d54");
         UUID fakeProductVariantId1 = UUID.fromString("5d123387-6d0f-48f4-aad4-21ffdd1a02c4");
         UUID fakeProductVariantId2  = UUID.fromString("fa3dcc02-9e11-4628-98b2-632b17a37969");
 
@@ -54,27 +56,70 @@ public class VariantPropertyDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, "1", 11,  new Date()));
+        provider.em().persist(new CategoryTx(fakeIdCategory, 11, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, "2", 11,  new Date()));
+        provider.em().persist(new Category(fakeIdCategory, 11, new Date(),  false, "Electronics", null, null, null));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantProperty(fakeProductVariantId1, "1", 11,  new Date(), false, "Operating System", "Android Wear"));
+        provider.em().persist(new ProductTx(fakeProductId, 11, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantProperty(fakeProductVariantId1, "2", 11,  new Date(), false, "Compatible Operating System", "Android, iOS - Apple"));
+        provider.em().persist(new Product(fakeProductId, 11, new Date(),  false, fakeIdCategory, 30));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantPropertyTx(fakeProductVariantId2, "1", 11,  new Date()));
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 11, new Date()));
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantProperty(fakeProductVariantId2, "1", 11,  new Date(), false, "Type", "Type-C /Micro USB"));
+        provider.em().persist(new ProductVariant(
+                fakeProductVariantId1,
+                11,
+                new Date(),
+                false,
+                "Fitness bracelet",
+                null,
+                "fitness-1",
+                null,
+                fakeProductId,
+                10,
+                "IDR",
+                1068051,
+                0,
+                ProductVariant.Form.physical.toString(), 10, 10, 20, 20));
+
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 11, new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, 1, 11,  new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, 2, 11,  new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantProperty(fakeProductVariantId1, 1, 11,  new Date(), false, "Operating System", "Android Wear"));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantProperty(fakeProductVariantId1, 2, 11,  new Date(), false, "Compatible Operating System", "Android, iOS - Apple"));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantPropertyTx(fakeProductVariantId2, 1, 11,  new Date()));
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(new VariantProperty(fakeProductVariantId2, 1, 11,  new Date(), false, "Type", "Type-C /Micro USB"));
         provider.commit();
 
         VariantPropertyDao variantPropertyDao = new VariantPropertyDao(entityManager);

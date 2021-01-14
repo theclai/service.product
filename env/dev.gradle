@@ -1,6 +1,7 @@
 ext {
   flyway {
     url = "jdbc:postgresql://localhost:5432/"
+    schemas = ["development"]
     user = "postgres"
     password = "tapp"
     locations = ["filesystem:${project.projectDir}/src/main/resources/db/migration"]
