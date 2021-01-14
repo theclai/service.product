@@ -6,12 +6,6 @@ create table product_variant_tx (
 
 create index product_variant_created_time_tx_idx on product_variant_tx(created_time, id);
 
-create type product_money as (
-    currency_code char(3),
-    units bigint,
-    nanos int
-);
-
 create type product_variant_form as enum ('digital', 'physical', 'billing', 'lending');
 
 create table product_variant (
@@ -26,7 +20,9 @@ create table product_variant (
     description text,
     product uuid references product_tx(id),
     quantity int not null,
-    price product_money,
+    price_currency_code char(3) not null,
+    price_units bigint not null,
+    price_nanos int not null,
     form product_variant_form,
     width int not null,
     length int not null,

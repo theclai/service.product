@@ -84,7 +84,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 10,
-                new ProductMoney("IDR",1068051),
+                "IDR",
+                1068051,
+                0,
                 ProductVariant.Form.physical,
                 10,10,20,20));
 
@@ -145,7 +147,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 10,
-                new ProductMoney("IDR",1068051),
+                "IDR",
+                1068051,
+                0,
                 ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
@@ -166,7 +170,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 20,
-                new ProductMoney("IDR",24500),
+                "IDR",
+                24500,
+                0,
                 ProductVariant.Form.physical, 20, 20, 15, 15));
 
         provider.commit();
@@ -187,7 +193,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 30,
-                new ProductMoney("IDR",26000),
+                "IDR",
+                26000,
+                0,
                 ProductVariant.Form.physical, 5, 5, 10, 10));
 
         provider.commit();
@@ -248,7 +256,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 10,
-                new ProductMoney("IDR",1068051),
+                "IDR",
+                1068051,
+                0,
                 ProductVariant.Form.physical, 10, 10, 20, 20));
 
         provider.commit();
@@ -269,7 +279,9 @@ public class ProductVariantDaoTest {
                 null,
                 fakeProductId,
                 20,
-                new ProductMoney("IDR",24500),
+                "IDR",
+                24500,
+                0,
                 ProductVariant.Form.physical, 2, 2, 5, 5));
 
         provider.commit();
@@ -290,7 +302,9 @@ public class ProductVariantDaoTest {
                 null,
                 null,
                 30,
-                new ProductMoney("IDR",26000),
+                "IDR",
+                26000,
+                0,
                 ProductVariant.Form.physical, 15, 15, 20, 20));
 
         provider.commit();

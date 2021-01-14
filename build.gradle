@@ -1,9 +1,3 @@
-buildscript {
-    dependencies {
-        classpath 'com.h2database:h2:1.4.197'
-    }
-}
-
 plugins {
     // Provide convenience executables for trying out the examples.
     id 'application'
@@ -12,7 +6,6 @@ plugins {
     // Generate IntelliJ IDEA's .idea & .iml project files
     id 'idea'
     id 'com.google.cloud.tools.jib' version '2.6.0'
-    id "org.flywaydb.flyway" version "7.3.2"
 }
 
 mainClassName = 'service.product.ProductServiceServer'
@@ -71,17 +64,6 @@ protobuf {
     }
 }
 
-flyway {
-    if(project.hasProperty('env') == false) {ext.env = 'dev'}
-    apply from: "env/${env}.gradle"
-    driver = "org.postgresql.Driver"
-    url = flyway.url
-    schemas = flyway.schemas
-    user = flyway.user
-    password = flyway.password
-    locations = flyway.locations
-    placeholders = ["dir" : "${project.projectDir}".toString()]
-}
 
 // Inform IDEs like IntelliJ IDEA, Eclipse or NetBeans about the generated code.
 sourceSets {
@@ -120,4 +102,29 @@ applicationDistribution.into('bin') {
 
 jib {
     container.mainClass = "service.product.ProductServiceServer"
+}
+
+
+apply plugin : "java"
+
+run.doFirst {
+    environment "DATABASE_HOST", System.getenv().getOrDefault("DATABASE_HOST", "localhost")
+    environment "DATABASE_NAME", System.getenv().getOrDefault("DATABASE_NAME","service_product")
+    environment "DATABASE_PORT", System.getenv().getOrDefault("DATABASE_PORT", "5432")
+    environment "DATABASE_USERNAME", System.getenv().getOrDefault("DATABASE_USERNAME", "postgres")
+    environment "DATABASE_PASSWORD", System.getenv().getOrDefault("DATABASE_PASSWORD", "tapp")
+    environment "DATABASE_TYPE", System.getenv().getOrDefault("DATABASE_TYPE", "postgresql")
+}
+
+test.doFirst {
+    environment "DATABASE_HOST", System.getenv().getOrDefault("DATABASE_HOST", "localhost")
+    environment "DATABASE_NAME", System.getenv().getOrDefault("DATABASE_NAME","service_product")
+    environment "DATABASE_PORT", System.getenv().getOrDefault("DATABASE_PORT", "5432")
+    environment "DATABASE_USERNAME", System.getenv().getOrDefault("DATABASE_USERNAME", "postgres")
+    environment "DATABASE_PASSWORD", System.getenv().getOrDefault("DATABASE_PASSWORD", "tapp")
+    environment "DATABASE_TYPE", System.getenv().getOrDefault("DATABASE_TYPE", "postgresql")
+}
+
+application {
+    mainClassName = 'service.product.ProductServiceServer'
 }
