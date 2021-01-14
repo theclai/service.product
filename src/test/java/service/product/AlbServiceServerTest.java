@@ -45,7 +45,7 @@ public class AlbServiceServerTest {
         DatabaseParams databaseParams = new DatabaseParams();
 
         productServiceServer = new ProductServiceServer(
-                InProcessServerBuilder.forName(serverName).directExecutor(), 50052, databaseParams);
+                InProcessServerBuilder.forName(serverName).directExecutor(), 50052);
 
         productServiceServer.start();
         inProcessChannel = grpcCleanup.register(
