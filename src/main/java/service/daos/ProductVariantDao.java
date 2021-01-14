@@ -66,11 +66,11 @@ public class ProductVariantDao implements Dao<ProductVariant> {
 
         if (productIdList == null || productIdList.isEmpty()) {
 
-            query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f'", ProductVariant.class);
+            query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt ON (pv.id = pvt.id) LEFT JOIN log l ON (pv.tx = l.tx AND pvt.tx = l.tx) WHERE pv.deleted = 'f'", ProductVariant.class);
 
         } else {
 
-            StringBuilder sb = new StringBuilder("SELECT * FROM product_variant pv LEFT JOIN  product_variant_tx pvt using(id,tx) JOIN log l using(tx) WHERE pv.deleted = 'f' AND pv.product IN ");
+            StringBuilder sb = new StringBuilder("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt ON (pv.id = pvt.id) LEFT JOIN log l ON (pv.tx = l.tx AND pvt.tx = l.tx) WHERE pv.deleted = 'f' AND pv.product IN ");
             sb.append("(");
 
             if (productIdList.size() > 0) {

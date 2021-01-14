@@ -97,6 +97,22 @@ public class VariantPropertyDaoTest {
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 11, new Date()));
         provider.commit();
 
+        saveToProductVariant(new ProductVariant(
+                fakeProductVariantId2,
+                11,
+                new Date(),
+                false,
+                "Fitness bracelet",
+                null,
+                "fitness-1",
+                null,
+                fakeProductId,
+                10,
+                "IDR",
+                1068051,
+                0,
+                ProductVariant.Form.physical, 10, 10, 20, 20));
+
         provider.begin();
         provider.em().persist(new VariantPropertyTx(fakeProductVariantId1, 1, 11,  new Date()));
         provider.commit();
