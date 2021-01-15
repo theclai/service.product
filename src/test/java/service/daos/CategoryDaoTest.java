@@ -15,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.testcontainers.containers.PostgreSQLContainer;
+import service.product.DatabaseParams;
+import service.product.ServiceException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,32 +33,21 @@ import static org.junit.Assert.assertFalse;
 @RunWith(JUnit4.class)
 public class CategoryDaoTest {
 
-    private static final String USER = "test";
-    private static final String PASSWORD = "test";
-    private static final String DATABASE = "service_product_db";
     private static final String PERSISTENCE_UNIT_NAME = "service_product";
 
     private EntityManager entityManager;
     private EntityManagerProvider provider;
-    private PostgreSQLContainer postgreSQLContainer;
 
     @Before
     public void Setup() {
 
-//        postgreSQLContainer = new PostgreSQLContainer("postgres:13.1")
-//                .withDatabaseName(DATABASE)
-//                .withUsername(USER)
-//                .withPassword(PASSWORD);
-//
-//        postgreSQLContainer.start();
-
-//        Map properties = new HashMap<>();
-//        properties.put("eclipselink.ddl-generation", "create-tables");
-//        properties.put("javax.persistence.jdbc.url", postgreSQLContainer.getJdbcUrl());
-//        properties.put("javax.persistence.jdbc.driver", "org.postgresql.Driver");
-//        properties.put("javax.persistence.jdbc.user", USER);
-//        properties.put("javax.persistence.jdbc.password", PASSWORD);
-//        properties.put("eclipselink.allow-zero-id", "true");
+//        DatabaseParams databaseParams = new DatabaseParams();
+//        databaseParams.setDatabaseHost("localhost");
+//        databaseParams.setDatabasePort(5432);
+//        databaseParams.setDatabaseName("service_product");
+//        databaseParams.setDatabaseType("postgresql");
+//        databaseParams.setDatabaseUsername("postgres");
+//        databaseParams.setDatabasePassword("tapp");
 
         provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
         entityManager = provider.em();
@@ -65,19 +56,11 @@ public class CategoryDaoTest {
     @After
     public void tearDown() throws Exception {
 
-//        entityManager.getTransaction().begin();
-//        entityManager.createNativeQuery("truncate table log").executeUpdate();
-//        entityManager.createNativeQuery("truncate table category_tx").executeUpdate();
-//        entityManager.createNativeQuery("truncate table category").executeUpdate();
-//        entityManager.getTransaction().commit();
-//        entityManager.clear();
         entityManager.close();
-
-        //postgreSQLContainer.close();
     }
 
     @Test
-    public void getCategory_withUUId_returnCategory() {
+    public void getCategory_withUUId_returnCategory() throws ServiceException {
 
         UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
         provider.begin();
@@ -102,7 +85,7 @@ public class CategoryDaoTest {
     }
 
     @Test
-    public void getCategoryList_withListOfParentUUID_returnCategory() {
+    public void getCategoryList_withListOfParentUUID_returnCategory() throws ServiceException {
 
         UUID fakeCategoryId1 = UUID.fromString("d7b137f3-9d81-4d41-9169-7040d0adf0bb");
         UUID fakeCategoryId2 = UUID.fromString("ff46a914-c61b-4e2e-aecb-3d4f1889774f");
@@ -167,7 +150,7 @@ public class CategoryDaoTest {
     }
 
     @Test
-    public void getCategoryList_withEmptyParentIds_returnAllCategory() {
+    public void getCategoryList_withEmptyParentIds_returnAllCategory() throws ServiceException {
 
         UUID fakeCategoryId1 = UUID.fromString("7867408e-185a-45a9-9882-9fa5b6f87d24");
         UUID fakeCategoryId2 = UUID.fromString("19a6c5b8-5d30-4719-8531-4e5faf1027a8");

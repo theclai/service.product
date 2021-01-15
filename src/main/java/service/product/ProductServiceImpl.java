@@ -6,14 +6,18 @@ package service.product;
 
 import AWS.ALBGrpc;
 import com.google.protobuf.Empty;
+import com.google.protobuf.NullValue;
 import com.google.protobuf.Timestamp;
 import com.google.type.Money;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.daos.CategoryDao;
 import tapp.product.*;
 
+import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -26,50 +30,61 @@ import java.util.*;
 public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBase {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+    private CategoryDao categoryDao;
+
+    public ProductServiceImpl(EntityManager entityManager){
+
+        categoryDao = new CategoryDao(entityManager);
+    }
 
     @Override
     public synchronized void getCategory(ID request, StreamObserver<Category> responseObserver) {
 
         logger.debug("getCategory");
+        Category category = null;
 
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        if (request == null || request.getId().isEmpty()) {
+
+            logger.debug("Category id is null");
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Category id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
-
-        Date dateValid = null;
         try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+            Optional<service.entities.Category> categoryValue = categoryDao.get(UUID.fromString(request.getId()));
+
+            if(categoryValue.isPresent()) {
+
+                Instant time = Instant.now();
+                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                        .setNanos(time.getNano()).build();
+
+                Instant instantValid = categoryValue.get().getValidTime().toInstant();
+                Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                        .setNanos(instantValid.getNano()).build();
+
+                category = Category
+                        .newBuilder()
+                        .setId(categoryValue.get().getId().toString())
+                        .setTransactionTime(transactionTime)
+                        .setValidTime(validTime)
+                        .setCreatedTime(transactionTime)
+                        .setTitle(categoryValue.get().getTitle() != null ? categoryValue.get().getTitle() : "")
+                        .setSubtitle(categoryValue.get().getSubtitle() != null ? categoryValue.get().getSubtitle() : "")
+                        .setDescription(categoryValue.get().getDescription() != null ? categoryValue.get().getDescription() : "")
+                        .setParent(categoryValue.get().getParent() != null ? categoryValue.get().getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
+                        //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
+                        .build();
+            }
+        } catch (CustomException | ServiceException e) {
+            logger.error("id {} error message: {}", request.getId(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
 
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        Category category = Category
-                .newBuilder()
-                .setId("//product.tapp/Category/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setTitle("Physical Goods")
-                .setSubtitle("")
-                .setDescription("Electronics and accessories delivered to your door")
-                .setParent("")
-                .setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
-                .build();
         responseObserver.onNext(category);
         responseObserver.onCompleted();
     }

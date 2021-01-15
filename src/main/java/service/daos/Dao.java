@@ -4,6 +4,8 @@
  */
 package service.daos;
 
+import service.product.ServiceException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,7 +16,7 @@ import java.util.UUID;
  */
 public interface Dao<T> {
 
-    Optional<T> get(UUID id);
+    Optional<T> get(UUID id) throws ServiceException;
 
     List<T> getAll();
 

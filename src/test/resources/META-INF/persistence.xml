@@ -20,7 +20,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.user" value="postgres"/>
             <property name="javax.persistence.jdbc.password" value="tapp"/>
-            <property name="eclipselink.allow-zero-id" value="true"/>
+            <property name="eclipselink.id-validation" value="NULL"/>
         </properties>
     </persistence-unit>
 </persistence>
