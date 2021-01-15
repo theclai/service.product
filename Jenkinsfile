@@ -21,7 +21,7 @@ pipeline {
                       script {
                           try {
                               sh 'docker-compose up -d'
-                              sleep time: 5000, unit: 'MILLISECONDS'
+                              sleep time: 1000, unit: 'MILLISECONDS'
                               sh './gradlew run --args="flyway migrate"'
                               sh './gradlew clean test --no-daemon'
                           } finally {
@@ -37,6 +37,8 @@ pipeline {
               }
         stage('Sanity Check') {
             steps {
+                sh 'docker-compose up -d'
+                sleep time: 1000, unit: 'MILLISECONDS'
                 sh '''
                     ./gradlew jibDockerBuild -Djib.to.image=${CONTAINER_IMAGE}:check --console=plain
                     (
@@ -60,6 +62,7 @@ pipeline {
             post {
                 always {
                     sh 'docker image rm ${CONTAINER_IMAGE}:check'
+                    sh 'docker-compose down'
                 }
             }
         }
