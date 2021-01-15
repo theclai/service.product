@@ -21,7 +21,7 @@ pipeline {
                       script {
                           try {
                               sh 'docker-compose up -d'
-                              sleep time: 1000, unit: 'MILLISECONDS'
+                              sleep time: 5000, unit: 'MILLISECONDS'
                               sh './gradlew run --args="flyway migrate"'
                               sh './gradlew clean test --no-daemon'
                           } finally {
