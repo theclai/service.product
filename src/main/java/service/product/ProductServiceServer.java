@@ -93,6 +93,8 @@ public class ProductServiceServer {
      * Main launches the server from the command line.
      */
     public static void main(String[] args) throws Exception {
+        
+        Thread.sleep(Long.parseLong(System.getenv().getOrDefault("START_DELAY", "0")));
 
         int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());

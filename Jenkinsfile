@@ -38,27 +38,20 @@ pipeline {
         stage('Sanity Check') {
             steps {
                 sh '''
-                    ./gradlew jibDockerBuild -Djib.to.image=${CONTAINER_IMAGE}:check --console=plain
-                    (
-                        set +e
-                        DURATION=30
-                        timeout $DURATION docker run --rm \
-                            -e HTTP_PORT=8080 \
-                            -e DATABASE_HOST=localhost \
-                            -e DATABASE_NAME=service_product \
-                            -e DATABASE_PORT=5432 \
-                            -e DATABASE_USERNAME=postgres \
-                            -e DATABASE_PASSWORD=tapp \
-                            -e DATABASE_TYPE=postgresql \
-                            ${CONTAINER_IMAGE}:check
-                        code=$?
-                        set -e
-                        [ $code -eq 124 ] && exit 0 || exit 1
-                    )
+                     ./gradlew jibDockerBuild -Djib.to.image=${CONTAINER_IMAGE}:check --console=plain
+                        (
+                            set +e
+                            DURATION=30
+                            timeout $DURATION docker-compose --file docker-compose-sanity.yml up
+                            code=$?
+                            set -e
+                            [ $code -eq 124 ] && exit 0 || exit 1
+                        )
                 '''
             }
             post {
                 always {
+                    sh 'docker-compose --file docker-compose-sanity.yml down'
                     sh 'docker image rm ${CONTAINER_IMAGE}:check'
                 }
             }

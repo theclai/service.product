@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=tapp
+    volumes:
+      - ./src/main/resources/db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  product:
+    image: service.product:check
+    environment:
+      - HTTP_PORT=8080
+      - DATABASE_HOST=db
+      - DATABASE_NAME=service_product
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=tapp
+      - DATABASE_TYPE=postgresql
+      - FLYWAY_TASK=migrate
+      - START_DELAY=5000
