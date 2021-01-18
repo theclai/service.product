@@ -13,7 +13,9 @@ import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.daos.CategoryDao;
+import service.daos.*;
+import service.entities.VariantOption;
+import service.entities.VariantProperty;
 import tapp.product.*;
 
 import javax.persistence.EntityManager;
@@ -22,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author faisalrahman
@@ -31,10 +34,18 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
     private CategoryDao categoryDao;
+    private ProductDao productDao;
+    private ProductVariantDao productVariantDao;
+    private VariantPropertyDao variantPropertyDao;
+    private VariantOptionDao variantOptionDao;
 
     public ProductServiceImpl(EntityManager entityManager){
 
         categoryDao = new CategoryDao(entityManager);
+        productDao = new ProductDao(entityManager);
+        productVariantDao = new ProductVariantDao(entityManager);
+        variantPropertyDao = new VariantPropertyDao(entityManager);
+        variantOptionDao = new VariantOptionDao(entityManager);
     }
 
     @Override
@@ -176,43 +187,63 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     public synchronized void getProduct(ID request, StreamObserver<Product> responseObserver) {
 
         logger.debug("getProduct");
+        Product product = null;
 
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        if(request == null || request.getId().isEmpty()) {
+
+            logger.debug("Product id is null");
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Product id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
+        try{
+            Optional<service.entities.Product> productValue = productDao.get(UUID.fromString(request.getId()));
 
-        Date dateValid = null;
-        try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+            if(productValue.isPresent()){
+
+                Instant time = Instant.now();
+                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                        .setNanos(time.getNano()).build();
+
+                Instant instantValid = productValue.get().getValidTime().toInstant();
+                Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                        .setNanos(instantValid.getNano()).build();
+
+                List<UUID> productIds = new ArrayList<>();
+                productIds.add(productValue.get().getId());
+
+                Optional<service.entities.ProductVariant> productVariantValue = productVariantDao.getProductVariants(productIds).stream().findFirst();
+                Map<String, RepeatedString> options = new HashMap<>();
+
+                if(productVariantValue.isPresent()){
+                    List<VariantOption> variantOptions = variantOptionDao.getVariantOptions(productVariantValue.get().getId());
+                    for (VariantOption vo : variantOptions) {
+                        options.put(vo.getId(), RepeatedString.newBuilder().addValue(vo.getValue()).build());
+                    }
+                }
+
+                product = Product
+                        .newBuilder()
+                        .setId(productValue.get().getId().toString())
+                        .setTransactionTime(transactionTime)
+                        .setValidTime(validTime)
+                        .setCreatedTime(transactionTime)
+                        .setCategory(productValue.get().getCategory() != null ? productValue.get().getCategory().toString() : String.valueOf(NullValue.NULL_VALUE))
+                        .setQuantity(productValue.get().getQuantity() != 0 ? productValue.get().getQuantity() : 0)
+                        .putAllOptions(options)
+                        .build();
+            }
+
+        }catch (CustomException e) {
+
+            logger.error("id {} error message: {}", request.getId(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
 
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        Product product = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(10)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
-                .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
-                .build();
 
         responseObserver.onNext(product);
         responseObserver.onCompleted();
@@ -258,7 +289,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(10)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -269,7 +299,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(0)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
                 .build();
 
@@ -280,7 +309,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(3)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -298,7 +326,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(56)
-                .setDefaultVariant(productVariant4)
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -319,7 +346,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(143)
-                .setDefaultVariant(productVariant5)
                 .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
                 .build();
 
