@@ -244,122 +244,83 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                     .asRuntimeException());
         }
 
-
         responseObserver.onNext(product);
         responseObserver.onCompleted();
     }
-
-
 
     @Override
     public void listProducts(ProductsList request, StreamObserver<Products> responseObserver) {
 
         logger.debug("listProducts");
+        Products products = null;
 
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        if(request == null || request.getCategory().isEmpty()){
+
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Category id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
+        try{
 
-        Date dateValid = null;
-        try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+            List<UUID> categoryIds = new ArrayList<>();
+            categoryIds.add(UUID.fromString(request.getCategory()));
+            List<service.entities.Product> productListEntity = productDao.getProductList(categoryIds);
+            List<Product> productList = new ArrayList<>();
+
+            if(productListEntity.size() > 0) {
+
+                for (service.entities.Product productValue : productListEntity) {
+
+                    Instant time = Instant.now();
+                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+
+                    Instant instantValid = productValue.getValidTime().toInstant();
+                    Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                            .setNanos(instantValid.getNano()).build();
+
+                    List<UUID> productIds = new ArrayList<>();
+                    productIds.add(productValue.getId());
+
+                    Optional<service.entities.ProductVariant> productVariantValue = productVariantDao.getProductVariants(productIds).stream().findFirst();
+                    Map<String, RepeatedString> options = new HashMap<>();
+
+                    if(productVariantValue.isPresent()){
+                        List<VariantOption> variantOptions = variantOptionDao.getVariantOptions(productVariantValue.get().getId());
+                        for (VariantOption vo : variantOptions) {
+                            options.put(vo.getId(), RepeatedString.newBuilder().addValue(vo.getValue()).build());
+                        }
+                    }
+
+                    Product product = Product
+                            .newBuilder()
+                            .setId(productValue.getId().toString())
+                            .setTransactionTime(transactionTime)
+                            .setValidTime(validTime)
+                            .setCreatedTime(transactionTime)
+                            .setCategory(productValue.getCategory() != null ? productValue.getCategory().toString() : String.valueOf(NullValue.NULL_VALUE))
+                            .setQuantity(productValue.getQuantity() != 0 ? productValue.getQuantity() : 0)
+                            .putAllOptions(options)
+                            .build();
+
+                    productList.add(product);
+                }
+
+                products = Products
+                        .newBuilder()
+                        .addAllNodes((Iterable<? extends Product>) productList.iterator())
+                        .build();
+            }
+
+        }catch (CustomException e){
+
+            logger.error("Category id {} error message: {}", request.getCategory(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
-
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        Product product1 = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(10)
-                .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
-                .build();
-
-        Product product2 = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/df659673-dc85-49bc-8af6-f7497275a064")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(0)
-                .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
-                .build();
-
-        Product product3 = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/19ef2f61-7ceb-4a69-a423-cdd513688e94")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(3)
-                .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
-                .build();
-
-
-        Map<String,String> colors4 = new HashMap<>();
-        colors4.put("blue","blue");
-        colors4.put("white","white");
-        colors4.put("red","red");
-
-        ProductVariant productVariant4 = ProductVariant.newBuilder().putAllOptions(colors4).build();
-        Product product4 = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(56)
-                .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
-                .build();
-
-        Map<String,String> colors5 = new HashMap<>();
-        colors4.put("black","black");
-        colors4.put("pink","pink");
-        colors4.put("white","white");
-        colors4.put("red","red");
-        colors4.put("blue","blue");
-        colors4.put("cartoon","cartoon");
-
-        ProductVariant productVariant5 = ProductVariant.newBuilder().putAllOptions(colors5).build();
-
-        Product product5 = Product
-                .newBuilder()
-                .setId("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setQuantity(143)
-                .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
-                .build();
-
-        List<Product> productList = new ArrayList<>();
-        productList.add(product1);
-        productList.add(product2);
-        productList.add(product3);
-        productList.add(product4);
-        productList.add(product5);
-
-        Products products = Products
-                .newBuilder()
-                .addAllNodes(productList)
-                .build();
 
         responseObserver.onNext(products);
         responseObserver.onCompleted();
