@@ -94,6 +94,8 @@ public class ProductServiceServer {
      */
     public static void main(String[] args) throws Exception {
 
+        Thread.sleep(5000);
+
         int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
         System.out.println("Read Specific Environment Variable");
