@@ -94,7 +94,13 @@ public class ProductServiceServer {
      */
     public static void main(String[] args) throws Exception {
 
-        Thread.sleep(Long.parseLong(System.getenv("DELAY_SLEEP_MILLISECOND")));
+        long delay = 5000;
+
+        if(System.getenv("DELAY_SLEEP_MILLISECOND") != null) {
+            delay = Long.parseLong(System.getenv("DELAY_SLEEP_MILLISECOND"));
+        }
+
+        Thread.sleep(delay);
 
         int port = 8080;
         logger.info("Log from {}", ProductServiceServer.class.getSimpleName());
