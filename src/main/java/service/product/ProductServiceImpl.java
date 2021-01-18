@@ -14,6 +14,11 @@ import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.daos.CategoryDao;
+import service.daos.ProductVariantDao;
+import service.daos.VariantOptionDao;
+import service.daos.VariantPropertyDao;
+import service.entities.VariantOption;
+import service.entities.VariantProperty;
 import tapp.product.*;
 
 import javax.persistence.EntityManager;
@@ -31,10 +36,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
     private CategoryDao categoryDao;
+    private ProductVariantDao productVariantDao;
+    private VariantPropertyDao variantPropertyDao;
+    private VariantOptionDao variantOptionDao;
 
     public ProductServiceImpl(EntityManager entityManager){
 
         categoryDao = new CategoryDao(entityManager);
+        productVariantDao = new ProductVariantDao(entityManager);
+        variantPropertyDao = new VariantPropertyDao(entityManager);
+        variantOptionDao = new VariantOptionDao(entityManager);
     }
 
     @Override
@@ -210,7 +221,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(10)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -258,7 +268,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(10)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -269,7 +278,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(0)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
                 .build();
 
@@ -280,7 +288,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(3)
-                .setDefaultVariant(ProductVariant.newBuilder().build())
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -298,7 +305,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(56)
-                .setDefaultVariant(productVariant4)
                 .setCategory("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
                 .build();
 
@@ -319,7 +325,6 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 .setValidTime(validTime)
                 .setCreatedTime(transactionTime)
                 .setQuantity(143)
-                .setDefaultVariant(productVariant5)
                 .setCategory("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
                 .build();
 
@@ -343,66 +348,92 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     public void getProductVariant(ID request, StreamObserver<ProductVariant> responseObserver) {
 
         logger.debug("getProductVariant");
+        ProductVariant productVariant = null;
 
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        if (request == null || request.getId().isEmpty()) {
+
+            logger.debug("Product variant id is null");
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Product variant id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
-
-        Date dateValid = null;
         try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+
+            Optional<service.entities.ProductVariant> productVariantValue = productVariantDao.get(UUID.fromString(request.getId()));
+
+            if (productVariantValue.isPresent()) {
+
+                Instant time = Instant.now();
+                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                        .setNanos(time.getNano()).build();
+
+                Instant instantValid = productVariantValue.get().getValidTime().toInstant();
+                Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                        .setNanos(instantValid.getNano()).build();
+
+                Money money = Money.newBuilder()
+                        .setCurrencyCode(productVariantValue.get().getPriceCurrencyCode())
+                        .setUnits(productVariantValue.get().getPriceUnits())
+                        .setNanos(productVariantValue.get().getPriceNanos())
+                        .build();
+
+                List<ProductVariant.Property> properties = new ArrayList<>();
+                List<VariantProperty> variantPropertyEntities = variantPropertyDao.getVariantProperties(productVariantValue.get().getId());
+
+                for (VariantProperty vp : variantPropertyEntities) {
+                    ProductVariant.Property property = ProductVariant.Property.newBuilder()
+                            .setKey(vp.getKey())
+                            .setValue(vp.getValue())
+                            .build();
+
+                    properties.add(property);
+                }
+
+                List<VariantOption> variantOptions = variantOptionDao.getVariantOptions(productVariantValue.get().getId());
+                Map<String, String> options = new HashMap<>();
+
+                for (VariantOption v : variantOptions) {
+                    options.put(v.getId(), v.getValue());
+                }
+
+                productVariant = ProductVariant
+                        .newBuilder()
+                        .setId(productVariantValue.get().getId().toString())
+                        .setTransactionTime(transactionTime)
+                        .setValidTime(validTime)
+                        .setCreatedTime(transactionTime)
+                        .setTitle(productVariantValue.get().getTitle() != null ? productVariantValue.get().getTitle() : "")
+                        .setSubtitle(productVariantValue.get().getSubtitle() != null ? productVariantValue.get().getSubtitle() : "")
+                        .setDescription(productVariantValue.get().getDescription() != null ? productVariantValue.get().getDescription() : "")
+                        .setForm(ProductVariant.Form.valueOf(productVariantValue.get().getProductVariantForm().toString()))
+                        .setSku(productVariantValue.get().getSku() != null ? productVariantValue.get().getSku() : "")
+                        .setPrice(money)
+                        .setProduct(productVariantValue.get().getProduct().toString())
+                        .setQuantity(productVariantValue.get().getQuantity() != 0 ? productVariantValue.get().getQuantity() : 0)
+                        .addAllProperties(properties)
+                        .putAllOptions(options)
+                        .setPackageMeasurements(
+                                Measurements
+                                        .newBuilder()
+                                        .setWidth(productVariantValue.get().getWidth() != 0 ? productVariantValue.get().getWidth() : 0)
+                                        .setLength(productVariantValue.get().getLength() != 0 ? productVariantValue.get().getLength() : 0)
+                                        .setHeight(productVariantValue.get().getHeight() != 0 ? productVariantValue.get().getHeight() : 0)
+                                        .setWeight(productVariantValue.get().getWeight() != 0 ? productVariantValue.get().getWeight() : 0)
+                                        .build()
+                        )
+                        //.setImages()
+                        .build();
+            }
+
+        } catch (CustomException e) {
+
+            logger.error("Product variant id {} error message: {}", request.getId(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
-
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        List<ProductVariant.Property> mapList = new ArrayList<>();
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Operating System").setValue("Android Wear").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Compatible Operating System").setValue("Android, iOS - Apple").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Model").setValue("Smart Bracelet").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Band Material").setValue("Silicone").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Series").setValue("C55").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("Blood Pressure Monitor, Bluetooth Enabled, Waterproof").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Case Material").setValue("Aluminium, Ceramic, Metal").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Item type").setValue("smart watch").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Screen size").setValue(".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("CPU chip").setValue("MTK2502").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("RAM/ROM").setValue("34M/128M").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Operating SystemPhone version require").setValue("Android 5.0 and above ,IOS 9.0 and above").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Waterproof").setValue("IP67").build());
-        mapList.add(ProductVariant.Property.newBuilder().setKey("Packing list").setValue("1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual").build());
-
-        ProductVariant productVariant = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Fitness bracelet")
-                .setSubtitle("")
-                .setDescription("Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock, calendar, stopwatch. Language:English, German, Spanish, Italian, French, Portuguese (Brazil), Russian, Indonesian, Czech, Arabic, Thai, Dutch, Polish, Turkish, Persian, Hebrew,Malaysian, Vietnamese, Greek language.")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("fitness-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
-                .setQuantity(10)
-                .addAllProperties(mapList)
-                .build();
 
         responseObserver.onNext(productVariant);
         responseObserver.onCompleted();
@@ -412,373 +443,105 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     public void listProductVariants(ProductVariantsList request, StreamObserver<ProductVariants> responseObserver) {
 
         logger.debug("listProductVariants");
+        ProductVariants productVariants = null;
 
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        if (request == null || request.getProduct().isEmpty()) {
+
+            logger.debug("Product id is null");
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Product id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
+        try{
 
-        Date dateValid = null;
-        try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+            List<UUID> productIds = new ArrayList<>();
+            productIds.add(UUID.fromString(request.getProduct()));
+            List<service.entities.ProductVariant> productVariantListEntity = productVariantDao.getProductVariants(productIds);
+            List<ProductVariant> productVariantList = new ArrayList<>();
+
+            if(productVariantListEntity.size() > 0){
+
+                for (service.entities.ProductVariant productVariantValue : productVariantListEntity) {
+
+                    Instant time = Instant.now();
+                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+
+                    Instant instantValid = productVariantValue.getValidTime().toInstant();
+                    Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                            .setNanos(instantValid.getNano()).build();
+
+                    Money money = Money.newBuilder()
+                            .setCurrencyCode(productVariantValue.getPriceCurrencyCode())
+                            .setUnits(productVariantValue.getPriceUnits())
+                            .setNanos(productVariantValue.getPriceNanos())
+                            .build();
+
+                    List<ProductVariant.Property> properties = new ArrayList<>();
+                    List<VariantProperty> variantPropertyEntities = variantPropertyDao.getVariantProperties(productVariantValue.getId());
+
+                    for (VariantProperty vp : variantPropertyEntities) {
+                        ProductVariant.Property property = ProductVariant.Property.newBuilder()
+                                .setKey(vp.getKey())
+                                .setValue(vp.getValue())
+                                .build();
+
+                        properties.add(property);
+                    }
+
+                    List<VariantOption> variantOptions = variantOptionDao.getVariantOptions(productVariantValue.getId());
+                    Map<String, String> options = new HashMap<>();
+
+                    for (VariantOption v : variantOptions) {
+                        options.put(v.getId(), v.getValue());
+                    }
+
+                    ProductVariant productVariant = ProductVariant
+                            .newBuilder()
+                            .setId(productVariantValue.getId().toString())
+                            .setTransactionTime(transactionTime)
+                            .setValidTime(validTime)
+                            .setCreatedTime(transactionTime)
+                            .setTitle(productVariantValue.getTitle() != null ? productVariantValue.getTitle() : "")
+                            .setSubtitle(productVariantValue.getSubtitle() != null ? productVariantValue.getSubtitle() : "")
+                            .setDescription(productVariantValue.getDescription() != null ? productVariantValue.getDescription() : "")
+                            .setForm(ProductVariant.Form.valueOf(productVariantValue.getProductVariantForm().toString()))
+                            .setSku(productVariantValue.getSku() != null ? productVariantValue.getSku() : "")
+                            .setPrice(money)
+                            .setProduct(productVariantValue.getProduct().toString())
+                            .setQuantity(productVariantValue.getQuantity() != 0 ? productVariantValue.getQuantity() : 0)
+                            .addAllProperties(properties)
+                            .putAllOptions(options)
+                            .setPackageMeasurements(
+                                    Measurements
+                                            .newBuilder()
+                                            .setWidth(productVariantValue.getWidth() != 0 ? productVariantValue.getWidth() : 0)
+                                            .setLength(productVariantValue.getLength() != 0 ? productVariantValue.getLength() : 0)
+                                            .setHeight(productVariantValue.getHeight() != 0 ? productVariantValue.getHeight() : 0)
+                                            .setWeight(productVariantValue.getWeight() != 0 ? productVariantValue.getWeight() : 0)
+                                            .build()
+                            )
+                            //.setImages()
+                            .build();
+
+                    productVariantList.add(productVariant);
+                }
+
+                productVariants = ProductVariants
+                        .newBuilder()
+                        .addAllNodes(productVariantList)
+                        .build();
+            }
+
+        }catch (CustomException e){
+
+            logger.error("Product variant id {} error message: {}", request.getProduct(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
-
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        List<ProductVariant.Property> mapList1 = new ArrayList<>();
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Operating System").setValue("Android Wear").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Compatible Operating System").setValue("Android, iOS - Apple").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Model").setValue("Smart Bracelet").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Band Material").setValue("Silicone").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Series").setValue("C55").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("Blood Pressure Monitor, Bluetooth Enabled, Waterproof").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Case Material").setValue("Aluminium, Ceramic, Metal").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Item type").setValue("smart watch").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Screen size").setValue(".1.54 HD IPS, 240*240 Touch screen 2.5D fox surface capacitive full-fit touch screen").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("CPU chip").setValue("MTK2502").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("RAM/ROM").setValue("34M/128M").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Operating SystemPhone version require").setValue("Android 5.0 and above ,IOS 9.0 and above").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Waterproof").setValue("IP67").build());
-        mapList1.add(ProductVariant.Property.newBuilder().setKey("Packing list").setValue("1 x Smart watch  1 x Charger  1 x Retail package  1 x User manual").build());
-
-        ProductVariant productVariant1 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Fitness bracelet")
-                .setSubtitle("")
-                .setDescription("Heart rate monitor ,sleep monitor,blood pressure,bluetooth call and message reminder,remote music/camera.Alarm clock, calendar, stopwatch. Language:English, German, Spanish, Italian, French, Portuguese (Brazil), Russian, Indonesian, Czech, Arabic, Thai, Dutch, Polish, Turkish, Persian, Hebrew,Malaysian, Vietnamese, Greek language.")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("fitness-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
-                .setQuantity(10)
-                .addAllProperties(mapList1)
-                .build();
-
-        List<ProductVariant.Property> mapList2 = new ArrayList<>();
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("Type").setValue("Type-C /Micro USB").build());
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("Cable Length").setValue("1m").build());
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("Items Included").setValue("Charging & Data Sync Cable, Charging Cable, Data Sync Cable").build());
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("Brand").setValue("Unbranded").build());
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("Features").setValue("USB-C").build());
-        mapList2.add(ProductVariant.Property.newBuilder().setKey("MPN").setValue("Does Not Apply").build());
-
-        ProductVariant productVariant2 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/df659673-dc85-49bc-8af6-f7497275a064")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("USB Type-C Cable")
-                .setSubtitle("")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("usb-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(24500).build())
-                .setQuantity(10)
-                .addAllProperties(mapList2)
-                .build();
-
-        List<ProductVariant.Property> mapList3 = new ArrayList<>();
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Fit Design").setValue("In-Ear Only").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Wireless Technology").setValue("Bluetooth").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("Android").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Connectivity").setValue("3.5mm Jack, Lightning").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Earpiece Design").setValue("Earbud (In Ear) Type: Headset").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Connector(s)").setValue("3.5mm Jack/Lightning Features: Built-in Microphone, Call functions, Playback Controls, Volume Control").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Earpiece").setValue("Double Color: White").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("Brand").setValue("Unbranded").build());
-        mapList3.add(ProductVariant.Property.newBuilder().setKey("MPN").setValue("Does Not Apply").build());
-
-        ProductVariant productVariant3 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/ProductVariant/e55305f0-5722-4634-b48f-a8ced6d17b4e")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Headset with box")
-                .setSubtitle("")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("headset-box-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(1068051).build())
-                .setQuantity(10)
-                .addAllProperties(mapList3)
-                .build();
-
-        List<ProductVariant.Property> mapList4 = new ArrayList<>();
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
-        mapList4.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
-
-        ProductVariant productVariant4 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/ProductVariant/e55305f0-5722-4634-b48f-a8ced6d17b4e")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Headset (Blue)")
-                .setSubtitle("")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("headset-blue-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
-                .setQuantity(4)
-                .addAllProperties(mapList4)
-                .build();
-
-        List<ProductVariant.Property> mapList5 = new ArrayList<>();
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
-        mapList5.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
-
-        Map<String, String> options5 = new HashMap<>();
-        options5.put("white","white");
-
-        ProductVariant productVariant5 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Headset (White)")
-                .setSubtitle("")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("headset-white-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(22000).build())
-                .setQuantity(47)
-                .addAllProperties(mapList5)
-                .putAllOptions(options5)
-                .build();
-
-        List<ProductVariant.Property> mapList6 = new ArrayList<>();
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Earphone style").setValue("wired earphone").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Plug diameter").setValue("3.5MM/ Lightning").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("State of the fast connection").setValue("to peel").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Quick connection").setValue("you device is connect").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Prompt disconnect").setValue("you device is disconnect").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Button function").setValue("Button function").build());
-        mapList6.add(ProductVariant.Property.newBuilder().setKey("Style").setValue("in ear").build());
-
-        Map<String, String> options6 = new HashMap<>();
-        options6.put("red","red");
-
-        ProductVariant productVariant6 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Headset (Red)")
-                .setSubtitle("")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("headset-red-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(26000).build())
-                .setQuantity(47)
-                .addAllProperties(mapList6)
-                .putAllOptions(options6)
-                .build();
-
-        List<ProductVariant.Property> mapList7 = new ArrayList<>();
-        mapList7.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
-        mapList7.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
-        mapList7.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
-        mapList7.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
-        mapList7.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
-
-        Map<String, String> options7 = new HashMap<>();
-        options7.put("black","black");
-
-        ProductVariant productVariant7 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Phone stent (Black)")
-                .setSubtitle("Pop socket / Phone stent")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("phone-stent-black-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
-                .setQuantity(43)
-                .addAllProperties(mapList7)
-                .putAllOptions(options7)
-                .build();
-
-        List<ProductVariant.Property> mapList8 = new ArrayList<>();
-        mapList8.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
-        mapList8.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
-        mapList8.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
-        mapList8.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
-        mapList8.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
-
-        Map<String, String> options8 = new HashMap<>();
-        options8.put("pink","pink");
-
-        ProductVariant productVariant8 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Phone stent (Pink)")
-                .setSubtitle("Pop socket / Phone stent")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("phone-ping-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
-                .setQuantity(20)
-                .addAllProperties(mapList8)
-                .putAllOptions(options8)
-                .build();
-
-        List<ProductVariant.Property> mapList9 = new ArrayList<>();
-        mapList9.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
-        mapList9.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
-        mapList9.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
-        mapList9.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
-        mapList9.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
-
-        Map<String, String> options9 = new HashMap<>();
-        options9.put("white","white");
-
-        ProductVariant productVariant9 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Phone stent (White)")
-                .setSubtitle("Pop socket / Phone stent")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("phone-stent-white-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
-                .setQuantity(20)
-                .addAllProperties(mapList9)
-                .putAllOptions(options9)
-                .build();
-
-        List<ProductVariant.Property> mapList10 = new ArrayList<>();
-        mapList10.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
-        mapList10.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
-        mapList10.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
-        mapList10.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
-        mapList10.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
-
-        Map<String, String> options10 = new HashMap<>();
-        options10.put("blue","blue");
-
-        ProductVariant productVariant10 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Phone stent (Blue)")
-                .setSubtitle("Pop socket / Phone stent")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("phone-stent-blue-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
-                .setQuantity(20)
-                .addAllProperties(mapList10)
-                .putAllOptions(options10)
-                .build();
-
-        List<ProductVariant.Property> mapList11 = new ArrayList<>();
-        mapList11.add(ProductVariant.Property.newBuilder().setKey("Material").setValue("Plastic +TPU").build());
-        mapList11.add(ProductVariant.Property.newBuilder().setKey("Product name").setValue("Phone Socket").build());
-        mapList11.add(ProductVariant.Property.newBuilder().setKey("Function").setValue("Stick on the phone").build());
-        mapList11.add(ProductVariant.Property.newBuilder().setKey("Weight").setValue("10g").build());
-        mapList11.add(ProductVariant.Property.newBuilder().setKey("Compatible Brand").setValue("All phones").build());
-
-        Map<String, String> options11 = new HashMap<>();
-        options11.put("cartoon","cartoon");
-
-        ProductVariant productVariant11 = ProductVariant
-                .newBuilder()
-                .setProduct("//product.tapp/Product/ec0cb10f-f275-4861-9d04-cde3c4f5b868")
-                .setId("//product.tapp/ProductVariant/")
-                .setTransactionTime(transactionTime)
-                .setCreatedTime(transactionTime)
-                .setValidTime(validTime)
-                .setTitle("Phone stent (cartoon)")
-                .setSubtitle("Pop socket / Phone stent")
-                .setDescription("")
-                .setImages(0, "")
-                .setForm(ProductVariant.Form.PHYSICAL)
-                .setSku("phone-stent-cartoon-1")
-                .setPrice(Money.newBuilder().setCurrencyCode("IDR").setUnits(4000).build())
-                .setQuantity(20)
-                .addAllProperties(mapList11)
-                .putAllOptions(options11)
-                .build();
-
-        List<ProductVariant> productVariantList = new ArrayList<>();
-        productVariantList.add(productVariant1);
-        productVariantList.add(productVariant2);
-        productVariantList.add(productVariant3);
-        productVariantList.add(productVariant4);
-        productVariantList.add(productVariant5);
-        productVariantList.add(productVariant6);
-        productVariantList.add(productVariant7);
-        productVariantList.add(productVariant8);
-        productVariantList.add(productVariant9);
-        productVariantList.add(productVariant10);
-        productVariantList.add(productVariant11);
-
-        ProductVariants productVariants = ProductVariants
-                .newBuilder()
-                .addAllNodes(productVariantList)
-                .build();
 
         responseObserver.onNext(productVariants);
         responseObserver.onCompleted();
