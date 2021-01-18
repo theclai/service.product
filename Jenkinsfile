@@ -51,8 +51,8 @@ pipeline {
             }
             post {
                 always {
+                    sh 'docker-compose --file docker-compose-sanity.yml down'
                     sh 'docker image rm ${CONTAINER_IMAGE}:check'
-                    sh 'docker-compose down'
                 }
             }
         }
