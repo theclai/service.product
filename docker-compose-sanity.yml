@@ -19,3 +19,4 @@ services:
       - DATABASE_PASSWORD=tapp
       - DATABASE_TYPE=postgresql
       - FLYWAY_TASK=migrate
+      - DELAY_SLEEP_MILLISECOND=5000
