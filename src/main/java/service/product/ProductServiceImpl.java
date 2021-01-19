@@ -390,7 +390,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .setTitle(productVariantValue.get().getTitle() != null ? productVariantValue.get().getTitle() : "")
                         .setSubtitle(productVariantValue.get().getSubtitle() != null ? productVariantValue.get().getSubtitle() : "")
                         .setDescription(productVariantValue.get().getDescription() != null ? productVariantValue.get().getDescription() : "")
-                        .setForm(ProductVariant.Form.valueOf(productVariantValue.get().getProductVariantForm().toString()))
+                        .setForm(productVariantValue.get().getProductVariantForm() != null ? mapProductVariantForm(productVariantValue.get().getProductVariantForm().toString()) : null)
                         .setSku(productVariantValue.get().getSku() != null ? productVariantValue.get().getSku() : "")
                         .setPrice(money)
                         .setProduct(productVariantValue.get().getProduct().toString())
@@ -490,7 +490,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                             .setTitle(productVariantValue.getTitle() != null ? productVariantValue.getTitle() : "")
                             .setSubtitle(productVariantValue.getSubtitle() != null ? productVariantValue.getSubtitle() : "")
                             .setDescription(productVariantValue.getDescription() != null ? productVariantValue.getDescription() : "")
-                            .setForm(ProductVariant.Form.valueOf(productVariantValue.getProductVariantForm().toString()))
+                            .setForm(productVariantValue.getProductVariantForm() != null ? mapProductVariantForm(productVariantValue.getProductVariantForm().toString()) : null)
                             .setSku(productVariantValue.getSku() != null ? productVariantValue.getSku() : "")
                             .setPrice(money)
                             .setProduct(productVariantValue.getProduct().toString())
@@ -529,5 +529,29 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         responseObserver.onNext(productVariants);
         responseObserver.onCompleted();
+    }
+
+    private ProductVariant.Form mapProductVariantForm(String form){
+
+        ProductVariant.Form formValue = null;
+
+        if(form.toLowerCase() == "digital"){
+
+            formValue = ProductVariant.Form.DIGITAL;
+
+        }else if(form.toLowerCase() == "physical"){
+
+            formValue = ProductVariant.Form.PHYSICAL;
+
+        }else if(form.toLowerCase() == "billing"){
+
+            formValue = ProductVariant.Form.BILLING;
+
+        }else if(form.toLowerCase() == "lending"){
+
+            formValue = ProductVariant.Form.LENDING;
+        }
+
+        return formValue;
     }
 }
