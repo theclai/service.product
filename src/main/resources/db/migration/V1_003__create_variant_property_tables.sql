@@ -1,7 +1,7 @@
 create table variant_property_tx (
     variant uuid references product_variant_tx(id),
     id int,
-    tx bigserial references log(tx),
+    tx bigserial not null references log(tx),
     created_time timestamp with time zone not null default(current_timestamp),
     primary key(variant, id)
 );
@@ -10,8 +10,8 @@ create index variant_property_tx_created_time_idx on variant_property_tx(created
 
 create table variant_property (
     variant uuid,
-    id int,
-    tx bigserial references log(tx),
+    id int not null,
+    tx bigserial not null references log(tx),
     valid_time timestamp with time zone not null default(current_timestamp),
     deleted boolean default (false),
     key text not null,

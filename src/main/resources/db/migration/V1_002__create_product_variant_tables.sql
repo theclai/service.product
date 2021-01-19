@@ -1,6 +1,6 @@
 create table product_variant_tx (
     id uuid primary key,
-    tx bigserial references log(tx),
+    tx bigserial not null references log(tx),
     created_time timestamp with time zone not null default(current_timestamp)
 );
 
@@ -9,8 +9,8 @@ create index product_variant_created_time_tx_idx on product_variant_tx(created_t
 create type product_variant_form as enum ('digital', 'physical', 'billing', 'lending');
 
 create table product_variant (
-    id uuid references product_variant_tx(id),
-    tx bigserial references log(tx),
+    id uuid not null references product_variant_tx(id),
+    tx bigserial not null references log(tx),
     primary key(id, tx),
     valid_time timestamp with time zone not null default(current_timestamp),
     deleted boolean default (false),

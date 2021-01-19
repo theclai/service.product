@@ -7,15 +7,15 @@ create index log_transaction_time_idx on log(transaction_time, tx);
 
 create table category_tx (
     id uuid primary key,
-    tx bigserial references log(tx),
+    tx bigserial not null references log(tx),
     created_time timestamp with time zone not null default(current_timestamp)
 );
 
 create index category_tx_created_time_idx on category_tx(created_time, id);
 
 create table category (
-    id uuid references category_tx(id),
-    tx bigserial references log(tx),
+    id uuid not null references category_tx(id),
+    tx bigserial not null references log(tx),
     primary key(id, tx),
     valid_time timestamp with time zone not null default(current_timestamp),
     deleted boolean default(false),
