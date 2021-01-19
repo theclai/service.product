@@ -104,80 +104,64 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     public void listCategories(CategoriesList request, StreamObserver<Categories> responseObserver) {
 
         logger.debug("listCategories");
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
+        Categories categories = null;
+
+        if(request == null || request.getParent().isEmpty()){
+
             responseObserver.onError(Status.INVALID_ARGUMENT
-                    .withDescription(e.getMessage())
+                    .withDescription("Category parent id is null")
                     .asRuntimeException());
         }
-        Instant time = date.toInstant();
 
-        Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                .setNanos(time.getNano()).build();
-
-        Date dateValid = null;
         try {
-            dateValid = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").parse("2020-12-28T02:46:18Z");
-        } catch (ParseException e) {
-            responseObserver.onError(Status.INVALID_ARGUMENT
+
+            List<UUID> categoryParentIds = new ArrayList<>();
+            categoryParentIds.add(UUID.fromString(request.getParent()));
+            List<service.entities.Category> categoryListEntity = categoryDao.getCategoryList(categoryParentIds);
+            List<Category> categoryList = new ArrayList<>();
+
+            if(categoryListEntity.size() > 0){
+
+                for (service.entities.Category categoryValue : categoryListEntity) {
+
+                    Instant time = Instant.now();
+                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+
+                    Instant instantValid = categoryValue.getValidTime().toInstant();
+                    Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
+                            .setNanos(instantValid.getNano()).build();
+
+                    Category category = Category
+                            .newBuilder()
+                            .setId(categoryValue.getId().toString())
+                            .setTransactionTime(transactionTime)
+                            .setValidTime(validTime)
+                            .setCreatedTime(transactionTime)
+                            .setTitle(categoryValue.getTitle() != null ? categoryValue.getTitle() : "")
+                            .setSubtitle(categoryValue.getSubtitle() != null ? categoryValue.getSubtitle() : "")
+                            .setDescription(categoryValue.getDescription() != null ? categoryValue.getDescription() : "")
+                            .setParent(categoryValue.getParent() != null ? categoryValue.getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
+                            //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
+                            .build();
+
+                    categoryList.add(category);
+                }
+
+                categories = Categories
+                        .newBuilder()
+                        .addAllNodes(categoryList)
+                        .build();
+            }
+
+        }catch (CustomException | ServiceException e){
+
+            logger.error("Category parent id {} error message: {}", request.getParent(), e.getMessage());
+            responseObserver.onError(Status.INTERNAL
                     .withDescription(e.getMessage())
+                    .withCause(e)
                     .asRuntimeException());
         }
-        Instant instantValid = dateValid.toInstant();
-
-        Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
-                .setNanos(instantValid.getNano()).build();
-
-        Category category1 = Category
-                .newBuilder()
-                .setId("//product.tapp/Category/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setTitle("Physical Goods")
-                .setSubtitle("")
-                .setDescription("Electronics and accessories delivered to your door")
-                .setParent("")
-                .setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
-                .build();
-
-        Category category2 = Category
-                .newBuilder()
-                .setId("//product.tapp/Category/3dcd405f-d0b5-4841-b9f2-c1ef6394d989")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setTitle("Electronics")
-                .setSubtitle("")
-                .setDescription("")
-                .setParent("//product.tapp/Category/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setImage("//image.tapp/Image/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
-                .build();
-
-        Category category3 = Category
-                .newBuilder()
-                .setId("//product.tapp/Category/713ec0bc-7a85-4fb6-8f9d-e2a8837b1abd")
-                .setTransactionTime(transactionTime)
-                .setValidTime(validTime)
-                .setCreatedTime(transactionTime)
-                .setTitle("Phone Accessories")
-                .setSubtitle("")
-                .setDescription("")
-                .setParent("//product.tapp/Category/9a0e4932-44be-11eb-b378-0242ac130002")
-                .setImage("//image.tapp/Image/82977ed3-0077-4d0f-b6a1-bdfc018693b0")
-                .build();
-
-        List<Category> categoryList = new ArrayList<>();
-        categoryList.add(category1);
-        categoryList.add(category2);
-        categoryList.add(category3);
-
-        Categories categories = Categories
-                .newBuilder()
-                .addAllNodes(categoryList)
-                .build();
 
         responseObserver.onNext(categories);
         responseObserver.onCompleted();
@@ -309,7 +293,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
                 products = Products
                         .newBuilder()
-                        .addAllNodes((Iterable<? extends Product>) productList.iterator())
+                        .addAllNodes(productList)
                         .build();
             }
 
