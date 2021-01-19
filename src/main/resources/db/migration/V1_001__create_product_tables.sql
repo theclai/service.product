@@ -1,14 +1,14 @@
 create table product_tx (
     id uuid primary key,
-    tx bigserial references log(tx),
+    tx bigserial not null references log(tx),
     created_time timestamp with time zone not null default(current_timestamp)
 );
 
 create index product_tx_created_time_idx on product_tx(created_time, id);
 
 create table product (
-    id uuid references product_tx(id),
-    tx bigserial references log(tx),
+    id uuid not null references product_tx(id),
+    tx bigserial not null references log(tx),
     primary key(id, tx),
     valid_time timestamp with time zone not null default(current_timestamp),
     deleted boolean default(false),
