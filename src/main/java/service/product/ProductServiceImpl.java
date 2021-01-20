@@ -258,7 +258,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .build();
             }
 
-        }catch (CustomException e) {
+        }catch (CustomException | ServiceException e) {
 
             logger.error("id {} error message: {}", request.getId(), e.getMessage());
             responseObserver.onError(Status.INTERNAL
@@ -346,7 +346,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .build();
             }
 
-        }catch (CustomException e){
+        }catch (CustomException | ServiceException e){
 
             logger.error("Category id {} error message: {}", request.getCategory(), e.getMessage());
             responseObserver.onError(Status.INTERNAL
@@ -387,6 +387,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                         .setNanos(instantValid.getNano()).build();
 
+                Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(request.getId()));
+                Timestamp createTime = transactionTime;
+
+                if(productVariantTxValue.isPresent()) {
+
+                    Instant instantCreateTime = productVariantTxValue.get().getCreatedTime().toInstant();
+                    createTime = Timestamp.newBuilder().setSeconds(instantCreateTime.getEpochSecond())
+                            .setNanos(instantCreateTime.getNano()).build();
+                }
+
                 Money money = Money.newBuilder()
                         .setCurrencyCode(productVariantValue.get().getPriceCurrencyCode())
                         .setUnits(productVariantValue.get().getPriceUnits())
@@ -417,7 +427,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .setId(productVariantValue.get().getId().toString())
                         .setTransactionTime(transactionTime)
                         .setValidTime(validTime)
-                        .setCreatedTime(transactionTime)
+                        .setCreatedTime(createTime)
                         .setTitle(productVariantValue.get().getTitle() != null ? productVariantValue.get().getTitle() : "")
                         .setSubtitle(productVariantValue.get().getSubtitle() != null ? productVariantValue.get().getSubtitle() : "")
                         .setDescription(productVariantValue.get().getDescription() != null ? productVariantValue.get().getDescription() : "")
@@ -441,7 +451,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .build();
             }
 
-        } catch (CustomException e) {
+        } catch (CustomException | ServiceException e) {
 
             logger.error("Product variant id {} error message: {}", request.getId(), e.getMessage());
             responseObserver.onError(Status.INTERNAL
@@ -487,6 +497,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                     Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                             .setNanos(instantValid.getNano()).build();
 
+                    Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(productVariantValue.getId().toString()));
+                    Timestamp createTime = transactionTime;
+
+                    if(productVariantTxValue.isPresent()) {
+
+                        Instant instantCreateTime = productVariantTxValue.get().getCreatedTime().toInstant();
+                        createTime = Timestamp.newBuilder().setSeconds(instantCreateTime.getEpochSecond())
+                                .setNanos(instantCreateTime.getNano()).build();
+                    }
+
                     Money money = Money.newBuilder()
                             .setCurrencyCode(productVariantValue.getPriceCurrencyCode())
                             .setUnits(productVariantValue.getPriceUnits())
@@ -517,7 +537,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                             .setId(productVariantValue.getId().toString())
                             .setTransactionTime(transactionTime)
                             .setValidTime(validTime)
-                            .setCreatedTime(transactionTime)
+                            .setCreatedTime(createTime)
                             .setTitle(productVariantValue.getTitle() != null ? productVariantValue.getTitle() : "")
                             .setSubtitle(productVariantValue.getSubtitle() != null ? productVariantValue.getSubtitle() : "")
                             .setDescription(productVariantValue.getDescription() != null ? productVariantValue.getDescription() : "")
@@ -549,7 +569,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .build();
             }
 
-        }catch (CustomException e){
+        }catch (CustomException | ServiceException e){
 
             logger.error("Product variant id {} error message: {}", request.getProduct(), e.getMessage());
             responseObserver.onError(Status.INTERNAL
