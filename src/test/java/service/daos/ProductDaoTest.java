@@ -18,6 +18,7 @@ import service.entities.CategoryTx;
 import service.entities.Log;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -48,6 +49,19 @@ public class ProductDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM product");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM product_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q4 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q5 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+        q4.executeUpdate();
+        q5.executeUpdate();
+        provider.commit();
         entityManager.close();
     }
 
@@ -164,9 +178,10 @@ public class ProductDaoTest {
 
         List<Product> productList = productDao.getProductList(categoryIdList);
 
+        long expectedValue = 4;
         long actualValue = productList.stream().count();
         
-        Assert.assertNotEquals(actualValue, 0);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 
     @Test
@@ -244,8 +259,8 @@ public class ProductDaoTest {
         List<Product> productList = productDao.getProductList(categoryIdList);
 
         long actualValue = productList.stream().count();
-        long expectedValue = 4;
+        long expectedValue = 2;
 
-        Assert.assertNotEquals(actualValue, expectedValue);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }

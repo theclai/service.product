@@ -42,6 +42,27 @@ public class VariantPropertyDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM variant_property");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM variant_property_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM product_variant");
+        Query q4 = provider.em().createNativeQuery("DELETE FROM product_variant_tx");
+        Query q5 = provider.em().createNativeQuery("DELETE FROM product");
+        Query q6 = provider.em().createNativeQuery("DELETE FROM product_tx");
+        Query q7 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q8 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q9 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+        q4.executeUpdate();
+        q5.executeUpdate();
+        q6.executeUpdate();
+        q7.executeUpdate();
+        q8.executeUpdate();
+        q9.executeUpdate();
+        provider.commit();
         entityManager.close();
     }
 

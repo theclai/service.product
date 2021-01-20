@@ -14,6 +14,8 @@ import service.entities.Log;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+
 import org.testcontainers.containers.PostgreSQLContainer;
 import service.product.DatabaseParams;
 import service.product.ServiceException;
@@ -41,14 +43,6 @@ public class CategoryDaoTest {
     @Before
     public void Setup() {
 
-//        DatabaseParams databaseParams = new DatabaseParams();
-//        databaseParams.setDatabaseHost("localhost");
-//        databaseParams.setDatabasePort(5432);
-//        databaseParams.setDatabaseName("service_product");
-//        databaseParams.setDatabaseType("postgresql");
-//        databaseParams.setDatabaseUsername("postgres");
-//        databaseParams.setDatabasePassword("tapp");
-
         provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
         entityManager = provider.em();
     }
@@ -56,6 +50,16 @@ public class CategoryDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+
+        provider.commit();
         entityManager.close();
     }
 
@@ -207,8 +211,9 @@ public class CategoryDaoTest {
         CategoryDao categoryDao = new CategoryDao(entityManager);
         List<Category> categoryList = categoryDao.getCategoryList(categoryParentList);
 
+        long expectedValue = 5;
         long actualValue = categoryList.stream().count();
         
-        Assert.assertNotEquals(actualValue, 0);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }
