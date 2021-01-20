@@ -6,6 +6,7 @@ package service.daos;
 
 import service.entities.Product;
 import service.entities.Category;
+import service.entities.ProductTx;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -91,5 +92,14 @@ public class ProductDao implements Dao<Product> {
         productList = query.getResultList();
 
         return productList;
+    }
+
+    public Optional<ProductTx> getProductTx(UUID id) {
+
+        Query query = entityManager.createNativeQuery("SELECT * FROM product_tx px JOIN log l using(tx) JOIN product p using(id, tx) WHERE px.id = ? AND p.deleted = 'f'", ProductTx.class);
+        query.setParameter(1, id);
+        ProductTx productTx = (ProductTx) query.getResultList().stream().findFirst().orElse(null);
+
+        return Optional.ofNullable(productTx);
     }
 }

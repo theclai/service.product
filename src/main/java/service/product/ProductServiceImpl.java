@@ -17,12 +17,14 @@ import service.daos.CategoryDao;
 import service.daos.ProductVariantDao;
 import service.daos.VariantOptionDao;
 import service.daos.VariantPropertyDao;
-import service.entities.VariantOption;
-import service.entities.VariantProperty;
+import service.entities.*;
 import service.daos.*;
 import service.entities.VariantOption;
 import service.entities.VariantProperty;
 import tapp.product.*;
+import tapp.product.Category;
+import tapp.product.Product;
+import tapp.product.ProductVariant;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -221,6 +223,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                         .setNanos(instantValid.getNano()).build();
 
+                Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(request.getId()));
+                Timestamp createTime = transactionTime;
+
+                if(productTxValue.isPresent()) {
+
+                    Instant instantCreateTime = productTxValue.get().getCreatedTime().toInstant();
+                    createTime = Timestamp.newBuilder().setSeconds(instantCreateTime.getEpochSecond())
+                            .setNanos(instantCreateTime.getNano()).build();
+                }
+
                 List<UUID> productIds = new ArrayList<>();
                 productIds.add(productValue.get().getId());
 
@@ -239,7 +251,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .setId(productValue.get().getId().toString())
                         .setTransactionTime(transactionTime)
                         .setValidTime(validTime)
-                        .setCreatedTime(transactionTime)
+                        .setCreatedTime(createTime)
                         .setCategory(productValue.get().getCategory() != null ? productValue.get().getCategory().toString() : String.valueOf(NullValue.NULL_VALUE))
                         .setQuantity(productValue.get().getQuantity() != 0 ? productValue.get().getQuantity() : 0)
                         .putAllOptions(options)
@@ -291,6 +303,16 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                     Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                             .setNanos(instantValid.getNano()).build();
 
+                    Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(productValue.getId().toString()));
+                    Timestamp createTime = transactionTime;
+
+                    if(productTxValue.isPresent()) {
+
+                        Instant instantCreateTime = productTxValue.get().getCreatedTime().toInstant();
+                        createTime = Timestamp.newBuilder().setSeconds(instantCreateTime.getEpochSecond())
+                                .setNanos(instantCreateTime.getNano()).build();
+                    }
+
                     List<UUID> productIds = new ArrayList<>();
                     productIds.add(productValue.getId());
 
@@ -309,7 +331,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                             .setId(productValue.getId().toString())
                             .setTransactionTime(transactionTime)
                             .setValidTime(validTime)
-                            .setCreatedTime(transactionTime)
+                            .setCreatedTime(createTime)
                             .setCategory(productValue.getCategory() != null ? productValue.getCategory().toString() : String.valueOf(NullValue.NULL_VALUE))
                             .setQuantity(productValue.getQuantity() != 0 ? productValue.getQuantity() : 0)
                             .putAllOptions(options)
