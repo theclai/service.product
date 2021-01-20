@@ -68,7 +68,7 @@ public class VariantPropertyDao implements Dao<VariantProperty> {
             logger.error("Id {} error message: {}",productVariantId,  e.getMessage());
             throw new ServiceException(e.getMessage(), Status.INTERNAL);
         }
-        
+
         return variantPropertyList;
     }
 }

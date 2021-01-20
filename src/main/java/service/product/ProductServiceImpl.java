@@ -46,6 +46,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     private ProductVariantDao productVariantDao;
     private VariantPropertyDao variantPropertyDao;
     private VariantOptionDao variantOptionDao;
+    private LogDao logDao;
 
     public ProductServiceImpl(EntityManager entityManager){
 
@@ -54,6 +55,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         productVariantDao = new ProductVariantDao(entityManager);
         variantPropertyDao = new VariantPropertyDao(entityManager);
         variantOptionDao = new VariantOptionDao(entityManager);
+        logDao = new LogDao(entityManager);
     }
 
     @Override
@@ -72,19 +74,25 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
         try {
             Optional<service.entities.Category> categoryValue = categoryDao.get(UUID.fromString(request.getId()));
-            Optional<service.entities.CategoryTx> categoryTxValue = categoryDao.getCategoryTx(UUID.fromString(request.getId()));
 
             if(categoryValue.isPresent()) {
 
-                Instant time = Instant.now();
-                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                        .setNanos(time.getNano()).build();
+                Optional<service.entities.CategoryTx> categoryTxValue = categoryDao.getCategoryTx(UUID.fromString(request.getId()));
+                Optional<service.entities.Log> logValue = logDao.getLog(categoryValue.get().getTx());
 
                 Instant instantValid = categoryValue.get().getValidTime().toInstant();
                 Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                         .setNanos(instantValid.getNano()).build();
 
-                Timestamp createTime = transactionTime;
+                Timestamp transactionTime = validTime;
+                Timestamp createTime = validTime;
+                
+                if(logValue.isPresent()){
+
+                    Instant time = logValue.get().getTransactionTime().toInstant();
+                    transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+                }
 
                 if(categoryTxValue.isPresent()) {
 
@@ -143,16 +151,21 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                 for (service.entities.Category categoryValue : categoryListEntity) {
 
                     Optional<service.entities.CategoryTx> categoryTxValue = categoryDao.getCategoryTx(UUID.fromString(categoryValue.getId().toString()));
-
-                    Instant time = Instant.now();
-                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                            .setNanos(time.getNano()).build();
+                    Optional<service.entities.Log> logValue = logDao.getLog(categoryValue.getTx());
 
                     Instant instantValid = categoryValue.getValidTime().toInstant();
                     Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                             .setNanos(instantValid.getNano()).build();
 
-                    Timestamp createTime = transactionTime;
+                    Timestamp transactionTime = validTime;
+                    Timestamp createTime = validTime;
+
+                    if(logValue.isPresent()) {
+
+                        Instant time = logValue.get().getTransactionTime().toInstant();
+                        transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                                .setNanos(time.getNano()).build();
+                    }
 
                     if(categoryTxValue.isPresent()) {
 
@@ -215,16 +228,22 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
             if(productValue.isPresent()){
 
-                Instant time = Instant.now();
-                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                        .setNanos(time.getNano()).build();
+                Optional<service.entities.Log> logValue = logDao.getLog(productValue.get().getTx());
+                Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(request.getId()));
 
                 Instant instantValid = productValue.get().getValidTime().toInstant();
                 Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                         .setNanos(instantValid.getNano()).build();
 
-                Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(request.getId()));
-                Timestamp createTime = transactionTime;
+                Timestamp transactionTime = validTime;
+                Timestamp createTime = validTime;
+
+                if(logValue.isPresent()){
+
+                    Instant time = logValue.get().getTransactionTime().toInstant();
+                    transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+                }
 
                 if(productTxValue.isPresent()) {
 
@@ -295,16 +314,22 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
                 for (service.entities.Product productValue : productListEntity) {
 
-                    Instant time = Instant.now();
-                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                            .setNanos(time.getNano()).build();
+                    Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(productValue.getId().toString()));
+                    Optional<service.entities.Log> logValue = logDao.getLog(productValue.getTx());
 
                     Instant instantValid = productValue.getValidTime().toInstant();
                     Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                             .setNanos(instantValid.getNano()).build();
 
-                    Optional<ProductTx> productTxValue = productDao.getProductTx(UUID.fromString(productValue.getId().toString()));
-                    Timestamp createTime = transactionTime;
+                    Timestamp transactionTime = validTime;
+                    Timestamp createTime = validTime;
+
+                    if(logValue.isPresent()){
+
+                        Instant time = logValue.get().getTransactionTime().toInstant();
+                        transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                                .setNanos(time.getNano()).build();
+                    }
 
                     if(productTxValue.isPresent()) {
 
@@ -379,16 +404,22 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
             if (productVariantValue.isPresent()) {
 
-                Instant time = Instant.now();
-                Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                        .setNanos(time.getNano()).build();
+                Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(request.getId()));
+                Optional<service.entities.Log> logValue = logDao.getLog(productVariantValue.get().getTx());
 
                 Instant instantValid = productVariantValue.get().getValidTime().toInstant();
                 Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                         .setNanos(instantValid.getNano()).build();
 
-                Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(request.getId()));
-                Timestamp createTime = transactionTime;
+                Timestamp transactionTime = validTime;
+                Timestamp createTime = validTime;
+
+                if(logValue.isPresent()){
+
+                    Instant time = logValue.get().getTransactionTime().toInstant();
+                    transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                            .setNanos(time.getNano()).build();
+                }
 
                 if(productVariantTxValue.isPresent()) {
 
@@ -489,16 +520,22 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
                 for (service.entities.ProductVariant productVariantValue : productVariantListEntity) {
 
-                    Instant time = Instant.now();
-                    Timestamp transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
-                            .setNanos(time.getNano()).build();
+                    Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(productVariantValue.getId().toString()));
+                    Optional<service.entities.Log> logValue = logDao.getLog(productVariantValue.getTx());
 
                     Instant instantValid = productVariantValue.getValidTime().toInstant();
                     Timestamp validTime = Timestamp.newBuilder().setSeconds(instantValid.getEpochSecond())
                             .setNanos(instantValid.getNano()).build();
 
-                    Optional<ProductVariantTx> productVariantTxValue = productVariantDao.getProductVariantTx(UUID.fromString(productVariantValue.getId().toString()));
-                    Timestamp createTime = transactionTime;
+                    Timestamp transactionTime = validTime;
+                    Timestamp createTime = validTime;
+
+                    if(logValue.isPresent()){
+
+                        Instant time = logValue.get().getTransactionTime().toInstant();
+                        transactionTime = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                                .setNanos(time.getNano()).build();
+                    }
 
                     if(productVariantTxValue.isPresent()) {
 

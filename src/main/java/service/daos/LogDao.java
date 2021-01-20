@@ -21,7 +21,7 @@ import java.util.UUID;
  * @author faisalrahman
  * @version $Id: LogDao.java, v 0.1 20210120 11.30 faisalrahman Exp $$
  */
-public class LogDao implements Dao<Log>{
+public class LogDao {
 
     private static final Logger logger = LoggerFactory.getLogger(LogDao.class);
     private final EntityManager entityManager;
@@ -30,42 +30,21 @@ public class LogDao implements Dao<Log>{
         this.entityManager = entityManager;
     }
 
-    @Override
-    public Optional<Log> get(UUID id) throws ServiceException {
+    public Optional<Log> getLog(int tx) throws ServiceException {
 
         Log log = new Log();
 
         try{
 
             Query query = entityManager.createNativeQuery("SELECT * FROM log l WHERE l.tx = ? ", Log.class);
-            query.setParameter(1, id);
+            query.setParameter(1, tx);
             log = (Log) query.getResultList().stream().findFirst().orElse(null);
 
         }catch (Exception e){
-            logger.error("Id {} error message: {}",id,  e.getMessage());
+            logger.error("Id {} error message: {}",tx,  e.getMessage());
             throw new ServiceException(e.getMessage(), Status.INTERNAL);
         }
 
         return Optional.ofNullable(log);
-    }
-
-    @Override
-    public List<Log> getAll() {
-        return null;
-    }
-
-    @Override
-    public void save(Log log) {
-
-    }
-
-    @Override
-    public void update(Log log, String[] params) {
-
-    }
-
-    @Override
-    public void delete(Log log) {
-
     }
 }
