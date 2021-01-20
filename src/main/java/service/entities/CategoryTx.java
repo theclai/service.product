@@ -19,7 +19,7 @@ import java.util.UUID;
  * @version $Id: CategoryTx.java, v 0.1 20210105 08.50 faisalrahman Exp $$
  */
 
-@Entity
+@Entity(name = "category_tx")
 @Table(name = "category_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
 public class CategoryTx implements Serializable {
