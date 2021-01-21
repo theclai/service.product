@@ -41,6 +41,23 @@ public class ProductVariantDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM product_variant");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM product_variant_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM product");
+        Query q4 = provider.em().createNativeQuery("DELETE FROM product_tx");
+        Query q5 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q6 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q7 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+        q4.executeUpdate();
+        q5.executeUpdate();
+        q6.executeUpdate();
+        q7.executeUpdate();
+        provider.commit();
         entityManager.close();
     }
 
@@ -51,31 +68,13 @@ public class ProductVariantDaoTest {
         UUID fakeProductId =  UUID.fromString("fab45351-7380-49a7-902d-5cf5adf7f4b6");
         UUID fakeIdCategory =  UUID.fromString("4d8224e6-872a-46ae-b27d-9c4997a917db");
 
-        provider.begin();
-        provider.em().persist(new Log(3, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory, 3, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId, 3, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Product(fakeProductId, 3, new Date(),  false, fakeIdCategory, 30));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductVariantId, 3, new Date()));
-        provider.commit();
-
-        saveToProductVariant(new ProductVariant(
+        Log logObj = new Log(3, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 3, new Date());
+        Category categoryObj = new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null);
+        ProductTx productTxObj = new ProductTx(fakeProductId, 3, new Date());
+        Product productObj = new Product(fakeProductId, 3, new Date(),  false, fakeIdCategory, 30);
+        ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId, 3, new Date());
+        ProductVariant productVariantObj = new ProductVariant(
                 fakeProductVariantId,
                 3,
                 new Date(),
@@ -90,7 +89,33 @@ public class ProductVariantDaoTest {
                 1068051,
                 0,
                 ProductVariant.Form.physical,
-                10,10,20,20));
+                10,10,20,20);
+
+        provider.begin();
+        provider.em().persist(logObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(categoryTxObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(categoryObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productTxObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productVariantTxObj);
+        provider.commit();
+
+        saveToProductVariant(productVariantObj);
 
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
         UUID id = fakeProductVariantId;
@@ -100,6 +125,24 @@ public class ProductVariantDaoTest {
         String expectedValue = "Fitness bracelet";
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(productVariantValue.get().getId(), productVariantObj.getId());
+        Assert.assertEquals(productVariantValue.get().getTx(), productVariantObj.getTx());
+        Assert.assertEquals(productVariantValue.get().getValidTime(), productVariantObj.getValidTime());
+        Assert.assertEquals(productVariantValue.get().isDeleted(), productVariantObj.isDeleted());
+        Assert.assertEquals(productVariantValue.get().getTitle(), productVariantObj.getTitle());
+        Assert.assertEquals(productVariantValue.get().getSubtitle(), productVariantObj.getSubtitle());
+        Assert.assertEquals(productVariantValue.get().getSku(), productVariantObj.getSku());
+        Assert.assertEquals(productVariantValue.get().getDescription(), productVariantObj.getDescription());
+        Assert.assertEquals(productVariantValue.get().getProduct(), productVariantObj.getProduct());
+        Assert.assertEquals(productVariantValue.get().getQuantity(), productVariantObj.getQuantity());
+        Assert.assertEquals(productVariantValue.get().getPriceCurrencyCode(), productVariantObj.getPriceCurrencyCode());
+        Assert.assertEquals(productVariantValue.get().getPriceUnits(), productVariantObj.getPriceUnits());
+        Assert.assertEquals(productVariantValue.get().getPriceNanos(), productVariantObj.getPriceNanos());
+        Assert.assertEquals(productVariantValue.get().getProductVariantForm(), productVariantObj.getProductVariantForm());
+        Assert.assertEquals(productVariantValue.get().getWidth(), productVariantObj.getWidth());
+        Assert.assertEquals(productVariantValue.get().getLength(), productVariantObj.getLength());
+        Assert.assertEquals(productVariantValue.get().getHeight(), productVariantObj.getHeight());
+        Assert.assertEquals(productVariantValue.get().getWeight(), productVariantObj.getWeight());
     }
 
     @Test
@@ -195,9 +238,10 @@ public class ProductVariantDaoTest {
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
         List<ProductVariant> productVariantList = productVariantDao.getProductVariants(productIdList);
 
+        long expectedValue = 3;
         long actualValue = productVariantList.stream().count();
 
-        Assert.assertNotEquals(actualValue, 0);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 
     @Test

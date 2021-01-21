@@ -14,6 +14,8 @@ import service.entities.Log;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+
 import org.testcontainers.containers.PostgreSQLContainer;
 import service.product.DatabaseParams;
 import service.product.ServiceException;
@@ -41,14 +43,6 @@ public class CategoryDaoTest {
     @Before
     public void Setup() {
 
-//        DatabaseParams databaseParams = new DatabaseParams();
-//        databaseParams.setDatabaseHost("localhost");
-//        databaseParams.setDatabasePort(5432);
-//        databaseParams.setDatabaseName("service_product");
-//        databaseParams.setDatabaseType("postgresql");
-//        databaseParams.setDatabaseUsername("postgres");
-//        databaseParams.setDatabasePassword("tapp");
-
         provider = EntityManagerProvider.withUnit(PERSISTENCE_UNIT_NAME);
         entityManager = provider.em();
     }
@@ -56,6 +50,16 @@ public class CategoryDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+
+        provider.commit();
         entityManager.close();
     }
 
@@ -63,25 +67,37 @@ public class CategoryDaoTest {
     public void getCategory_withUUId_returnCategory() throws ServiceException {
 
         UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
+        Log logObj = new Log(0, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeId, 0, new Date());
+        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null);
+
         provider.begin();
-        provider.em().persist(new Log(0, new Date()));
+        provider.em().persist(logObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeId, 0, new Date()));
+        provider.em().persist(categoryTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null));
+        provider.em().persist(categoryObj);
         provider.commit();
 
         CategoryDao categoryDao = new CategoryDao(entityManager);
         UUID id = fakeId;
         Optional<Category> categoryValue = categoryDao.get(id);
         String actualValue = categoryValue.get().getTitle();
-        String expectedValue = "Physical Goods";
+        String expectedValue = categoryObj.getTitle();
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(categoryValue.get().getId(), categoryObj.getId());
+        Assert.assertEquals(categoryValue.get().getTx(), categoryObj.getTx());
+        Assert.assertEquals(categoryValue.get().getValidTime(), categoryObj.getValidTime());
+        Assert.assertEquals(categoryValue.get().isDeleted(), categoryObj.isDeleted());
+        Assert.assertEquals(categoryValue.get().getTitle(), categoryObj.getTitle());
+        Assert.assertEquals(categoryValue.get().getSubtitle(), categoryObj.getSubtitle());
+        Assert.assertEquals(categoryValue.get().getDescription(), categoryObj.getDescription());
+        Assert.assertEquals(categoryValue.get().getParent(), categoryObj.getParent());
     }
 
     @Test
@@ -207,8 +223,9 @@ public class CategoryDaoTest {
         CategoryDao categoryDao = new CategoryDao(entityManager);
         List<Category> categoryList = categoryDao.getCategoryList(categoryParentList);
 
+        long expectedValue = 5;
         long actualValue = categoryList.stream().count();
         
-        Assert.assertNotEquals(actualValue, 0);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }

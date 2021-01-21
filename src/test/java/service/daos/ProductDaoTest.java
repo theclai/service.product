@@ -19,6 +19,7 @@ import service.entities.Log;
 import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -49,6 +50,19 @@ public class ProductDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM product");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM product_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q4 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q5 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+        q4.executeUpdate();
+        q5.executeUpdate();
+        provider.commit();
         entityManager.close();
     }
 
@@ -58,28 +72,30 @@ public class ProductDaoTest {
         UUID fakeProductId =  UUID.fromString("59e1ae6c-45a2-41b6-a2f2-fce36b541b05");
         UUID fakeIdCategory =  UUID.fromString("feb246cb-cf3f-40f2-b3a0-6e84ce27396d");
 
+        Log logObj = new Log(1, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 1, new Date());
+        Category categoryObj = new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null);
+        ProductTx productTxObj = new ProductTx(fakeProductId, 1, new Date());
+        Product productObj = new Product(fakeProductId, 1, new Date(),  false, fakeIdCategory, 20);
+
         provider.begin();
-        provider.em().persist(new Log(1, new Date()));
+        provider.em().persist(logObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory, 1, new Date()));
+        provider.em().persist(categoryTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null));
+        provider.em().persist(categoryObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Log(2, new Date()));
+        provider.em().persist(productTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId, 2, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Product(fakeProductId, 2, new Date(),  false, fakeIdCategory, 20));
+        provider.em().persist(productObj);
         provider.commit();
 
         ProductDao productDao = new ProductDao(entityManager);
@@ -90,6 +106,12 @@ public class ProductDaoTest {
         int expectedValue = 20;
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(productValue.get().getId(), productObj.getId());
+        Assert.assertEquals(productValue.get().getTx(), productObj.getTx());
+        Assert.assertEquals(productValue.get().getValidTime(), productObj.getValidTime());
+        Assert.assertEquals(productValue.get().isDeleted(), productObj.isDeleted());
+        Assert.assertEquals(productValue.get().getCategory(), productObj.getCategory());
+        Assert.assertEquals(productValue.get().getQuantity(), productObj.getQuantity());
     }
 
     @Test
@@ -165,9 +187,10 @@ public class ProductDaoTest {
 
         List<Product> productList = productDao.getProductList(categoryIdList);
 
+        long expectedValue = 4;
         long actualValue = productList.stream().count();
         
-        Assert.assertNotEquals(actualValue, 0);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 
     @Test
@@ -245,8 +268,8 @@ public class ProductDaoTest {
         List<Product> productList = productDao.getProductList(categoryIdList);
 
         long actualValue = productList.stream().count();
-        long expectedValue = 4;
+        long expectedValue = 2;
 
-        Assert.assertNotEquals(actualValue, expectedValue);
+        Assert.assertEquals(actualValue, expectedValue);
     }
 }

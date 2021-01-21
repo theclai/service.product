@@ -43,6 +43,31 @@ public class VariantOptionDaoTest {
     @After
     public void tearDown() throws Exception {
 
+        provider.begin();
+        Query q1 = provider.em().createNativeQuery("DELETE FROM variant_option");
+        Query q2 = provider.em().createNativeQuery("DELETE FROM variant_option_tx");
+        Query q3 = provider.em().createNativeQuery("DELETE FROM variant_property");
+        Query q4 = provider.em().createNativeQuery("DELETE FROM variant_property_tx");
+        Query q5 = provider.em().createNativeQuery("DELETE FROM product_variant");
+        Query q6 = provider.em().createNativeQuery("DELETE FROM product_variant_tx");
+        Query q7 = provider.em().createNativeQuery("DELETE FROM product");
+        Query q8 = provider.em().createNativeQuery("DELETE FROM product_tx");
+        Query q9 = provider.em().createNativeQuery("DELETE FROM category");
+        Query q10 = provider.em().createNativeQuery("DELETE FROM category_tx");
+        Query q11 = provider.em().createNativeQuery("DELETE FROM log");
+
+        q1.executeUpdate();
+        q2.executeUpdate();
+        q3.executeUpdate();
+        q4.executeUpdate();
+        q5.executeUpdate();
+        q6.executeUpdate();
+        q7.executeUpdate();
+        q8.executeUpdate();
+        q9.executeUpdate();
+        q10.executeUpdate();
+        q11.executeUpdate();
+        provider.commit();
         entityManager.close();
     }
 
@@ -53,31 +78,13 @@ public class VariantOptionDaoTest {
         UUID fakeIdCategory =  UUID.fromString("43bcc9ec-c5f0-433b-8a08-3874d0806eef");
         UUID fakeProductVariantId1 = UUID.fromString("d481b2e0-b152-436c-84e5-ee806239e190");
 
-        provider.begin();
-        provider.em().persist(new Log(10, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory, 10, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId, 10, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Product(fakeProductId, 10, new Date(),  false, fakeIdCategory, 30));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 10, new Date()));
-        provider.commit();
-
-        saveToProductVariant(new ProductVariant(
+        Log logObj = new Log(10, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 10, new Date());
+        Category categoryObj = new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null);
+        ProductTx productTxObj = new ProductTx(fakeProductId, 10, new Date());
+        Product productObj = new Product(fakeProductId, 10, new Date(),  false, fakeIdCategory, 30);
+        ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId1, 10, new Date());
+        ProductVariant productVariantObj = new ProductVariant(
                 fakeProductVariantId1,
                 10,
                 new Date(),
@@ -91,14 +98,42 @@ public class VariantOptionDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20);
+        VariantOptionTx variantOptionTxObj = new VariantOptionTx(fakeProductVariantId1, "colour", 10,  new Date());
+        VariantOption variantOptionObj = new VariantOption(fakeProductVariantId1, "colour", 10,  new Date(), false, "Blue");
 
         provider.begin();
-        provider.em().persist(new VariantOptionTx(fakeProductVariantId1, "colour", 10,  new Date()));
+        provider.em().persist(logObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new VariantOption(fakeProductVariantId1, "colour", 10,  new Date(), false, "Blue"));
+        provider.em().persist(categoryTxObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(categoryObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productTxObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(productVariantTxObj);
+        provider.commit();
+
+        saveToProductVariant(productVariantObj);
+
+        provider.begin();
+        provider.em().persist(variantOptionTxObj);
+        provider.commit();
+
+        provider.begin();
+        provider.em().persist(variantOptionObj);
         provider.commit();
 
         VariantOptionDao variantOptionDao = new VariantOptionDao(entityManager);
@@ -108,6 +143,12 @@ public class VariantOptionDaoTest {
         String expectedValue = "Blue";
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().getVariant(), variantOptionObj.getVariant());
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().getId(), variantOptionObj.getId());
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().getTx(), variantOptionObj.getTx());
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().getValidTime(), variantOptionObj.getValidTime());
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().isDeleted(), variantOptionObj.isDeleted());
+        Assert.assertEquals(variantOptionList.stream().findFirst().get().getValue(), variantOptionObj.getValue());
     }
 
     private void saveToProductVariant(ProductVariant productVariant) {
