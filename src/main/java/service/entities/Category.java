@@ -18,7 +18,7 @@ import service.util.UUIDConverter;
  * @version $Id: Category.java, v 0.1 20210104 11.36 faisalrahman Exp $$
  */
 
-@Entity
+@Entity(name = "category")
 @Table(name = "category")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
 public class Category implements Serializable {

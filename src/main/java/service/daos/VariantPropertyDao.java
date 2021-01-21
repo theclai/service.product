@@ -4,8 +4,12 @@
  */
 package service.daos;
 
+import io.grpc.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.entities.VariantOption;
 import service.entities.VariantProperty;
+import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -20,6 +24,7 @@ import java.util.UUID;
  */
 public class VariantPropertyDao implements Dao<VariantProperty> {
 
+    private static final Logger logger = LoggerFactory.getLogger(VariantPropertyDao.class);
     private final EntityManager entityManager;
 
     public VariantPropertyDao(EntityManager entityManager) { this.entityManager = entityManager; }
@@ -49,11 +54,20 @@ public class VariantPropertyDao implements Dao<VariantProperty> {
 
     }
 
-    public List<VariantProperty> getVariantProperties(UUID productVariantId){
+    public List<VariantProperty> getVariantProperties(UUID productVariantId) throws ServiceException {
 
-        Query query = entityManager.createNativeQuery("SELECT * FROM variant_property vp LEFT OUTER JOIN variant_property_tx vpt ON (vp.variant = vpt.variant and vp.id = vpt.id) LEFT OUTER JOIN log l ON (vp.tx = l.tx) WHERE vp.deleted = 'f' and vp.variant = ?", VariantProperty.class);
-        query.setParameter(1, productVariantId);
-        List<VariantProperty> variantPropertyList = query.getResultList();
+        List<VariantProperty> variantPropertyList;
+
+        try {
+
+            Query query = entityManager.createNativeQuery("SELECT * FROM variant_property vp LEFT OUTER JOIN variant_property_tx vpt ON (vp.variant = vpt.variant and vp.id = vpt.id) LEFT OUTER JOIN log l ON (vp.tx = l.tx) WHERE vp.deleted = 'f' and vp.variant = ?", VariantProperty.class);
+            query.setParameter(1, productVariantId);
+            variantPropertyList = query.getResultList();
+
+        }catch (Exception e){
+            logger.error("Id {} error message: {}",productVariantId,  e.getMessage());
+            throw new ServiceException(e.getMessage(), Status.INTERNAL);
+        }
 
         return variantPropertyList;
     }

@@ -8,6 +8,7 @@ import io.grpc.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import service.entities.Category;
+import service.entities.CategoryTx;
 import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
@@ -24,7 +25,6 @@ import java.util.UUID;
 public class CategoryDao implements Dao<Category> {
 
     private static final Logger logger = LoggerFactory.getLogger(CategoryDao.class);
-
     private final EntityManager entityManager;
 
     public CategoryDao(EntityManager entityManager) {
@@ -34,7 +34,7 @@ public class CategoryDao implements Dao<Category> {
     @Override
     public Optional<Category> get(UUID id) throws ServiceException {
 
-        Category category = new Category();
+        Category category;
 
         try{
 
@@ -72,7 +72,7 @@ public class CategoryDao implements Dao<Category> {
 
     public List<Category> getCategoryList(List<UUID> categoryParentList) throws ServiceException {
 
-        List<Category> categoryList = new ArrayList<>();
+        List<Category> categoryList;
 
         try {
 
@@ -116,5 +116,23 @@ public class CategoryDao implements Dao<Category> {
         }
 
         return categoryList;
+    }
+
+    public Optional<CategoryTx> getCategoryTx(UUID id) throws ServiceException {
+
+        CategoryTx categoryTx;
+
+        try{
+
+            Query query = entityManager.createNativeQuery("SELECT * FROM category_tx cx JOIN log l using(tx) JOIN category c using(id, tx) WHERE cx.id = ? AND c.deleted = 'f'", CategoryTx.class);
+            query.setParameter(1, id);
+            categoryTx = (CategoryTx) query.getResultList().stream().findFirst().orElse(null);
+
+        }catch (Exception e){
+            logger.error("Id {} error message: {}",id,  e.getMessage());
+            throw new ServiceException(e.getMessage(), Status.INTERNAL);
+        }
+
+        return Optional.ofNullable(categoryTx);
     }
 }
