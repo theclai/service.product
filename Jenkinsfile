@@ -23,7 +23,8 @@ pipeline {
                               sh 'docker-compose up -d'
                               sleep time: 1000, unit: 'MILLISECONDS'
                               sh './gradlew run --args="flyway migrate"'
-                              sh './gradlew clean test --no-daemon'
+                              sh '
+                              '
                           } finally {
                               junit '**/build/test-results/test/*.xml' //make the junit test results available in any case (success & failure)
                           }

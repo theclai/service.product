@@ -71,28 +71,30 @@ public class ProductDaoTest {
         UUID fakeProductId =  UUID.fromString("59e1ae6c-45a2-41b6-a2f2-fce36b541b05");
         UUID fakeIdCategory =  UUID.fromString("feb246cb-cf3f-40f2-b3a0-6e84ce27396d");
 
+        Log logObj = new Log(1, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 1, new Date());
+        Category categoryObj = new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null);
+        ProductTx productTxObj = new ProductTx(fakeProductId, 1, new Date());
+        Product productObj = new Product(fakeProductId, 1, new Date(),  false, fakeIdCategory, 20);
+
         provider.begin();
-        provider.em().persist(new Log(1, new Date()));
+        provider.em().persist(logObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeIdCategory, 1, new Date()));
+        provider.em().persist(categoryTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null));
+        provider.em().persist(categoryObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Log(2, new Date()));
+        provider.em().persist(productTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new ProductTx(fakeProductId, 2, new Date()));
-        provider.commit();
-
-        provider.begin();
-        provider.em().persist(new Product(fakeProductId, 2, new Date(),  false, fakeIdCategory, 20));
+        provider.em().persist(productObj);
         provider.commit();
 
         ProductDao productDao = new ProductDao(entityManager);
@@ -103,6 +105,12 @@ public class ProductDaoTest {
         int expectedValue = 20;
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(productValue.get().getId(), productObj.getId());
+        Assert.assertEquals(productValue.get().getTx(), productObj.getTx());
+        Assert.assertEquals(productValue.get().getValidTime(), productObj.getValidTime());
+        Assert.assertEquals(productValue.get().isDeleted(), productObj.isDeleted());
+        Assert.assertEquals(productValue.get().getCategory(), productObj.getCategory());
+        Assert.assertEquals(productValue.get().getQuantity(), productObj.getQuantity());
     }
 
     @Test

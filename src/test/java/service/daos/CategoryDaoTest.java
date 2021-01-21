@@ -67,25 +67,37 @@ public class CategoryDaoTest {
     public void getCategory_withUUId_returnCategory() throws ServiceException {
 
         UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
+        Log logObj = new Log(0, new Date());
+        CategoryTx categoryTxObj = new CategoryTx(fakeId, 0, new Date());
+        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null);
+
         provider.begin();
-        provider.em().persist(new Log(0, new Date()));
+        provider.em().persist(logObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new CategoryTx(fakeId, 0, new Date()));
+        provider.em().persist(categoryTxObj);
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null));
+        provider.em().persist(categoryObj);
         provider.commit();
 
         CategoryDao categoryDao = new CategoryDao(entityManager);
         UUID id = fakeId;
         Optional<Category> categoryValue = categoryDao.get(id);
         String actualValue = categoryValue.get().getTitle();
-        String expectedValue = "Physical Goods";
+        String expectedValue = categoryObj.getTitle();
 
         Assert.assertEquals(actualValue, expectedValue);
+        Assert.assertEquals(categoryValue.get().getId(), categoryObj.getId());
+        Assert.assertEquals(categoryValue.get().getTx(), categoryObj.getTx());
+        Assert.assertEquals(categoryValue.get().getValidTime(), categoryObj.getValidTime());
+        Assert.assertEquals(categoryValue.get().isDeleted(), categoryObj.isDeleted());
+        Assert.assertEquals(categoryValue.get().getTitle(), categoryObj.getTitle());
+        Assert.assertEquals(categoryValue.get().getSubtitle(), categoryObj.getSubtitle());
+        Assert.assertEquals(categoryValue.get().getDescription(), categoryObj.getDescription());
+        Assert.assertEquals(categoryValue.get().getParent(), categoryObj.getParent());
     }
 
     @Test
