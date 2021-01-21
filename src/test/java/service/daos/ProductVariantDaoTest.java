@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import service.entities.*;
+import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -61,7 +62,7 @@ public class ProductVariantDaoTest {
     }
 
     @Test
-    public void getProductVariant_withUUid_returnProductVariant(){
+    public void getProductVariant_withUUid_returnProductVariant() throws ServiceException {
 
         UUID fakeProductVariantId =  UUID.fromString("e10389d4-3273-4d35-86e2-95a44b829bd7");
         UUID fakeProductId =  UUID.fromString("fab45351-7380-49a7-902d-5cf5adf7f4b6");
@@ -145,7 +146,7 @@ public class ProductVariantDaoTest {
     }
 
     @Test
-    public void getProductVariants_withEmptyProductIdList_returnAllProductVariantList(){
+    public void getProductVariants_withEmptyProductIdList_returnAllProductVariantList() throws ServiceException {
 
         UUID fakeProductVariantId1 =  UUID.fromString("effdebe5-14f5-4cea-982d-d4b0618baa55");
         UUID fakeProductVariantId2 =  UUID.fromString("a920f722-3c42-40a6-8aee-d799e827be19");
@@ -244,7 +245,7 @@ public class ProductVariantDaoTest {
     }
 
     @Test
-    public void getProductVariants_withProductIdList_returnProductVariantListByProductId(){
+    public void getProductVariants_withProductIdList_returnProductVariantListByProductId() throws ServiceException {
 
         UUID fakeProductVariantId1 =  UUID.fromString("a5e64526-7363-45bc-9ece-29d0f72a00e3");
         UUID fakeProductVariantId2 =  UUID.fromString("c747c907-0058-4769-8377-d2aae4ad178c");

@@ -4,7 +4,11 @@
  */
 package service.daos;
 
+import io.grpc.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import service.entities.VariantOption;
+import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -19,6 +23,7 @@ import java.util.UUID;
  */
 public class VariantOptionDao implements Dao<VariantOption> {
 
+    private static final Logger logger = LoggerFactory.getLogger(VariantOptionDao.class);
     private final EntityManager entityManager;
 
     public VariantOptionDao(EntityManager entityManager) { this.entityManager = entityManager; }
@@ -48,12 +53,21 @@ public class VariantOptionDao implements Dao<VariantOption> {
 
     }
 
-    public List<VariantOption> getVariantOptions(UUID productVariantId){
+    public List<VariantOption> getVariantOptions(UUID productVariantId) throws ServiceException {
 
-        Query query = entityManager.createNativeQuery("SELECT * FROM variant_option vo LEFT OUTER JOIN variant_option_tx vot ON (vo.variant = vot.variant) LEFT OUTER JOIN log l ON (vo.tx = l.tx) WHERE vo.deleted = 'f' and vo.variant = ?", VariantOption.class);
-        query.setParameter(1, productVariantId);
+        List<VariantOption> variantOptionList;
 
-        List<VariantOption> variantOptionList = query.getResultList();
+        try{
+
+            Query query = entityManager.createNativeQuery("SELECT * FROM variant_option vo LEFT OUTER JOIN variant_option_tx vot ON (vo.variant = vot.variant) LEFT OUTER JOIN log l ON (vo.tx = l.tx) WHERE vo.deleted = 'f' and vo.variant = ?", VariantOption.class);
+            query.setParameter(1, productVariantId);
+
+            variantOptionList = query.getResultList();
+
+        }catch (Exception e){
+            logger.error("Id {} error message: {}", productVariantId,  e.getMessage());
+            throw new ServiceException(e.getMessage(), Status.INTERNAL);
+        }
 
         return variantOptionList;
     }

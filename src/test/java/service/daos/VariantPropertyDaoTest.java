@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import service.entities.*;
+import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -67,6 +68,7 @@ public class VariantPropertyDaoTest {
     }
 
     @Test
+    public void getVariantProperties_WithProductVariantId_ReturnListVariantProperty() throws ServiceException {
     public void getVariantProperties_WithProductVariantId_ReturnListVariantProperty() {
 
         UUID fakeProductId = UUID.fromString("b09713e5-72a3-4e58-9227-b36b0b847e48");

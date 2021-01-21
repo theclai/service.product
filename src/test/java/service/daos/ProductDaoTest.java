@@ -16,6 +16,7 @@ import service.entities.ProductTx;
 import service.entities.Category;
 import service.entities.CategoryTx;
 import service.entities.Log;
+import service.product.ServiceException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -66,7 +67,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void getProduct_withUUId_returnProduct() {
+    public void getProduct_withUUId_returnProduct() throws ServiceException {
 
         UUID fakeProductId =  UUID.fromString("59e1ae6c-45a2-41b6-a2f2-fce36b541b05");
         UUID fakeIdCategory =  UUID.fromString("feb246cb-cf3f-40f2-b3a0-6e84ce27396d");
@@ -114,7 +115,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void getListOfProduct_categoryList_isNull_returnAllProduct(){
+    public void getListOfProduct_categoryList_isNull_returnAllProduct() throws ServiceException {
 
         UUID fakeProductId1 =  UUID.fromString("0450df08-2245-41e8-8345-3918fd5db926");
         UUID fakeProductId2 =  UUID.fromString("04365df2-07eb-4c55-b756-db989d9b99ec");
@@ -193,7 +194,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    public void getListOfProduct_categoryList_isNot_Null_returnProductByCategory(){
+    public void getListOfProduct_categoryList_isNot_Null_returnProductByCategory() throws ServiceException {
 
         UUID fakeProductId1 =  UUID.fromString("8dbfcaa0-6eec-46e2-b883-941ff858c7cd");
         UUID fakeProductId2 =  UUID.fromString("be90abfc-4319-4008-bd9c-94e8f5696d02");
