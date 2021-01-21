@@ -113,7 +113,7 @@ public class ProductServiceServer {
         databaseParams.setDatabaseUsername(System.getenv("DATABASE_USERNAME"));
         databaseParams.setDatabasePassword(System.getenv("DATABASE_PASSWORD"));
 
-        final ProductServiceServer server = new ProductServiceServer(port, databaseParams);
+        final ProductServiceServer server;
 
         if(args.length == 1 || (args.length > 0 && !args[0].equalsIgnoreCase("flyway"))){
             System.out.println("Wrong migration command");
@@ -128,11 +128,13 @@ public class ProductServiceServer {
         } else if (flywayTask != null && flywayTask.length() > 0) {
 
             runMigration(System.getenv("FLYWAY_TASK"), databaseParams);
-            server.start();
-            server.blockUntilShutdown();
-            return;
+//            server = new ProductServiceServer(port, databaseParams);
+//            server.start();
+//            server.blockUntilShutdown();
+//            return;
         }
 
+        server = new ProductServiceServer(port, databaseParams);
         server.start();
         server.blockUntilShutdown();
     }
