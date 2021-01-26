@@ -69,7 +69,7 @@ public class CategoryDaoTest {
         UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
         Log logObj = new Log(0, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeId, 0, new Date());
-        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null);
+        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null, null);
 
         provider.begin();
         provider.em().persist(logObj);
