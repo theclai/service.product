@@ -71,6 +71,54 @@ public class VariantImageDao implements Dao<VariantImage>{
 
     }
 
+    public List<VariantImage> getVariantImages(List<UUID> productVariantIdList) throws ServiceException {
+
+        List<VariantImage> variantImageList;
+
+        try {
+
+            Query query;
+
+            if (productVariantIdList == null || productVariantIdList.isEmpty()) {
+
+                query = entityManager.createNativeQuery("SELECT * FROM variant_image vi LEFT JOIN variant_image_tx vit ON (vi.id = vit.id) LEFT JOIN log l ON (vi.tx = l.tx AND vit.tx = l.tx) WHERE vi.deleted = 'f'", ProductVariant.class);
+
+            } else {
+
+                StringBuilder sb = new StringBuilder("SELECT * FROM variant_image vi LEFT JOIN variant_image_tx vit ON (vi.id = vit.id) LEFT JOIN log l ON (vi.tx = l.tx AND vit.tx = l.tx) WHERE vi.deleted = 'f' AND vi.variant IN ");
+                sb.append("(");
+
+                if (productVariantIdList.size() > 0) {
+
+                    for (int i = 0; i < productVariantIdList.size(); i++) {
+                        sb.append("?");
+                        sb.append(",");
+                    }
+
+                    if (sb.length() > 0) {
+                        sb.setLength(sb.length() - 1);
+                    }
+
+                    sb.append(")");
+                }
+
+                query = entityManager.createNativeQuery(sb.toString(), ProductVariant.class);
+
+                for (int i = 0; i < productVariantIdList.size(); i++) {
+                    query.setParameter(i + 1, productVariantIdList.get(i));
+                }
+            }
+
+            variantImageList = query.getResultList();
+
+        }catch (Exception e){
+            logger.error("Error message: {}", e.getMessage());
+            throw new ServiceException(e.getMessage(), Status.INTERNAL);
+        }
+
+        return variantImageList;
+    }
+
     public Optional<VariantImageTx> getVariantImageTx(UUID id) throws ServiceException {
 
         VariantImageTx variantImageTx;
