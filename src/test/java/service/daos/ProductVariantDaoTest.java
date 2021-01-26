@@ -144,6 +144,7 @@ public class ProductVariantDaoTest {
         Assert.assertEquals(productVariantValue.get().getLength(), productVariantObj.getLength());
         Assert.assertEquals(productVariantValue.get().getHeight(), productVariantObj.getHeight());
         Assert.assertEquals(productVariantValue.get().getWeight(), productVariantObj.getWeight());
+        Assert.assertEquals(productVariantValue.get().getOrderWeight(), productVariantObj.getOrderWeight());
     }
 
     @Test
@@ -353,7 +354,7 @@ public class ProductVariantDaoTest {
         EntityManager em = provider.em();
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
+        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight, order_weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?, ?)");
         query.setParameter(1, productVariant.getId());
         query.setParameter(2, productVariant.getTx());
         query.setParameter(3, productVariant.getValidTime());
@@ -372,6 +373,7 @@ public class ProductVariantDaoTest {
         query.setParameter(16, productVariant.getLength());
         query.setParameter(17, productVariant.getHeight());
         query.setParameter(18, productVariant.getWeight());
+        query.setParameter(19, productVariant.getOrderWeight());
         query.executeUpdate();
         et.commit();
     }

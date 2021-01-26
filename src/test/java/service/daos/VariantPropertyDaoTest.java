@@ -74,10 +74,11 @@ public class VariantPropertyDaoTest {
         UUID fakeIdCategory = UUID.fromString("a7e2b9eb-c48a-4fc3-9dec-c6b73d390d54");
         UUID fakeProductVariantId1 = UUID.fromString("5d123387-6d0f-48f4-aad4-21ffdd1a02c4");
         UUID fakeProductVariantId2 = UUID.fromString("fa3dcc02-9e11-4628-98b2-632b17a37969");
+        UUID fakeImageId1 = UUID.fromString("b451e315-4ec1-4095-a9fd-95642a57a528");
 
         Log logObj = new Log(11, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 11, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 11, new Date(), false, "Electronics", null, null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 11, new Date(), false, "Electronics", null, null, null, fakeImageId1);
         ProductTx productTxObj = new ProductTx(fakeProductId, 11, new Date());
         Product productObj = new Product(fakeProductId, 11, new Date(), false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj1 = new ProductVariantTx(fakeProductVariantId1, 11, new Date());
@@ -196,7 +197,7 @@ public class VariantPropertyDaoTest {
         EntityManager em = provider.em();
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
+        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight, order_weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?, ?)");
         query.setParameter(1, productVariant.getId());
         query.setParameter(2, productVariant.getTx());
         query.setParameter(3, productVariant.getValidTime());
@@ -215,6 +216,7 @@ public class VariantPropertyDaoTest {
         query.setParameter(16, productVariant.getLength());
         query.setParameter(17, productVariant.getHeight());
         query.setParameter(18, productVariant.getWeight());
+        query.setParameter(19, productVariant.getOrderWeight());
         query.executeUpdate();
         et.commit();
     }
