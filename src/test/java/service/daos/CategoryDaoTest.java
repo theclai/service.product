@@ -7,9 +7,7 @@ package service.daos;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import service.entities.Category;
-import service.entities.CategoryTx;
-import service.entities.Log;
+import service.entities.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -108,6 +106,7 @@ public class CategoryDaoTest {
         UUID fakeCategoryId3 = UUID.fromString("265132e6-2b63-4034-9c80-569f5c7d327b");
         UUID fakeCategoryId4 = UUID.fromString("68ec07e3-1052-4781-9916-ae649bae120d");
         UUID fakeCategoryId5 = UUID.fromString("2b8f70c4-99ea-45c0-b6dd-398e937ad8d6");
+        UUID fakeImageId = UUID.fromString("20466c91-6ee3-4224-9612-17d792dfd960");
 
         provider.begin();
         provider.em().persist(new Log(6, new Date()));
@@ -118,7 +117,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId1, 6, new Date(), false, "Physical Goods", null, null, null));
+        provider.em().persist(new Category(fakeCategoryId1, 6, new Date(), false, "Physical Goods", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -126,7 +125,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId2, 6, new Date(), false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeCategoryId2, 6, new Date(), false, "Electronics", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -134,7 +133,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId3, 6, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId3, 6, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, null));
         provider.commit();
 
         provider.begin();
@@ -142,7 +141,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId4, 6, new Date(), false, "Yachts", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId4, 6, new Date(), false, "Yachts", null, null, fakeCategoryId1, null));
         provider.commit();
 
         provider.begin();
@@ -150,7 +149,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId5, 6, new Date(), false, "Physical Goods", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId5, 6, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, null));
         provider.commit();
 
         List<UUID> categoryParentList = new ArrayList<>();
@@ -183,7 +182,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId1, 7, new Date(), false, "Physical Goods", null, null, null));
+        provider.em().persist(new Category(fakeCategoryId1, 7, new Date(), false, "Physical Goods", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -191,7 +190,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId2, 7, new Date(), false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeCategoryId2, 7, new Date(), false, "Electronics", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -199,7 +198,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId3, 7, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId3, 7, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, null));
         provider.commit();
 
         provider.begin();
@@ -207,7 +206,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId4, 7, new Date(), false, "Yachts", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId4, 7, new Date(), false, "Yachts", null, null, fakeCategoryId1, null));
         provider.commit();
 
         provider.begin();
@@ -215,7 +214,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId5, 7, new Date(), false, "Physical Goods", null, null, fakeCategoryId1));
+        provider.em().persist(new Category(fakeCategoryId5, 7, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, null));
         provider.commit();
 
         List<UUID> categoryParentList = new ArrayList<>();

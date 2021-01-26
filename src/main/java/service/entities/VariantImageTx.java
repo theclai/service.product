@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,7 +24,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "variant_image_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
-public class VariantImageTx {
+public class VariantImageTx implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name="id")

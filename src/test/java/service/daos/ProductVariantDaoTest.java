@@ -70,7 +70,7 @@ public class ProductVariantDaoTest {
 
         Log logObj = new Log(3, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 3, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null, null);
         ProductTx productTxObj = new ProductTx(fakeProductId, 3, new Date());
         Product productObj = new Product(fakeProductId, 3, new Date(),  false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId, 3, new Date());
@@ -89,7 +89,7 @@ public class ProductVariantDaoTest {
                 1068051,
                 0,
                 ProductVariant.Form.physical,
-                10,10,20,20);
+                10,10,20,20, 50);
 
         provider.begin();
         provider.em().persist(logObj);
@@ -163,7 +163,7 @@ public class ProductVariantDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 8, new Date(),  false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory, 8, new Date(),  false, "Electronics", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -192,7 +192,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20, 50));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 8, new Date()));
@@ -212,7 +212,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 24500,
                 0,
-                ProductVariant.Form.physical, 20, 20, 15, 15));
+                ProductVariant.Form.physical, 20, 20, 15, 15, 100));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 8, new Date()));
@@ -232,7 +232,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 26000,
                 0,
-                ProductVariant.Form.physical, 5, 5, 10, 10));
+                ProductVariant.Form.physical, 5, 5, 10, 10, 0));
 
         List<UUID> productIdList = new ArrayList<>();
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
@@ -262,7 +262,7 @@ public class ProductVariantDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 9, new Date(),  false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory, 9, new Date(),  false, "Electronics", null, null, null, null));
         provider.commit();
 
         provider.begin();
@@ -291,7 +291,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20, 10));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 9, new Date()));
@@ -311,7 +311,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 24500,
                 0,
-                ProductVariant.Form.physical, 2, 2, 5, 5));
+                ProductVariant.Form.physical, 2, 2, 5, 5, 10));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 9, new Date()));
@@ -331,7 +331,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 26000,
                 0,
-                ProductVariant.Form.physical, 15, 15, 20, 20));
+                ProductVariant.Form.physical, 15, 15, 20, 20, 30));
 
         List<UUID> productIdList = new ArrayList<>();
         productIdList.add(fakeProductId);

@@ -74,7 +74,7 @@ public class ProductDaoTest {
 
         Log logObj = new Log(1, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 1, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 1, new Date(),  false, "Physical Goods", null, null, null, null);
         ProductTx productTxObj = new ProductTx(fakeProductId, 1, new Date());
         Product productObj = new Product(fakeProductId, 1, new Date(),  false, fakeIdCategory, 20);
 
@@ -134,7 +134,7 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory1, 4, new Date(),  false, "Phone Accessories", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory1, 4, new Date(),  false, "Phone Accessories", null, null, null, null));
         provider.commit();
 
         //category2
@@ -143,7 +143,8 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory2, 4, new Date(),  false, "Yachts", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory2, 4, new Date(),  false, "Yachts", null, null, null, null
+        ));
         provider.commit();
 
         //product1
@@ -213,7 +214,7 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory1, 5, new Date(),  false, "Phone Accessories", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory1, 5, new Date(),  false, "Phone Accessories", null, null, null, null));
         provider.commit();
 
         //category2
@@ -222,7 +223,7 @@ public class ProductDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory2, 5, new Date(),  false, "Yachts", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory2, 5, new Date(),  false, "Yachts", null, null, null, null));
         provider.commit();
 
         //product1

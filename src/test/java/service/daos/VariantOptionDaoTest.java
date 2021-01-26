@@ -80,7 +80,7 @@ public class VariantOptionDaoTest {
 
         Log logObj = new Log(10, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 10, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null, null);
         ProductTx productTxObj = new ProductTx(fakeProductId, 10, new Date());
         Product productObj = new Product(fakeProductId, 10, new Date(),  false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId1, 10, new Date());
@@ -98,7 +98,7 @@ public class VariantOptionDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20);
+                ProductVariant.Form.physical, 10, 10, 20, 20, 20);
         VariantOptionTx variantOptionTxObj = new VariantOptionTx(fakeProductVariantId1, "colour", 10,  new Date());
         VariantOption variantOptionObj = new VariantOption(fakeProductVariantId1, "colour", 10,  new Date(), false, "Blue");
 

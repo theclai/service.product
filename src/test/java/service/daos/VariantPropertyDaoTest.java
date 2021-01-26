@@ -77,7 +77,7 @@ public class VariantPropertyDaoTest {
 
         Log logObj = new Log(11, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 11, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 11, new Date(), false, "Electronics", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 11, new Date(), false, "Electronics", null, null, null, null);
         ProductTx productTxObj = new ProductTx(fakeProductId, 11, new Date());
         Product productObj = new Product(fakeProductId, 11, new Date(), false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj1 = new ProductVariantTx(fakeProductVariantId1, 11, new Date());
@@ -95,7 +95,7 @@ public class VariantPropertyDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20);
+                ProductVariant.Form.physical, 10, 10, 20, 20, 100);
         ProductVariantTx productVariantTxObj2 = new ProductVariantTx(fakeProductVariantId2, 11, new Date());
         ProductVariant productVariantObj2 = new ProductVariant(
                 fakeProductVariantId2,
@@ -111,7 +111,7 @@ public class VariantPropertyDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20);
+                ProductVariant.Form.physical, 10, 10, 20, 20, 15);
         VariantPropertyTx variantPropertyTxObj1 = new VariantPropertyTx(fakeProductVariantId1, 1, 11, new Date());
         VariantPropertyTx variantPropertyTxObj2 = new VariantPropertyTx(fakeProductVariantId1, 2, 11, new Date());
         VariantPropertyTx variantPropertyObjTx3 = new VariantPropertyTx(fakeProductVariantId2, 1, 11, new Date());
