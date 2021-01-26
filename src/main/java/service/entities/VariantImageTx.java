@@ -21,7 +21,7 @@ import java.util.UUID;
  * @author faisalrahman
  * @version $Id: VariantImageTx.java, v 0.1 20210126 08.57 faisalrahman Exp $$
  */
-@Entity
+@Entity(name = "variant_image_tx")
 @Table(name = "variant_image_tx")
 @Converter(name="uuidConverter", converterClass= UUIDConverter.class)
 public class VariantImageTx implements Serializable {

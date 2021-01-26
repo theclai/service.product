@@ -59,7 +59,6 @@ public class VariantImageDaoTest {
     public void getVariantImage_withUUId_returnVariantImage() throws ServiceException {
 
         UUID fakeImageId = UUID.fromString("26c8f90c-35d7-4d18-99c1-ef6b6a4bd703");
-//        UUID fakeProductVariantId1 =  UUID.fromString("a5e64526-7363-45bc-9ece-29d0f72a00e3");
         Log logObj = new Log(0, new Date());
         VariantImageTx variantImageTxObj = new VariantImageTx(fakeImageId, 0, new Date());
         VariantImage variantImageObj = new VariantImage(fakeImageId, 0, new Date(), false, null, 10);
@@ -67,26 +66,6 @@ public class VariantImageDaoTest {
        provider.begin();
        provider.em().persist(logObj);
        provider.commit();
-
-//        provider.begin();
-//        provider.em().persist(new ProductVariantTx(fakeProductVariantId1, 9, new Date()));
-//        provider.commit();
-//
-//        saveToProductVariant(new ProductVariant(
-//                fakeProductVariantId1,
-//                9,
-//                new Date(),
-//                false,
-//                "Fitness bracelet",
-//                null,
-//                "fitness-1",
-//                null,
-//                fakeProductId,
-//                10,
-//                "IDR",
-//                1068051,
-//                0,
-//                ProductVariant.Form.physical, 10, 10, 20, 20, 10));
 
        provider.begin();
        provider.em().persist(variantImageTxObj);
@@ -108,34 +87,6 @@ public class VariantImageDaoTest {
         Assert.assertEquals(variantImageValue.get().isDeleted(), variantImageObj.isDeleted());
         Assert.assertEquals(variantImageValue.get().getVariant(), variantImageObj.getVariant());
         Assert.assertEquals(variantImageValue.get().getOrderWeight(), variantImageObj.getOrderWeight());
-    }
-
-    private void saveToProductVariant(ProductVariant productVariant) {
-
-        EntityManager em = provider.em();
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
-        query.setParameter(1, productVariant.getId());
-        query.setParameter(2, productVariant.getTx());
-        query.setParameter(3, productVariant.getValidTime());
-        query.setParameter(4, productVariant.isDeleted());
-        query.setParameter(5, productVariant.getProduct());
-        query.setParameter(6, productVariant.getTitle());
-        query.setParameter(7, productVariant.getSubtitle());
-        query.setParameter(8, productVariant.getSku());
-        query.setParameter(9, productVariant.getDescription());
-        query.setParameter(10, productVariant.getQuantity());
-        query.setParameter(11, productVariant.getPriceCurrencyCode());
-        query.setParameter(12, productVariant.getPriceUnits());
-        query.setParameter(13, productVariant.getPriceNanos());
-        query.setParameter(14, productVariant.getProductVariantForm().toString());
-        query.setParameter(15, productVariant.getWidth());
-        query.setParameter(16, productVariant.getLength());
-        query.setParameter(17, productVariant.getHeight());
-        query.setParameter(18, productVariant.getWeight());
-        query.executeUpdate();
-        et.commit();
     }
 }
 

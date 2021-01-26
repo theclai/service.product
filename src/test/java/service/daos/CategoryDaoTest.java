@@ -65,9 +65,10 @@ public class CategoryDaoTest {
     public void getCategory_withUUId_returnCategory() throws ServiceException {
 
         UUID fakeId = UUID.fromString("58addfe9-d87d-4ea0-8c88-f4561aa72607");
+        UUID fakeImageId = UUID.fromString("49aadeae-8b1a-4c29-a2aa-8cc44aaa491c");
         Log logObj = new Log(0, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeId, 0, new Date());
-        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null, null);
+        Category categoryObj = new Category(fakeId, 0, new Date(), false, "Physical Goods", null, null, null, fakeImageId);
 
         provider.begin();
         provider.em().persist(logObj);
@@ -106,7 +107,11 @@ public class CategoryDaoTest {
         UUID fakeCategoryId3 = UUID.fromString("265132e6-2b63-4034-9c80-569f5c7d327b");
         UUID fakeCategoryId4 = UUID.fromString("68ec07e3-1052-4781-9916-ae649bae120d");
         UUID fakeCategoryId5 = UUID.fromString("2b8f70c4-99ea-45c0-b6dd-398e937ad8d6");
-        UUID fakeImageId = UUID.fromString("20466c91-6ee3-4224-9612-17d792dfd960");
+        UUID fakeImageId1 = UUID.fromString("20466c91-6ee3-4224-9612-17d792dfd960");
+        UUID fakeImageId2 = UUID.fromString("c419315f-6465-4748-8846-cafb0cb07106");
+        UUID fakeImageId3 = UUID.fromString("2e12bb6c-34f2-4af3-8338-cd98269d8b55");
+        UUID fakeImageId4 = UUID.fromString("a21d4b50-bfa4-4202-9344-c076c48b224d");
+        UUID fakeImageId5 = UUID.fromString("49aadeae-8b1a-4c29-a2aa-8cc44aaa491c");
 
         provider.begin();
         provider.em().persist(new Log(6, new Date()));
@@ -117,7 +122,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId1, 6, new Date(), false, "Physical Goods", null, null, null, null));
+        provider.em().persist(new Category(fakeCategoryId1, 6, new Date(), false, "Physical Goods", null, null, null, fakeImageId1));
         provider.commit();
 
         provider.begin();
@@ -125,7 +130,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId2, 6, new Date(), false, "Electronics", null, null, null, null));
+        provider.em().persist(new Category(fakeCategoryId2, 6, new Date(), false, "Electronics", null, null, null, fakeImageId2));
         provider.commit();
 
         provider.begin();
@@ -133,7 +138,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId3, 6, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId3, 6, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, fakeImageId3));
         provider.commit();
 
         provider.begin();
@@ -141,7 +146,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId4, 6, new Date(), false, "Yachts", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId4, 6, new Date(), false, "Yachts", null, null, fakeCategoryId1, fakeImageId4));
         provider.commit();
 
         provider.begin();
@@ -149,7 +154,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId5, 6, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId5, 6, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, fakeImageId5));
         provider.commit();
 
         List<UUID> categoryParentList = new ArrayList<>();
@@ -172,6 +177,11 @@ public class CategoryDaoTest {
         UUID fakeCategoryId3 = UUID.fromString("943a558b-2fb4-490a-afdc-79ffff28a523");
         UUID fakeCategoryId4 = UUID.fromString("1bc6476e-de89-474f-bdd1-9c6b0bf6812c");
         UUID fakeCategoryId5 = UUID.fromString("737d4454-504e-4454-93d5-554bdc4c1da8");
+        UUID fakeImageId1 = UUID.fromString("6c4eaa88-eb49-424a-b617-2d018ba6c1a8");
+        UUID fakeImageId2 = UUID.fromString("2c61e895-b752-4056-b021-d6ab7337d53d");
+        UUID fakeImageId3 = UUID.fromString("6eb23c61-e7d7-4ea7-a9b1-72f8a4daf399");
+        UUID fakeImageId4 = UUID.fromString("20b54a78-56d6-4a9f-a1ce-5d335236fb37");
+        UUID fakeImageId5 = UUID.fromString("b17dd9a1-62f0-4fc8-8b45-f7644eef0894");
 
         provider.begin();
         provider.em().persist(new Log(7, new Date()));
@@ -182,7 +192,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId1, 7, new Date(), false, "Physical Goods", null, null, null, null));
+        provider.em().persist(new Category(fakeCategoryId1, 7, new Date(), false, "Physical Goods", null, null, null, fakeImageId1));
         provider.commit();
 
         provider.begin();
@@ -190,7 +200,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId2, 7, new Date(), false, "Electronics", null, null, null, null));
+        provider.em().persist(new Category(fakeCategoryId2, 7, new Date(), false, "Electronics", null, null, null, fakeImageId2));
         provider.commit();
 
         provider.begin();
@@ -198,7 +208,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId3, 7, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId3, 7, new Date(), false, "Phone Accessories", null, null, fakeCategoryId1, fakeImageId3));
         provider.commit();
 
         provider.begin();
@@ -206,7 +216,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId4, 7, new Date(), false, "Yachts", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId4, 7, new Date(), false, "Yachts", null, null, fakeCategoryId1, fakeImageId4));
         provider.commit();
 
         provider.begin();
@@ -214,7 +224,7 @@ public class CategoryDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeCategoryId5, 7, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, null));
+        provider.em().persist(new Category(fakeCategoryId5, 7, new Date(), false, "Physical Goods", null, null, fakeCategoryId1, fakeImageId5));
         provider.commit();
 
         List<UUID> categoryParentList = new ArrayList<>();
