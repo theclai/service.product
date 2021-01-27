@@ -81,7 +81,7 @@ public class VariantImageDao implements Dao<VariantImage>{
 
             if (productVariantIdList == null || productVariantIdList.isEmpty()) {
 
-                query = entityManager.createNativeQuery("SELECT * FROM variant_image vi LEFT JOIN variant_image_tx vit ON (vi.id = vit.id) LEFT JOIN log l ON (vi.tx = l.tx AND vit.tx = l.tx) WHERE vi.deleted = 'f'", ProductVariant.class);
+                query = entityManager.createNativeQuery("SELECT * FROM variant_image vi LEFT JOIN variant_image_tx vit ON (vi.id = vit.id) LEFT JOIN log l ON (vi.tx = l.tx AND vit.tx = l.tx) WHERE vi.deleted = 'f'", VariantImage.class);
 
             } else {
 
@@ -102,7 +102,7 @@ public class VariantImageDao implements Dao<VariantImage>{
                     sb.append(")");
                 }
 
-                query = entityManager.createNativeQuery(sb.toString(), ProductVariant.class);
+                query = entityManager.createNativeQuery(sb.toString(), VariantImage.class);
 
                 for (int i = 0; i < productVariantIdList.size(); i++) {
                     query.setParameter(i + 1, productVariantIdList.get(i));

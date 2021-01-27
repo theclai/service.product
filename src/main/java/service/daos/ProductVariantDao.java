@@ -40,7 +40,7 @@ public class ProductVariantDao implements Dao<ProductVariant> {
 
         try {
 
-            Query query = entityManager.createNativeQuery("SELECT * FROM product_variant_tx pvx JOIN log l using(tx) JOIN product_variant pv using(id, tx) WHERE pvx.id = ? AND pv.deleted = 'f'", ProductVariant.class);
+            Query query = entityManager.createNativeQuery("SELECT * FROM product_variant_tx pvx JOIN log l using(tx) JOIN product_variant pv using(id, tx) WHERE pvx.id = ? AND pv.deleted = 'f' ORDER BY pv.order_weight asc", ProductVariant.class);
             query.setParameter(1, id);
             productVariant = (ProductVariant) query.getResultList().stream().findFirst().orElse(null);
 
@@ -82,7 +82,7 @@ public class ProductVariantDao implements Dao<ProductVariant> {
 
             if (productIdList == null || productIdList.isEmpty()) {
 
-                query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt ON (pv.id = pvt.id) LEFT JOIN log l ON (pv.tx = l.tx AND pvt.tx = l.tx) WHERE pv.deleted = 'f'", ProductVariant.class);
+                query = entityManager.createNativeQuery("SELECT * FROM product_variant pv LEFT JOIN product_variant_tx pvt ON (pv.id = pvt.id) LEFT JOIN log l ON (pv.tx = l.tx AND pvt.tx = l.tx) WHERE pv.deleted = 'f' ORDER BY pv.order_weight asc", ProductVariant.class);
 
             } else {
 
@@ -100,9 +100,11 @@ public class ProductVariantDao implements Dao<ProductVariant> {
                         sb.setLength(sb.length() - 1);
                     }
 
-                    sb.append(")");
+                    sb.append(") ");
+                    sb.append("ORDER BY pv.order_weight asc");
                 }
 
+                String sbu = sb.toString();
                 query = entityManager.createNativeQuery(sb.toString(), ProductVariant.class);
 
                 for (int i = 0; i < productIdList.size(); i++) {
