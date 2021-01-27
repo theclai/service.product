@@ -113,7 +113,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .setSubtitle(categoryValue.get().getSubtitle() != null ? categoryValue.get().getSubtitle() : "")
                         .setDescription(categoryValue.get().getDescription() != null ? categoryValue.get().getDescription() : "")
                         .setParent(categoryValue.get().getParent() != null ? categoryValue.get().getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
-                        .setImage(categoryValue.get().getImage() != null ? categoryValue.get().getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
+                        .setImage(categoryValue.get().getImage() != null ? "//product.tapp/Image/" + categoryValue.get().getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
                         .build();
             }
         } catch (CustomException | ServiceException e) {
@@ -186,7 +186,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                             .setSubtitle(categoryValue.getSubtitle() != null ? categoryValue.getSubtitle() : "")
                             .setDescription(categoryValue.getDescription() != null ? categoryValue.getDescription() : "")
                             .setParent(categoryValue.getParent() != null ? categoryValue.getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
-                            .setImage(categoryValue.getImage() != null ? categoryValue.getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
+                            .setImage(categoryValue.getImage() != null ? "//product.tapp/Image/" + categoryValue.getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
                             .build();
 
                     categoryList.add(category);
@@ -462,7 +462,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
                 if(variantImages.size() > 0){
                     for (VariantImage v : variantImages) {
-                        imageList.add(v.getId().toString());
+                        imageList.add("//product.tapp/Image/" + v.getId().toString());
                     }
                 }
 
@@ -589,7 +589,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
 
                     if(variantImages.size() > 0){
                         for (VariantImage v : variantImages) {
-                            imageList.add(v.getId().toString());
+                            imageList.add("//product.tapp/Image/" + v.getId().toString());
                         }
                     }
 
