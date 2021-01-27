@@ -87,6 +87,9 @@ public class ProductVariant implements Serializable {
     @Column(name = "weight")
     private int weight;
 
+    @Column(name = "order_weight")
+    private int orderWeight;
+
     public ProductVariant(){
 
     }
@@ -109,7 +112,8 @@ public class ProductVariant implements Serializable {
             int width,
             int length,
             int height,
-            int weight) {
+            int weight,
+            int orderWeight) {
 
         this.id = id;
         this.tx = tx;
@@ -129,6 +133,7 @@ public class ProductVariant implements Serializable {
         this.length = length;
         this.height = height;
         this.weight = weight;
+        this.orderWeight = orderWeight;
     }
 
     public UUID getId() {
@@ -235,9 +240,7 @@ public class ProductVariant implements Serializable {
         this.priceNanos = priceNanos;
     }
 
-    public Form getProductVariantForm() {
-        return productVariantForm;
-    }
+    public Form getProductVariantForm() { return productVariantForm; }
 
     public void setProductVariantForm(Form productVariantForm) {
         this.productVariantForm = productVariantForm;
@@ -274,6 +277,10 @@ public class ProductVariant implements Serializable {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
+    public int getOrderWeight() { return orderWeight; }
+
+    public void setOrderWeight(int orderWeight) { this.orderWeight = orderWeight; }
 
     @Override
     public boolean equals(Object o) {
