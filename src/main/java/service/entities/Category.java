@@ -53,11 +53,15 @@ public class Category implements Serializable {
     @Convert("uuidConverter")
     private UUID parent;
 
+    @Column(name="image", nullable = true)
+    @Convert("uuidConverter")
+    private UUID image;
+
     public Category(){
 
     }
 
-    public Category(UUID id, int tx, Date validTime, boolean deleted, String title, String subtitle, String description, UUID parent){
+    public Category(UUID id, int tx, Date validTime, boolean deleted, String title, String subtitle, String description, UUID parent, UUID image){
 
         this.id = id;
         this.tx = tx;
@@ -67,6 +71,7 @@ public class Category implements Serializable {
         this.subtitle = subtitle;
         this.description = description;
         this.parent = parent;
+        this.image = image;
     }
 
     public UUID getId() {
@@ -132,6 +137,10 @@ public class Category implements Serializable {
     public void setParent(UUID parent) {
         this.parent = parent;
     }
+
+    public UUID getImage() {  return image; }
+
+    public void setImage(UUID image) { this.image = image; }
 
     @Override
     public boolean equals(Object o) {

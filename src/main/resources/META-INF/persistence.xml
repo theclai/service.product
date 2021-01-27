@@ -14,6 +14,8 @@
         <class>service.entities.VariantOptionTx</class>
         <class>service.entities.VariantProperty</class>
         <class>service.entities.VariantPropertyTx</class>
+        <class>service.entities.VariantImage</class>
+        <class>service.entities.VariantImageTx</class>
         <properties>
             <property name="eclipselink.ddl-generation" value="none" />
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/service_product"/>

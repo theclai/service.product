@@ -46,6 +46,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
     private ProductVariantDao productVariantDao;
     private VariantPropertyDao variantPropertyDao;
     private VariantOptionDao variantOptionDao;
+    private  VariantImageDao variantImageDao;
     private LogDao logDao;
 
     public ProductServiceImpl(EntityManager entityManager){
@@ -55,6 +56,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
         productVariantDao = new ProductVariantDao(entityManager);
         variantPropertyDao = new VariantPropertyDao(entityManager);
         variantOptionDao = new VariantOptionDao(entityManager);
+        variantImageDao = new VariantImageDao(entityManager);
         logDao = new LogDao(entityManager);
     }
 
@@ -111,7 +113,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         .setSubtitle(categoryValue.get().getSubtitle() != null ? categoryValue.get().getSubtitle() : "")
                         .setDescription(categoryValue.get().getDescription() != null ? categoryValue.get().getDescription() : "")
                         .setParent(categoryValue.get().getParent() != null ? categoryValue.get().getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
-                        //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
+                        .setImage(categoryValue.get().getImage() != null ? categoryValue.get().getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
                         .build();
             }
         } catch (CustomException | ServiceException e) {
@@ -184,7 +186,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                             .setSubtitle(categoryValue.getSubtitle() != null ? categoryValue.getSubtitle() : "")
                             .setDescription(categoryValue.getDescription() != null ? categoryValue.getDescription() : "")
                             .setParent(categoryValue.getParent() != null ? categoryValue.getParent().toString() : String.valueOf(NullValue.NULL_VALUE))
-                            //.setImage("//image.tapp/Image/4e2e94d7-016a-4fd6-812d-3baa544e4e17")
+                            .setImage(categoryValue.getImage() != null ? categoryValue.getImage().toString() : String.valueOf(NullValue.NULL_VALUE))
                             .build();
 
                     categoryList.add(category);
@@ -453,6 +455,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                     options.put(v.getId(), v.getValue());
                 }
 
+                List<UUID> productVariantIdList = new ArrayList<>();
+                productVariantIdList.add(productVariantValue.get().getId());
+                List<VariantImage> variantImages = variantImageDao.getVariantImages(productVariantIdList);
+                List<String> imageList = new ArrayList<>();
+
+                if(variantImages.size() > 0){
+                    for (VariantImage v : variantImages) {
+                        imageList.add(v.getId().toString());
+                    }
+                }
+
                 productVariant = ProductVariant
                         .newBuilder()
                         .setId(productVariantValue.get().getId().toString())
@@ -478,7 +491,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                                         .setWeight(productVariantValue.get().getWeight() != 0 ? productVariantValue.get().getWeight() : 0)
                                         .build()
                         )
-                        //.setImages()
+                        .addAllImages(imageList)
                         .build();
             }
 
@@ -569,6 +582,17 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                         options.put(v.getId(), v.getValue());
                     }
 
+                    List<UUID> productVariantIdList = new ArrayList<>();
+                    productVariantIdList.add(productVariantValue.getId());
+                    List<VariantImage> variantImages = variantImageDao.getVariantImages(productVariantIdList);
+                    List<String> imageList = new ArrayList<>();
+
+                    if(variantImages.size() > 0){
+                        for (VariantImage v : variantImages) {
+                            imageList.add(v.getId().toString());
+                        }
+                    }
+
                     ProductVariant productVariant = ProductVariant
                             .newBuilder()
                             .setId(productVariantValue.getId().toString())
@@ -594,7 +618,7 @@ public class ProductServiceImpl extends ProductServiceGrpc.ProductServiceImplBas
                                             .setWeight(productVariantValue.getWeight() != 0 ? productVariantValue.getWeight() : 0)
                                             .build()
                             )
-                            //.setImages()
+                            .addAllImages(imageList)
                             .build();
 
                     productVariantList.add(productVariant);

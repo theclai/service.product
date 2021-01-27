@@ -67,10 +67,11 @@ public class ProductVariantDaoTest {
         UUID fakeProductVariantId =  UUID.fromString("e10389d4-3273-4d35-86e2-95a44b829bd7");
         UUID fakeProductId =  UUID.fromString("fab45351-7380-49a7-902d-5cf5adf7f4b6");
         UUID fakeIdCategory =  UUID.fromString("4d8224e6-872a-46ae-b27d-9c4997a917db");
+        UUID fakeImageId1 = UUID.fromString("221261cf-533e-4d54-a0ae-7158f858fdbd");
 
         Log logObj = new Log(3, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 3, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 3, new Date(),  false, "Electronics", null, null, null, fakeImageId1);
         ProductTx productTxObj = new ProductTx(fakeProductId, 3, new Date());
         Product productObj = new Product(fakeProductId, 3, new Date(),  false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId, 3, new Date());
@@ -89,7 +90,7 @@ public class ProductVariantDaoTest {
                 1068051,
                 0,
                 ProductVariant.Form.physical,
-                10,10,20,20);
+                10,10,20,20, 50);
 
         provider.begin();
         provider.em().persist(logObj);
@@ -143,6 +144,7 @@ public class ProductVariantDaoTest {
         Assert.assertEquals(productVariantValue.get().getLength(), productVariantObj.getLength());
         Assert.assertEquals(productVariantValue.get().getHeight(), productVariantObj.getHeight());
         Assert.assertEquals(productVariantValue.get().getWeight(), productVariantObj.getWeight());
+        Assert.assertEquals(productVariantValue.get().getOrderWeight(), productVariantObj.getOrderWeight());
     }
 
     @Test
@@ -153,6 +155,7 @@ public class ProductVariantDaoTest {
         UUID fakeProductVariantId3 =  UUID.fromString("d554bb08-4d5a-4058-9624-8eef40e917f3");
         UUID fakeProductId =  UUID.fromString("58aae1ff-1625-4482-ab11-3efce4113106");
         UUID fakeIdCategory =  UUID.fromString("a0b3830f-477d-411f-9705-604de7700676");
+        UUID fakeImageId1 = UUID.fromString("c511f19d-234b-42ac-a633-6355352b0a1f");
 
         provider.begin();
         provider.em().persist(new Log(8, new Date()));
@@ -163,7 +166,7 @@ public class ProductVariantDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 8, new Date(),  false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory, 8, new Date(),  false, "Electronics", null, null, null, fakeImageId1));
         provider.commit();
 
         provider.begin();
@@ -192,7 +195,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20, 50));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 8, new Date()));
@@ -212,7 +215,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 24500,
                 0,
-                ProductVariant.Form.physical, 20, 20, 15, 15));
+                ProductVariant.Form.physical, 20, 20, 15, 15, 100));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 8, new Date()));
@@ -232,7 +235,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 26000,
                 0,
-                ProductVariant.Form.physical, 5, 5, 10, 10));
+                ProductVariant.Form.physical, 5, 5, 10, 10, 0));
 
         List<UUID> productIdList = new ArrayList<>();
         ProductVariantDao productVariantDao = new ProductVariantDao(entityManager);
@@ -252,6 +255,7 @@ public class ProductVariantDaoTest {
         UUID fakeProductVariantId3 =  UUID.fromString("b23cb307-2a92-45a1-95a7-3293e6371073");
         UUID fakeProductId =  UUID.fromString("dc50f255-39c8-4e7f-9044-1030068a50d6");
         UUID fakeIdCategory =  UUID.fromString("fca8f771-c2b9-4371-ac9b-f258016cd21a");
+        UUID fakeImageId1 = UUID.fromString("d4254462-ed0d-492a-801f-9360fb4303ec");
 
         provider.begin();
         provider.em().persist(new Log(9, new Date()));
@@ -262,7 +266,7 @@ public class ProductVariantDaoTest {
         provider.commit();
 
         provider.begin();
-        provider.em().persist(new Category(fakeIdCategory, 9, new Date(),  false, "Electronics", null, null, null));
+        provider.em().persist(new Category(fakeIdCategory, 9, new Date(),  false, "Electronics", null, null, null, fakeImageId1));
         provider.commit();
 
         provider.begin();
@@ -291,7 +295,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20));
+                ProductVariant.Form.physical, 10, 10, 20, 20, 10));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId2, 9, new Date()));
@@ -311,7 +315,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 24500,
                 0,
-                ProductVariant.Form.physical, 2, 2, 5, 5));
+                ProductVariant.Form.physical, 2, 2, 5, 5, 10));
 
         provider.begin();
         provider.em().persist(new ProductVariantTx(fakeProductVariantId3, 9, new Date()));
@@ -331,7 +335,7 @@ public class ProductVariantDaoTest {
                 "IDR",
                 26000,
                 0,
-                ProductVariant.Form.physical, 15, 15, 20, 20));
+                ProductVariant.Form.physical, 15, 15, 20, 20, 30));
 
         List<UUID> productIdList = new ArrayList<>();
         productIdList.add(fakeProductId);
@@ -350,7 +354,7 @@ public class ProductVariantDaoTest {
         EntityManager em = provider.em();
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
+        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight, order_weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?, ?)");
         query.setParameter(1, productVariant.getId());
         query.setParameter(2, productVariant.getTx());
         query.setParameter(3, productVariant.getValidTime());
@@ -369,6 +373,7 @@ public class ProductVariantDaoTest {
         query.setParameter(16, productVariant.getLength());
         query.setParameter(17, productVariant.getHeight());
         query.setParameter(18, productVariant.getWeight());
+        query.setParameter(19, productVariant.getOrderWeight());
         query.executeUpdate();
         et.commit();
     }

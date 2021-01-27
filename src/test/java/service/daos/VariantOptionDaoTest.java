@@ -77,10 +77,11 @@ public class VariantOptionDaoTest {
         UUID fakeProductId =  UUID.fromString("9ef5602c-d67e-492c-9b91-aaf4a0fb08d3");
         UUID fakeIdCategory =  UUID.fromString("43bcc9ec-c5f0-433b-8a08-3874d0806eef");
         UUID fakeProductVariantId1 = UUID.fromString("d481b2e0-b152-436c-84e5-ee806239e190");
+        UUID fakeImageId1 = UUID.fromString("768139f3-50a3-470b-a1c8-063b5dbcf0a6");
 
         Log logObj = new Log(10, new Date());
         CategoryTx categoryTxObj = new CategoryTx(fakeIdCategory, 10, new Date());
-        Category categoryObj = new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null);
+        Category categoryObj = new Category(fakeIdCategory, 10, new Date(),  false, "Electronics", null, null, null, fakeImageId1);
         ProductTx productTxObj = new ProductTx(fakeProductId, 10, new Date());
         Product productObj = new Product(fakeProductId, 10, new Date(),  false, fakeIdCategory, 30);
         ProductVariantTx productVariantTxObj = new ProductVariantTx(fakeProductVariantId1, 10, new Date());
@@ -98,7 +99,7 @@ public class VariantOptionDaoTest {
                 "IDR",
                 1068051,
                 0,
-                ProductVariant.Form.physical, 10, 10, 20, 20);
+                ProductVariant.Form.physical, 10, 10, 20, 20, 20);
         VariantOptionTx variantOptionTxObj = new VariantOptionTx(fakeProductVariantId1, "colour", 10,  new Date());
         VariantOption variantOptionObj = new VariantOption(fakeProductVariantId1, "colour", 10,  new Date(), false, "Blue");
 
@@ -156,7 +157,7 @@ public class VariantOptionDaoTest {
         EntityManager em = provider.em();
         EntityTransaction et = em.getTransaction();
         et.begin();
-        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?)");
+        Query query = em.createNativeQuery("INSERT INTO product_variant (id, tx, valid_time, deleted, product, title, subtitle, sku, description, quantity, price_currency_code, price_units, price_nanos,form, width, length, height, weight, order_weight) VALUES (?, ?, ?, ?, CAST(? AS UUID), ?, ?, ?, ?, ?, ?, ?, ?, CAST(? AS product_variant_form), ?, ?, ?, ?, ?)");
         query.setParameter(1, productVariant.getId());
         query.setParameter(2, productVariant.getTx());
         query.setParameter(3, productVariant.getValidTime());
@@ -175,6 +176,7 @@ public class VariantOptionDaoTest {
         query.setParameter(16, productVariant.getLength());
         query.setParameter(17, productVariant.getHeight());
         query.setParameter(18, productVariant.getWeight());
+        query.setParameter(19, productVariant.getOrderWeight());
         query.executeUpdate();
         et.commit();
     }
