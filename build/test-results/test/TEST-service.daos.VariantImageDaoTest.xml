@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.daos.VariantImageDaoTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-28T08:25:38" hostname="192.168.0.156" time="0.13">
+  <properties/>
+  <testcase name="getVariantImage_withUUId_returnVariantImage" classname="service.daos.VariantImageDaoTest" time="0.13"/>
+  <system-out><![CDATA[[EL Info]: connection: 2021-01-28 16:25:38.756--ServerSession(1342227089)--/file:/Users/faisalrahman/TappRepo/service.product/build/resources/main/_service_product logout successful
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

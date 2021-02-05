@@ -1,0 +1,19 @@
+service/daos/CategoryDaoTest.java
+ service.daos.CategoryDaoTest
+service/daos/EntityManagerProvider.java
+ service.daos.EntityManagerProvider
+ service.daos.EntityManagerProvider$1
+service/daos/ProductDaoTest.java
+ service.daos.ProductDaoTest
+service/daos/VariantOptionDaoTest.java
+ service.daos.VariantOptionDaoTest
+service/product/ProductServiceServerTest.java
+ service.product.ProductServiceServerTest
+service/product/AlbServiceServerTest.java
+ service.product.AlbServiceServerTest
+service/daos/VariantPropertyDaoTest.java
+ service.daos.VariantPropertyDaoTest
+service/daos/ProductVariantDaoTest.java
+ service.daos.ProductVariantDaoTest
+service/daos/VariantImageDaoTest.java
+ service.daos.VariantImageDaoTest

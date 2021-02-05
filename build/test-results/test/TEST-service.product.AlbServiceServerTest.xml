@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.product.AlbServiceServerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-28T08:25:35" hostname="192.168.0.156" time="0.616">
+  <properties/>
+  <testcase name="albServiceImpl_healthcheck" classname="service.product.AlbServiceServerTest" time="0.616"/>
+  <system-out><![CDATA[2021-01-28 16:25:36.330 INFO  service.product.ProductServiceServer  - Server started, listening on 50052
+2021-01-28 16:25:36.526 INFO  service.product.ProductServiceServer  - Server shutdown
+]]></system-out>
+  <system-err><![CDATA[SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/Users/faisalrahman/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.2.3/7c4f3c474fb2c041d8028740440937705ebb473a/logback-classic-1.2.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/Users/faisalrahman/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-simple/1.7.9/f918aa891c5402deb6b4dc82862699bb82602a2e/slf4j-simple-1.7.9.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+]]></system-err>
+</testsuite>

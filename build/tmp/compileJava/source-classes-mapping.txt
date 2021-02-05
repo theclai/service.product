@@ -1,0 +1,173 @@
+tapp/product/Products.java
+ tapp.product.Products
+ tapp.product.Products$1
+ tapp.product.Products$Builder
+service/daos/Dao.java
+ service.daos.Dao
+tapp/product/Measurements.java
+ tapp.product.Measurements
+ tapp.product.Measurements$1
+ tapp.product.Measurements$Builder
+AWS/ALBGrpc.java
+ AWS.ALBGrpc
+ AWS.ALBGrpc$1
+ AWS.ALBGrpc$2
+ AWS.ALBGrpc$3
+ AWS.ALBGrpc$ALBBaseDescriptorSupplier
+ AWS.ALBGrpc$ALBBlockingStub
+ AWS.ALBGrpc$ALBFileDescriptorSupplier
+ AWS.ALBGrpc$ALBFutureStub
+ AWS.ALBGrpc$ALBImplBase
+ AWS.ALBGrpc$ALBMethodDescriptorSupplier
+ AWS.ALBGrpc$ALBStub
+ AWS.ALBGrpc$MethodHandlers
+service/entities/VariantProperty.java
+ service.entities.VariantProperty
+tapp/product/Product.java
+ tapp.product.Product
+ tapp.product.Product$1
+ tapp.product.Product$Builder
+ tapp.product.Product$OptionsDefaultEntryHolder
+service/product/DatabaseParams.java
+ service.product.DatabaseParams
+tapp/product/ProductVariants.java
+ tapp.product.ProductVariants
+ tapp.product.ProductVariants$1
+ tapp.product.ProductVariants$Builder
+service/entities/ProductVariant.java
+ service.entities.ProductVariant
+ service.entities.ProductVariant$Form
+service/product/CustomException.java
+ service.product.CustomException
+tapp/product/RepeatedStringOrBuilder.java
+ tapp.product.RepeatedStringOrBuilder
+service/daos/VariantPropertyDao.java
+ service.daos.VariantPropertyDao
+service/util/EntityManagerConfigurator.java
+ service.util.EntityManagerConfigurator
+service/entities/Product.java
+ service.entities.Product
+tapp/product/ProductVariantsListOrBuilder.java
+ tapp.product.ProductVariantsListOrBuilder
+service/daos/CategoryDao.java
+ service.daos.CategoryDao
+service/daos/VariantImageDao.java
+ service.daos.VariantImageDao
+tapp/product/Category.java
+ tapp.product.Category
+ tapp.product.Category$1
+ tapp.product.Category$Builder
+tapp/product/ProductOrBuilder.java
+ tapp.product.ProductOrBuilder
+tapp/product/IDOrBuilder.java
+ tapp.product.IDOrBuilder
+service/util/UUIDConverter.java
+ service.util.UUIDConverter
+tapp/product/CategoriesListOrBuilder.java
+ tapp.product.CategoriesListOrBuilder
+tapp/product/MeasurementsOrBuilder.java
+ tapp.product.MeasurementsOrBuilder
+tapp/product/ProductVariant.java
+ tapp.product.ProductVariant
+ tapp.product.ProductVariant$1
+ tapp.product.ProductVariant$Builder
+ tapp.product.ProductVariant$Form
+ tapp.product.ProductVariant$Form$1
+ tapp.product.ProductVariant$OptionsDefaultEntryHolder
+ tapp.product.ProductVariant$Property
+ tapp.product.ProductVariant$Property$1
+ tapp.product.ProductVariant$Property$Builder
+ tapp.product.ProductVariant$PropertyOrBuilder
+tapp/product/ProductsListOrBuilder.java
+ tapp.product.ProductsListOrBuilder
+tapp/product/CategoriesList.java
+ tapp.product.CategoriesList
+ tapp.product.CategoriesList$1
+ tapp.product.CategoriesList$Builder
+tapp/product/Categories.java
+ tapp.product.Categories
+ tapp.product.Categories$1
+ tapp.product.Categories$Builder
+service/daos/ProductVariantDao.java
+ service.daos.ProductVariantDao
+tapp/product/ProductVariantOrBuilder.java
+ tapp.product.ProductVariantOrBuilder
+tapp/product/ProductVariantsList.java
+ tapp.product.ProductVariantsList
+ tapp.product.ProductVariantsList$1
+ tapp.product.ProductVariantsList$Builder
+service/entities/VariantImageTx.java
+ service.entities.VariantImageTx
+tapp/product/ProductVariantsOrBuilder.java
+ tapp.product.ProductVariantsOrBuilder
+service/entities/Category.java
+ service.entities.Category
+service/entities/Log.java
+ service.entities.Log
+tapp/product/CategoriesOrBuilder.java
+ tapp.product.CategoriesOrBuilder
+service/daos/ProductDao.java
+ service.daos.ProductDao
+service/product/ExceptionHandler.java
+ service.product.ExceptionHandler
+ service.product.ExceptionHandler$ExceptionHandlingServerCallListener
+service/entities/ProductTx.java
+ service.entities.ProductTx
+service/product/AlbServiceImpl.java
+ service.product.AlbServiceImpl
+service/product/ServiceException.java
+ service.product.ServiceException
+service/product/ProductServiceImpl.java
+ service.product.ProductServiceImpl
+tapp/product/ProductServiceGrpc.java
+ tapp.product.ProductServiceGrpc
+ tapp.product.ProductServiceGrpc$1
+ tapp.product.ProductServiceGrpc$2
+ tapp.product.ProductServiceGrpc$3
+ tapp.product.ProductServiceGrpc$MethodHandlers
+ tapp.product.ProductServiceGrpc$ProductServiceBaseDescriptorSupplier
+ tapp.product.ProductServiceGrpc$ProductServiceBlockingStub
+ tapp.product.ProductServiceGrpc$ProductServiceFileDescriptorSupplier
+ tapp.product.ProductServiceGrpc$ProductServiceFutureStub
+ tapp.product.ProductServiceGrpc$ProductServiceImplBase
+ tapp.product.ProductServiceGrpc$ProductServiceMethodDescriptorSupplier
+ tapp.product.ProductServiceGrpc$ProductServiceStub
+service/daos/VariantOptionDao.java
+ service.daos.VariantOptionDao
+service/entities/ProductVariantTx.java
+ service.entities.ProductVariantTx
+service/product/ProductServiceServer.java
+ service.product.ProductServiceServer
+ service.product.ProductServiceServer$1
+tapp/product/ProductOuterClass.java
+ tapp.product.ProductOuterClass
+AWS/Alb.java
+ AWS.Alb
+service/entities/CategoryTx.java
+ service.entities.CategoryTx
+service/daos/LogDao.java
+ service.daos.LogDao
+service/entities/VariantImage.java
+ service.entities.VariantImage
+tapp/product/ID.java
+ tapp.product.ID
+ tapp.product.ID$1
+ tapp.product.ID$Builder
+tapp/product/ProductsList.java
+ tapp.product.ProductsList
+ tapp.product.ProductsList$1
+ tapp.product.ProductsList$Builder
+service/entities/VariantOption.java
+ service.entities.VariantOption
+tapp/product/RepeatedString.java
+ tapp.product.RepeatedString
+ tapp.product.RepeatedString$1
+ tapp.product.RepeatedString$Builder
+tapp/product/ProductsOrBuilder.java
+ tapp.product.ProductsOrBuilder
+service/entities/VariantOptionTx.java
+ service.entities.VariantOptionTx
+service/entities/VariantPropertyTx.java
+ service.entities.VariantPropertyTx
+tapp/product/CategoryOrBuilder.java
+ tapp.product.CategoryOrBuilder

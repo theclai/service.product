@@ -1,0 +1,184 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+import "google/type/money.proto";
+package tapp.product;
+option java_multiple_files = true;
+
+///////////////////////////////////////////////////////////////////////////////
+// ProductService
+
+service ProductService {
+  rpc GetCategory(ID) returns (Category);
+  rpc ListCategories(CategoriesList) returns (Categories);
+  rpc GetProduct (ID) returns (Product);
+  rpc ListProducts(ProductsList) returns (Products);
+  rpc GetProductVariant (ID) returns (ProductVariant);
+  rpc ListProductVariants(ProductVariantsList) returns (ProductVariants);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Categories
+
+message Category {
+
+  // ID of the form: //product.tapp/Category/9a0e4932-44be-11eb-b378-0242ac130002
+  string id = 1;
+
+  google.protobuf.Timestamp transaction_time = 2;
+  google.protobuf.Timestamp valid_time = 3;
+  google.protobuf.Timestamp created_time = 4;
+
+  string title = 5;
+  string subtitle = 6;
+  string description = 7;
+
+  // Parent Category ID
+  string parent = 8;
+
+  // Image ID
+  string image = 9;
+}
+
+message Categories {
+  reserved 1;
+  reserved 2;
+  repeated Category nodes = 3;
+}
+
+message CategoriesList {
+  reserved 1;
+  reserved 2;
+  reserved 3;
+  reserved 4;
+  reserved 5;
+  //Category ID
+  string parent = 6;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Products
+
+message Product {
+
+  // ID of the form: //product.tapp/Product/9a0e4932-44be-11eb-b378-0242ac130002
+  string id = 1;
+
+  google.protobuf.Timestamp transaction_time = 2;
+  google.protobuf.Timestamp valid_time = 3;
+  google.protobuf.Timestamp created_time = 4;
+
+  // Category ID
+  string category = 5;
+
+  // Total available stock for all variants
+  int32 quantity = 6;
+  map<string, RepeatedString> options = 7;
+}
+
+message RepeatedString {
+  repeated string value = 1;
+}
+
+message Products {
+  reserved 1;
+  reserved 2;
+  repeated Product nodes = 3;
+}
+
+message ProductsList {
+  reserved 1;
+  reserved 2;
+  reserved 3;
+  reserved 4;
+  reserved 5;
+  //Category ID
+  string category = 6;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// ProductVariants
+
+message ProductVariant {
+
+  // ID of the form: //product.tapp/ProductVariant/9a0e4932-44be-11eb-b378-0242ac130002
+  string id = 1;
+
+  google.protobuf.Timestamp transaction_time = 2;
+  google.protobuf.Timestamp valid_time = 3;
+  google.protobuf.Timestamp created_time = 4;
+
+  string title = 5;
+  string subtitle = 6;
+  string description = 7;
+  Form form = 8;
+  reserved 9; // type
+  string sku = 10;
+  google.type.Money price = 11;
+
+  // Image IDs
+  repeated string images = 12;
+
+  // Product ID
+  string product = 13;
+
+  // Stock quantity
+  int32 quantity = 14;
+
+  // Ordered key value properties of the product
+  repeated Property properties = 15;
+
+  // Options that differentiate this variant SKU from another
+  // i.e. colour, size, design
+  map<string, string> options = 16;
+
+  Measurements package_measurements = 17;
+
+  enum Form {
+    DIGITAL = 0;
+    PHYSICAL = 1;
+    BILLING = 2;
+    LENDING = 3;
+  }
+  message Property {
+    string key = 1;
+    string value = 2;
+  }
+}
+
+message ProductVariants {
+  reserved 1;
+  reserved 2;
+  repeated ProductVariant nodes = 3;
+}
+
+message ProductVariantsList {
+  // Max number of items to return after the 'after' cursor
+  int32 first = 1;
+  reserved 2;
+  reserved 3;
+  reserved 4;
+  reserved 5;
+  string product = 6;
+}
+
+message Measurements {
+    //Millimetres
+    int32 width = 1;
+
+    //Millimetres
+    int32 length = 2;
+
+    //Millimetres
+    int32 height = 3;
+
+    // Grams
+    int32 weight = 4;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// ID
+
+message ID {
+  string id = 1;
+}

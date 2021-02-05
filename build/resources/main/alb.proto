@@ -1,0 +1,7 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+package AWS;
+
+service ALB {
+  rpc healthcheck(google.protobuf.Empty) returns (google.protobuf.Empty);
+}

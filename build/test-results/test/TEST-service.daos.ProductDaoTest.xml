@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.daos.ProductDaoTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-01-28T08:25:40" hostname="192.168.0.156" time="0.736">
+  <properties/>
+  <testcase name="getProduct_withUUId_returnProduct" classname="service.daos.ProductDaoTest" time="0.101"/>
+  <testcase name="getListOfProduct_categoryList_isNull_returnAllProduct" classname="service.daos.ProductDaoTest" time="0.28"/>
+  <testcase name="getListOfProduct_categoryList_isNot_Null_returnProductByCategory" classname="service.daos.ProductDaoTest" time="0.354"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

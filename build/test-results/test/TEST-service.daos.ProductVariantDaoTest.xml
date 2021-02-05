@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="service.daos.ProductVariantDaoTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-01-28T08:25:39" hostname="192.168.0.156" time="1.709">
+  <properties/>
+  <testcase name="getProductVariants_withEmptyProductIdList_returnAllProductVariantList" classname="service.daos.ProductVariantDaoTest" time="1.176"/>
+  <testcase name="getProductVariant_withUUid_returnProductVariant" classname="service.daos.ProductVariantDaoTest" time="0.154"/>
+  <testcase name="getProductVariants_withProductIdList_returnProductVariantListByProductId" classname="service.daos.ProductVariantDaoTest" time="0.377"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
